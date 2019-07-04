@@ -37,6 +37,7 @@ S3method(print, PCA)
 S3method(predict, CA)
 S3method(predict, FAMD)
 S3method(predict, MCA)
+S3method(predict, MFA)
 S3method(predict, PCA)
 
 S3method(summary, CA)

@@ -18,8 +18,10 @@ A data frame with 55 rows and 15 columns.
 }
 
 \examples{
+\dontrun{
 data(poison)
 res.mca <- MCA(poison, quanti.sup = 1:2, quali.sup=c(3,4))
+}
 }
 
 \keyword{datasets}

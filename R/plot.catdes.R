@@ -238,10 +238,12 @@ if (!barplot){
     par(las = 3)
     par(mfrow = c(numr, numc))
     for(i in 1:lengthX){
-      catdes.aux=list.catdes[[i]]
+      catdes.aux <- list.catdes[[i]]
       if(!is.null(catdes.aux)){
         catdes.aux=sort(catdes.aux,decreasing=FALSE)					#plot the catdes for every cluster in the graphic window
-        barplot(catdes.aux, width =c(1,1), col = col.upper, border = "black", 
+        coul <- rep(col.upper,length(catdes.aux))
+        coul[catdes.aux<0] <- col.lower
+        barplot(catdes.aux, width =c(1,1), col = coul, border = "black", 
                 ylim = c(minimum-1,maximum+1),xlim=c(0,max(long)+1), 
                 main = unique(names(x$category)[i],names(x$quanti)), cex.names = 1, ylab="v.test", 
                 names.arg = substr(names(catdes.aux), 1, numchar))

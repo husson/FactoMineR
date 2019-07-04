@@ -39,14 +39,16 @@ test.aov.w <- function(y,x,w=NULL){
 	if (is.null(weights)) weights <- rep(1,nrow(donnee))
 	if (sum(weights)<3) weights <- weights*nrow(donnee)
     for (i in 1:length(lab)) {
-#        lab[i] = gsub(" ", ".", lab[i])
         if (is.factor(donnee[, i])) {
             if (any(is.na(donnee[, i]))) {
                 levels(donnee[, i]) <- c(levels(donnee[, i]),"NA")
                 donnee[, i][is.na(donnee[, i])] <- "NA"
             }
             if (levels(donnee[, i])[1] == "") levels(donnee[, i])[1] = "NA"
-            if (i != num.var) quali = c(quali, i)
+            if (i != num.var) {
+			  levels(donnee[, i])=paste(colnames(donnee)[i],levels(donnee[, i]),sep="=")
+			  quali = c(quali, i)
+			}
         }
     }
     quanti = (1:ncol(donnee))[-c(quali, num.var)]
