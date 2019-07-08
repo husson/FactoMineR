@@ -75,7 +75,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
         aux3 = marge.col[k]/sum(marge.col)
 #		aux4 <- min(phyper(Table[j,k]-1,marge.li[j],sum(marge.li)-marge.li[j],marge.col[k])*2+dhyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k]),phyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k],lower.tail=FALSE)*2+dhyper(Table[j,k],marge.li[j],sum(marge.li)-marge.li[j],marge.col[k]))
         aux4 <- min(phyper(round(Table[j,k],0)-1,round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0))*2+dhyper(round(Table[j,k],0),round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0)),phyper(round(Table[j,k],0),round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0),lower.tail=FALSE)*2+dhyper(round(Table[j,k],0),round(marge.li[j],0),round(sum(marge.li),0)-round(marge.li[j],0),round(marge.col[k],0)))
-        if (aux4<proba) {
+        if (aux4 <= proba) {
           aux5 = (1-2*as.integer(aux2>aux3))*qnorm(aux4/2)
           aux1 = Table[j,k]/marge.col[k]
           tri[[j]] = rbind(tri[[j]],c(aux1*100,aux2*100,aux3*100,aux4,aux5))
@@ -86,14 +86,14 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
     rownames(Test.chi) = colnames(donnee)[quali]
    }
    if (nrow(matrix(Test.chi,ncol=2))>1){
-     if (sum(Test.chi[,1]<proba)==1){
+     if (sum(Test.chi[,1] <= proba)==1){
        nomaux = rownames(Test.chi[order(Test.chi[,1]),])[1]
-       Test.chi = matrix(Test.chi[Test.chi[,1]<proba,],ncol=2)
+       Test.chi = matrix(Test.chi[Test.chi[,1] <= proba,],ncol=2)
        rownames(Test.chi) = nomaux
      }
-     else Test.chi = Test.chi[Test.chi[,1]<proba,]
+     else Test.chi = Test.chi[Test.chi[,1] <= proba,]
    }
-   else if (Test.chi[,1]>proba) Test.chi =NULL
+   else if (Test.chi[,1] > proba) Test.chi =NULL
    if (!is.null(Test.chi)){
      if (nrow(matrix(Test.chi,ncol=2))>1){
        oo = order(Test.chi[,1])
@@ -144,7 +144,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 	}
     dimnames(tabF) <- list(colnames(donnee)[quanti], c("Eta2", "P-value"))
     auxF <- tabF[order(tabF[, 2]),,drop=FALSE]
-    select1 <- (1:nrow(auxF))[auxF[, 2,drop=FALSE]<proba]
+    select1 <- (1:nrow(auxF))[auxF[, 2,drop=FALSE] <= proba]
     if (length(select1) > 0) resF <- auxF[select1,,drop=FALSE]
     for (j in 1:nb.modalite){
       if (!is.null(result[[j]])){
