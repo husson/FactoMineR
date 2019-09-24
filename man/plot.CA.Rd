@@ -19,7 +19,8 @@ Draw the Correspondence Analysis (CA) graphs.
     title = NULL, palette = NULL, autoLab = c("auto","yes","no"), 
 	new.plot=FALSE, selectRow = NULL, selectCol = NULL,
 	unselect = 0.7, shadowtext = FALSE, habillage = "none",
-	legend = list(bty = "y", x = "topleft"), \dots)
+	legend = list(bty = "y", x = "topleft"), 
+	graph.type = c("ggplot","classic"), ggoptions = NULL, \dots)
 }
 
 \arguments{
@@ -46,6 +47,8 @@ Draw the Correspondence Analysis (CA) graphs.
   \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program)}
   \item{habillage}{color the individuals among a categorical variable (give the number of the categorical supplementary variable or its name)}
   \item{legend}{a list of arguments that defines the legend if needed (when individuals are drawn according to a variable); see the arguments of the function \code{legend}}
+  \item{graph.type}{a character that gives the type of graph used: "ggplot" or "classic"}
+  \item{ggoptions}{a list that gives the graph options when grah.type="ggplot" is used. See the optines and the default values in the details section}
   \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
 }
 
@@ -65,15 +68,16 @@ For example, you can use:\cr
 \code{select = "dist 8"} and then the 8 rows (8 actives and 8 supplementaries) that have the highest distance to the center of gravity are drawn.\cr 
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Jeremy Mazet}
+\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{CA}}}
 
 \examples{
 data(children)
 res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
+
 ## select rows and columns that have a cos2 greater than 0.8
-plot(res.ca,selectCol="cos2 0.8",selectRow="cos2 0.8")
+plot(res.ca, selectCol="cos2 0.8", selectRow="cos2 0.8")
 }
 
 \keyword{dplot}

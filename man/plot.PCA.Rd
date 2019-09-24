@@ -19,7 +19,7 @@ variables and supplementary categorical variables.
     lim.cos2.var = 0., title = NULL, palette=NULL,
     autoLab = c("auto","yes","no"), new.plot = FALSE, select = NULL, 
 	unselect = 0.7, shadowtext = FALSE, legend = list(bty = "y", x = "topleft"),
-	\dots)
+	graph.type = c("ggplot","classic"), ggoptions = NULL, \dots)
     }
 
 \arguments{
@@ -43,11 +43,13 @@ variables and supplementary categorical variables.
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
   \item{palette}{the color palette used to draw the points. By default colors are chosen. If you want to define the colors : palette=palette(c("black","red","blue")); or you can use: palette=palette(rainbow(30)), or in black and white for example: palette=palette(gray(seq(0,.9,len=25)))}
   \item{autoLab}{if \code{autoLab="auto"}, \code{autoLab} is equal to "yes" if there are less than 50 elements and "no" otherwise; if "yes", the labels of the drawn elements are placed in a "good" way (can be time-consuming if many elements), and if "no" the elements are placed quickly but may overlap}
-  \item{new.plot}{boolean, if TRUE, a new graphical device is created}
+  \item{new.plot}{boolean, if TRUE, a new graphical device is created; only used when \code{graph.type="classic"}}
   \item{select}{a selection of the elements that are drawn; see the details section}
   \item{unselect}{may be either a value between 0 and 1 that gives the transparency of the unselected objects (if \code{unselect=1} the transparceny is total and the elements are not drawn, if \code{unselect=0} the elements are drawn as usual but without any label) or may be a color (for example \code{unselect="grey60"})}
-  \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program)}
+  \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program); only used when \code{graph.type="classic"}}
   \item{legend}{a list of arguments that defines the legend if needed (when individuals are drawn according to a variable); see the arguments of the function \code{legend}}
+  \item{graph.type}{a character that gives the type of graph used: "ggplot" or "classic"}
+  \item{ggoptions}{a list that gives the graph options when grah.type="ggplot" is used. See the optines and the default values in the details section}
   \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
 }
 
@@ -61,13 +63,28 @@ For example, you can use:\cr
 \code{select = "contrib 10"} and then the 10 elements that have the highest contribution on the 2 dimensions of your plot are drawn.\cr 
 \code{select = "cos2 5"} and then the 5 elements that have the highest cos2 on the 2 dimensions of your plot are drawn.\cr 
 \code{select = "dist 8"} and then the 8 elements that have the highest distance to the center of gravity are drawn.\cr 
+\cr
+\code{ggoptions} is a list that gives some ggplot2 options when the graph.type="ggplot" is used. Use for instance ggoptions(list(size=3,title.size=10,bg.color="orange")) if you want to modify the size of the points and labels, the title size and the background color.\cr
+Below you can see the options and the default values: \cr
+size = 4, #label size (point size = size/3)\cr
+point.shape = 19, #points shape\cr
+line.lty = 2, #origin linetypes (0="blank", 1="solid", 2="dashed", 3="dotted",...)\cr
+line.lwd = 0, #origin lines width\cr
+line.color = "black", #origin lines color\cr
+segment.lty = 1, #arrow linetypes (0="blank", 1="solid", 2="dashed", 3="dotted",...)\cr
+segment.lwd = 0, #arrow width\cr
+circle.lty = 1, #circle linetypes (0="blank", 1="solid", 2="dashed", 3="dotted",...)\cr
+circle.lwd = 0, #circle width\cr
+circle.color = "black", #circle color\cr
+low.col.quanti = "blue", #for quantitative variables, low color to be used\cr
+high.col.quanti = "red3", #for quantitative variables, high color to be used\cr
 }
 
 \value{
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Jeremy Mazet}
+\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{PCA}}}
 

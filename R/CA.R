@@ -12,7 +12,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
   unlist(lapply(as.data.frame(x),VB))/colSums(x*x*weights)
 }
 
-    if (is.table(X)) X <- as.data.frame(X)
+    if (is.table(X)) X <- matrix(as.vector(X),nrow(X),dimnames=dimnames(X))
     if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
 	X <- as.data.frame(X)
@@ -20,8 +20,6 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
     for (i in is.quali) X[,i]=as.factor(X[,i])
 	X <- droplevels(X)
-#    for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
-#    for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
     Xtot <- X
     if (any(!sapply(X, is.numeric))) {
       auxi = NULL
@@ -215,8 +213,8 @@ dist2.col <- colSums((X.col.sup-marge.row)^2/marge.row)
 
     class(res) <- c("CA", "list")
     if (graph & (ncp>1)) {
-	  plot(res,axes=axes)
-	  if (!is.null(quanti.sup)) plot(res, choix="quanti.sup",axes=axes,new.plot=TRUE)
+	  print(plot(res,axes=axes))
+	  if (!is.null(quanti.sup)) print(plot(res, choix="quanti.sup",axes=axes,new.plot=TRUE))
 	}
     return(res)
 }

@@ -10,7 +10,7 @@ Draw an interactive Multiple Factor Analysis (MFA) graphs.
 
 \usage{
 plotMFApartial(x, axes = c(1, 2), 
-    lab.ind = TRUE, lab.par = FALSE, habillage = "ind",
+    lab.ind = TRUE, lab.par = FALSE, habillage = "group",
     chrono = FALSE, col.hab = NULL, invisible = NULL, 
     draw.partial = NULL, xlim = NULL, ylim = NULL, 
     cex = 1, title = NULL, palette = NULL, \dots)
@@ -21,7 +21,7 @@ plotMFApartial(x, axes = c(1, 2),
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{lab.ind}{boolean, if TRUE, the label of the mean points are drawn}
   \item{lab.par}{boolean, if TRUE, the label of the partial points are drawn}
-  \item{habillage}{string corresponding to the color which are used. If "ind", one color is used for each individual;
+  \item{habillage}{string corresponding to the color which are used. If "group", one color is used for each group of variables;
   if "quali" the individuals are colored according to one categorical variable; if "group" the individuals are colored according to the group}
   \item{chrono}{boolean, if TRUE, the partial points of a same point are linked (useful when groups correspond to different moment)}
   \item{col.hab}{the colors to use. By default, colors are chosen}
@@ -41,10 +41,11 @@ plotMFApartial(x, axes = c(1, 2),
 \value{
 Draw a graph with the individuals and the centers of gravity. The graph is interactive and clicking on a point will draw the partial points,
 if you click on a point for which the partial points are yet drawn, the partial points are deleted.
-To stop the interactive plot, click on the title (or in the top of the graph)
+To stop the interactive plot, click on the title (or in the top of the graph).\cr
+Return the names of the points for which the partial points are drawn.
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Jeremy Mazet}
+\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{MFA}}, \code{\link{plot.MFA}}}
 
@@ -55,6 +56,7 @@ res.wine = MFA(wine,group=c(2,5,3,10,9,2),type=c("n",rep("s",5)),ncp=5,
     name.group=c("orig","olf","vis","olfag","gust","ens"),
     num.group.sup=c(1,6),graph=FALSE)
 liste = plotMFApartial(res.wine)
+plot(res.wine, partial = liste)
 }
 }
 

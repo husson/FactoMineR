@@ -210,8 +210,8 @@ fct.eta2 <- function(vec,x,weights) {
     res$call = res.call
     class(res) <- c("PCA", "list ")
     if (graph & (ncp>1)) {
-        plot.PCA(res, choix = "ind", axes = axes,new.plot=TRUE)
-        plot.PCA(res, choix = "var", axes = axes,new.plot=TRUE,shadowtext=TRUE)
+        print(plot.PCA(res, choix = "ind", axes = axes,new.plot=TRUE))
+        print(plot.PCA(res, choix = "var", axes = axes,new.plot=TRUE,shadowtext=TRUE))
     }
     return(res)
 }

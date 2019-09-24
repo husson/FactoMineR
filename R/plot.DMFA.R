@@ -11,7 +11,7 @@ plot.DMFA <- function (x, axes = c(1, 2), choix = "ind", label = "all",
 	if(is.null(title)) titre = "Individuals factor map (PCA)"
 	else titre = title
         plot.PCA(res.dmfa, habillage = 1, axes = axes, label = label, xlim = xlim, ylim = ylim,  
-            autoLab = autoLab, title = titre,...)
+            autoLab = autoLab, title = titre,graph.type="classic",...)
     }
     if (choix == "quali") {
         if (length(res.dmfa$call$quali.sup$modalite) == 1) 
@@ -64,7 +64,7 @@ plot.DMFA <- function (x, axes = c(1, 2), choix = "ind", label = "all",
 	  if(is.null(title)) titre = "Variables factor map (PCA)"
 	  else titre = title
       plot.PCA(res.dmfa, choix = "var", axes = axes, col.var = ng + 
-            1, lim.cos2.var = lim.cos2.var, label = label, autoLab = autoLab, title = titre,...)
+            1, lim.cos2.var = lim.cos2.var, label = label, autoLab = autoLab, title = titre, graph.type="classic",...)
         for (j in 1:ng) {
             cor.partiel = res.dmfa$var.partiel[[j]][, axes]
             cor.cos2 = res.dmfa$cor.dim.gr[[j]][axes[1], axes[2]]

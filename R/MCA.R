@@ -295,10 +295,10 @@ if (!is.null(quanti.sup)){
 	
     class(res.mca) <- c("MCA", "list")
     if (graph & (ncp>1)) {
-        plot.MCA(res.mca, choix = "ind", invisible="ind", axes = axes,new.plot=TRUE)
-        if (method=="Indicator") plot.MCA(res.mca, choix = "ind", invisible=c("var","quali.sup","quanti.sup"), axes = axes,new.plot=TRUE,cex=0.8)
-		plot.MCA(res.mca, choix = "var", axes = axes,new.plot=TRUE)
-        if (!is.null(quanti.sup)) plot.MCA(res.mca, choix = "quanti.sup", axes = axes,new.plot=TRUE)
+        print(plot.MCA(res.mca, choix = "ind", invisible="ind", axes = axes,new.plot=TRUE))
+        if (method=="Indicator") print(plot.MCA(res.mca, choix = "ind", invisible=c("var","quali.sup","quanti.sup"), axes = axes,new.plot=TRUE,cex=0.8))
+		print(plot.MCA(res.mca, choix = "var", axes = axes,new.plot=TRUE))
+        if (!is.null(quanti.sup)) print(plot.MCA(res.mca, choix = "quanti.sup", axes = axes,new.plot=TRUE))
     }
     return(res.mca)
 }

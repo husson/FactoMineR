@@ -10,8 +10,9 @@ Draw confidence ellipses in CA around rows and/or columns.
 
 \usage{
 ellipseCA (x, ellipse=c("col","row"), method="multinomial", nbsample=100,
-    axes=c(1,2), xlim=NULL, ylim=NULL, col.row="red", col.col="blue",
-	col.row.ell=col.row, col.col.ell=col.col, \dots)
+    axes=c(1,2), xlim=NULL, ylim=NULL, col.row="blue", col.col="red",
+	col.row.ell=col.row, col.col.ell=col.col, 
+	graph.type = c("ggplot","classic"), ggoptions = NULL, \dots)
 }
 
 \arguments{
@@ -26,6 +27,8 @@ ellipseCA (x, ellipse=c("col","row"), method="multinomial", nbsample=100,
   \item{col.col}{a color for columns points}
   \item{col.row.ell}{a color for the ellipses of rows points (the color "transparent" can be used if an ellipse should not be drawn)}
   \item{col.col.ell}{a color for the ellipses of columns points (the color "transparent" can be used if an ellipse should not be drawn)}
+  \item{graph.type}{a character that gives the type of graph used: "ggplot" or "classic"}
+  \item{ggoptions}{a list that gives the graph options when grah.type="ggplot" is used. See the optines and the default values in the details section}
   \item{\dots}{further arguments passed to or from the plot.CA function, such as title, invisible, ...}
 }
 
@@ -56,7 +59,7 @@ res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
 ## Ellipses for all the active elements
 ellipseCA(res.ca)
 ## Ellipses around some columns only
-ellipseCA(res.ca,ellipse="col",col.col.ell=c(rep("blue",2),rep("transparent",3)),
+ellipseCA(res.ca,ellipse="col",col.col.ell=c(rep("red",2),rep("transparent",3)),
      invisible=c("row.sup","col.sup"))
 }
 

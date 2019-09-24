@@ -167,11 +167,11 @@
 #	res$call$call <- sys.calls()[[1]]
     class(res) <- c("FAMD", "list")
 	 if (graph & (ncp>1)){
-       plot.FAMD(res,choix="ind", axes=axes,habillage="none")
-       plot.FAMD(res,choix="ind", invisible=c("quali","quali.sup"),axes=axes,habillage="none",new.plot=TRUE)
-       plot.FAMD(res,choix="var",axes=axes,new.plot=TRUE)
-       plot.FAMD(res,choix="quali", axes=axes,habillage="none",new.plot=TRUE)
-       plot.FAMD(res,choix="quanti",axes=axes,new.plot=TRUE)
+       print(plot.FAMD(res,choix="ind", axes=axes,habillage="none"))
+       print(plot.FAMD(res,choix="ind", invisible=c("quali","quali.sup"),axes=axes,habillage="none",new.plot=TRUE))
+       print(plot.FAMD(res,choix="var",axes=axes,new.plot=TRUE))
+       print(plot.FAMD(res,choix="quali", axes=axes,habillage="none",new.plot=TRUE))
+       print(plot.FAMD(res,choix="quanti",axes=axes,new.plot=TRUE))
      }
 	return(res)
 }

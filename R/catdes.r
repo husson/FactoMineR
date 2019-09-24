@@ -161,7 +161,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL){
 	  res$quanti = result
 	}
   }
-  res$call = list(num.var=num.var, proba=proba, row.w=row.w)
+  res$call = list(num.var=num.var, proba=proba, row.w=row.w, X=donnee)
   options(old.warn)
 class(res) <- c("catdes", "list ")
   return(res)

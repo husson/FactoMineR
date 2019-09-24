@@ -2,9 +2,10 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
                               level = 0.95, magnify = 2, cex = 1, pch = 20, pch.means = 15, 
                               type = c("g", "p"), keepnames = TRUE, namescat = NULL, xlim = NULL, 
                               ylim = NULL, lwd = 1, label = "all",
-							  autoLab = c("auto","yes", "no"), ...) 
+							  autoLab = c("auto","yes", "no"), graph.type=c("ggplot","classic"), ...) 
 {
 # lit les options
+  graph.type <- match.arg(graph.type[1],c("ggplot","classic"))
   p3p <- list(...)
   
   monpanel <- function(x, y, level, means, nommod, magnify = magnify, 
@@ -112,10 +113,8 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
     }
   }
   autoLab <- match.arg(autoLab, c("auto", "yes", "no"))
-  if (autoLab == "yes") 
-    autoLab = TRUE
-  if (autoLab == "no") 
-    autoLab = FALSE
+  if (autoLab == "yes")  autoLab = TRUE
+  if (autoLab == "no")  autoLab = FALSE
   nomtot <- names(model$call$X)
   nbevartot <- ncol(model$call$X)
   eliminer <- NULL
@@ -238,63 +237,73 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
       aux <- cbind.data.frame(model$call$X[, var, drop = FALSE], 
                                  model$ind$coord[, 1:max(axes)])
     }
-    if (class(model)[1] == "PCA") {
-      coord.ell <- coord.ellipse(aux, bary = means, 
-                                 level.conf = level, axes = axes)
-      if (means == TRUE) {
-        L <- list(x=model, habillage = var, ellipse = coord.ell, 
-                 cex = cex, label = label, axes = axes, xlim = xlim, 
-                 ylim = ylim, title = paste("Confidence ellipses around the categories of", 
-                                            colnames(model$call$X)[var]), autoLab = autoLab)
-      } else {
-        L <- list(x=model, habillage = var, ellipse = coord.ell, 
-                    cex = cex, label = label, axes = axes, xlim = xlim, 
-                    ylim = ylim, title = paste("Concentration ellipses for the categories of", 
-                                               colnames(model$call$X)[var]), autoLab = autoLab)
-      }
-      L <- modifyList(L, p3p)
-      do.call(plot.PCA, L)
-    }
-    if (class(model)[1] == "MCA") {
-      res.pca <- PCA(aux, ncp = max(axes), quali.sup = 1, scale.unit = FALSE, 
-                     graph = FALSE, axes = 1:max(axes))
-      res.pca$eig[axes, ] = model$eig[axes, ]
-      coord.ell <- coord.ellipse(aux, bary = means, level.conf = level
-                                 , axes = axes)
-      if (means == TRUE) {
-        L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
-                 cex = cex, label = label, axes = axes, xlim = xlim, 
-                 ylim = ylim, title = paste("Confidence ellipses around the categories of", 
-                                            colnames(model$call$X)[var]), autoLab = autoLab)
-      } else {
-        L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
-                    cex = cex, label = label, axes = axes, xlim = xlim, 
-                    ylim = ylim, title = paste("Concentration ellipses for the categories of", 
-                                               colnames(model$call$X)[var]), autoLab = autoLab)
-      }
-      L <- modifyList(L, p3p)
-      do.call(plot.PCA, L)
-    }
-    if ((class(model)[1] == "MFA") || (class(model)[1] == 
+    # if (class(model)[1] == "PCA") {
+    #   res.pca <- PCA(aux, ncp = max(axes), quali.sup = 1, scale.unit = FALSE, 
+    #                  graph = FALSE, axes = 1:max(axes))
+    #   res.pca$eig[axes, ] = model$eig[axes, ]
+    #   coord.ell <- coord.ellipse(aux, bary = means, 
+    #                              level.conf = level, axes = axes)
+    #   if (means == TRUE) {
+    #     L <- list(x=model, habillage = var, ellipse = coord.ell, 
+    #              cex = cex, label = label, axes = axes, xlim = xlim, 
+    #              ylim = ylim, title = paste("Confidence ellipses around the categories of", 
+    #                                         colnames(model$call$X)[var]), autoLab = autoLab,graph.type=graph.type)
+    #   } else {
+    #     L <- list(x=model, habillage = var, ellipse = coord.ell, 
+    #                 cex = cex, label = label, axes = axes, xlim = xlim, 
+    #                 ylim = ylim, title = paste("Concentration ellipses for the categories of", 
+    #                                            colnames(model$call$X)[var]), autoLab = autoLab,graph.type=graph.type)
+    #   }
+    #   L <- modifyList(L, p3p)
+    #   if (graph.type=="ggplot") return(do.call(plot.PCA, L))
+    #   else do.call(plot.PCA, L)
+    # }
+    # if (class(model)[1] == "MCA") {
+    #   res.pca <- PCA(aux, ncp = max(axes), quali.sup = 1, scale.unit = FALSE, 
+    #                  graph = FALSE, axes = 1:max(axes))
+    #   res.pca$eig[axes, ] = model$eig[axes, ]
+    #   coord.ell <- coord.ellipse(aux, bary = means, level.conf = level
+    #                              , axes = axes)
+    #   if (means == TRUE) {
+    #     L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
+    #              cex = cex, label = label, axes = axes, xlim = xlim, 
+    #              ylim = ylim, title = paste("Confidence ellipses around the categories of", 
+    #                                         colnames(model$call$X)[var]), autoLab = autoLab,graph.type=graph.type)
+    #   } else {
+    #     L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
+    #                 cex = cex, label = label, axes = axes, xlim = xlim, 
+    #                 ylim = ylim, title = paste("Concentration ellipses for the categories of", 
+    #                                            colnames(model$call$X)[var]), autoLab = autoLab,graph.type=graph.type)
+    #   }
+    #   L <- modifyList(L, p3p)
+    #   if (graph.type=="ggplot") return(do.call(plot.PCA, L))
+    #   else do.call(plot.PCA, L)
+    # }
+    if ((class(model)[1] == "PCA")||(class(model)[1] == "MCA")||(class(model)[1] == "MFA") || (class(model)[1] == 
                                        "FAMD")) {
       res.pca <- PCA(aux, ncp = max(axes), quali.sup = 1, scale.unit = FALSE, 
                      graph = FALSE, axes = 1:max(axes))
       res.pca$eig[axes, ] = model$eig[axes, ]
       coord.ell <- coord.ellipse(aux, bary = means, level.conf = level, 
                                  axes = axes)
-      if (means == TRUE) {
         L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
                   cex = cex, label = label, axes = axes, xlim = xlim, 
-                  ylim = ylim, title = paste("Confidence ellipses around the categories of", 
-                                             colnames(model$call$X)[var]), autoLab = autoLab)
-      } else {
-        L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
-                    cex = cex, label = label, axes = axes, xlim = xlim, 
-                    ylim = ylim, title = paste("Concentration ellipses for the categories of", 
-                                               colnames(model$call$X)[var]), autoLab = autoLab)
-      }
+                  ylim = ylim, title = paste(if (means == TRUE){"Confidence ellipses around the categories of"} else {"Concentration ellipses for the categories of"}, 
+                                             colnames(model$call$X)[var]), autoLab = autoLab, graph.type=graph.type)
+      # if (means == TRUE) {
+        # L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
+                  # cex = cex, label = label, axes = axes, xlim = xlim, 
+                  # ylim = ylim, title = paste("Confidence ellipses around the categories of", 
+                                             # colnames(model$call$X)[var]), autoLab = autoLab, graph.type=graph.type)
+      # } else {
+        # L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
+                    # cex = cex, label = label, axes = axes, xlim = xlim, 
+                    # ylim = ylim, title = paste("Concentration ellipses for the categories of", 
+                                               # colnames(model$call$X)[var]), autoLab = autoLab, graph.type=graph.type)
+      # }
       L <- modifyList(L, p3p)
-      do.call(plot.PCA, L)
+      if (graph.type=="ggplot") return(do.call(plot.PCA, L))
+      else do.call(plot.PCA, L)
     }
   } else {
     don <- apply(model$ind$coord[, axes], 2, FUN = function(x, 

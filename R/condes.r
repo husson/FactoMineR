@@ -54,7 +54,7 @@ test.aov.w <- function(y,x,w=NULL){
     quanti = (1:ncol(donnee))[-c(quali, num.var)]
     if (length(quanti) == 0) quanti = NULL
     colnames(donnee) = lab
-    result = list()
+    result <- list()
     if (!is.null(quanti)) {
         if (length(quanti)>1){
 		  tab.quanti=apply(donnee[,quanti],2,cor.calc,donnee[,num.var],w=weights)
@@ -93,6 +93,9 @@ test.aov.w <- function(y,x,w=NULL){
         result$category = resT
         options(contrasts = old.contr)
     }
-    if (is.null(result$quanti) & is.null(result$quali) & is.null(result$category)) result = NULL
+	if (is.null(quali) & is.null(quanti)) print(paste("The value of proba is too small. Choose a proba greater than",proba))
+	result$call <- list(num.var=num.var, proba=proba, weights=weights, X=donnee)
+	class(result) <- c("condes", "list ")
+
     return(result)
 }

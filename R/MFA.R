@@ -785,7 +785,6 @@ cor.partial.axes <- cov.wt(aux,wt=row.w/sum(row.w),method="ML",cor=TRUE)$cor
     resultats$partial.axes = res.partial.axes
     resultats$call = call
 	resultats$call$call <- match.call()
-#	resultats$call$call <- sys.calls()[[1]]
     resultats$global.pca = res.globale
     class(resultats) <- c("MFA", "list")
 
@@ -800,15 +799,15 @@ cor.partial.axes <- cov.wt(aux,wt=row.w/sum(row.w),method="ML",cor=TRUE)$cor
           max.inertia <- order(apply(resultats$quali.var.sup$within.inertia[,1:2],1,sum))
           cg.plot.partial <- c(cg.plot.partial,rownames(resultats$quali.var.sup$coord)[max.inertia[1:length(max.inertia)]])
         }
-        plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial,habillage="group",axes=axes,new.plot=TRUE)
+        print(plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial,habillage="group",axes=axes,new.plot=TRUE))
       }
       max.inertia <- order(apply(resultats$ind$within.inertia[,1:2],1,sum))
-      plot.MFA(resultats,choix="axes",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE)
-      plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],habillage="group",axes=axes,new.plot=TRUE)
-      if ("c"%in%type) plot.MFA(resultats,choix="var",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE	)
-      if ("f"%in%type) plot.MFA(resultats,choix="freq",habillage="group",axes=axes,new.plot=TRUE)
-      plot.MFA(resultats,choix="ind",invisible="quali",habillage = "ind",axes=axes,new.plot=TRUE,col.hab=1+3*(1:nbre.ind)%in%ind.sup)
-      plot.MFA(resultats,choix="group",axes=axes,new.plot=TRUE)
+      print(plot.MFA(resultats,choix="axes",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE))
+      print(plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],habillage="group",axes=axes,new.plot=TRUE))
+      if ("c"%in%type) print(plot.MFA(resultats,choix="var",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE))
+      if ("f"%in%type) print(plot.MFA(resultats,choix="freq",habillage="group",axes=axes,new.plot=TRUE))
+      print(plot.MFA(resultats,choix="ind",invisible="quali",habillage = "ind",axes=axes,new.plot=TRUE,col.hab=1+3*(1:nbre.ind)%in%ind.sup))
+      print(plot.MFA(resultats,choix="group",axes=axes,new.plot=TRUE))
     }
     return(resultats)
 }

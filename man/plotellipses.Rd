@@ -12,7 +12,9 @@ Draw confidence ellipses around the categories.
 plotellipses(model, keepvar = "all", axes = c(1, 2), means=TRUE, level = 0.95, 
     magnify = 2, cex = 1, pch = 20, pch.means=15, type = c("g","p"), 
     keepnames = TRUE, namescat = NULL, xlim=NULL, ylim=NULL, lwd=1, 
-    label="all", autoLab=c("auto","yes","no"),\dots)}
+    label="all", autoLab=c("auto","yes","no"), 
+	graph.type = c("ggplot","classic"), \dots)
+	}
 \arguments{
   \item{model}{an object of class MCA or PCA or MFA}
 \item{keepvar}{a boolean or numeric vector of
@@ -53,6 +55,7 @@ plotellipses(model, keepvar = "all", axes = c(1, 2), means=TRUE, level = 0.95,
 \item{lwd}{The line width, a positive number, defaulting to 1}
 \item{label}{a list of character for the elements which are labelled (by default, "all", you can use "none", "ind", ind.sup"))}
 \item{autoLab}{if \code{autoLab="auto"}, \code{autoLab} is equal to "y" if there are less than 50 elements and "no" otherwise; if "y", the labels of the drawn elements are placed in a "good" way (can be time-consuming if many elements), and if "no" the elements are placed quickly but may overlap}
+  \item{graph.type}{a character that gives the type of graph used: "ggplot" or "classic"}
 \item{\dots}{further arguments passed to or from other methods}
 }
 
