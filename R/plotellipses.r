@@ -279,13 +279,10 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
     #   if (graph.type=="ggplot") return(do.call(plot.PCA, L))
     #   else do.call(plot.PCA, L)
     # }
-    if ((class(model)[1] == "PCA")||(class(model)[1] == "MCA")||(class(model)[1] == "MFA") || (class(model)[1] == 
-                                       "FAMD")) {
-      res.pca <- PCA(aux, ncp = max(axes), quali.sup = 1, scale.unit = FALSE, 
-                     graph = FALSE, axes = 1:max(axes))
+    if ((class(model)[1] == "PCA")||(class(model)[1] == "MCA")||(class(model)[1] == "MFA") || (class(model)[1] == "FAMD")) {
+      res.pca <- PCA(aux, ncp = max(axes), quali.sup = 1, scale.unit = FALSE, graph = FALSE, axes = 1:max(axes))
       res.pca$eig[axes, ] = model$eig[axes, ]
-      coord.ell <- coord.ellipse(aux, bary = means, level.conf = level, 
-                                 axes = axes)
+      coord.ell <- coord.ellipse(aux, bary = means, level.conf = level, axes = axes)
         L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
                   cex = cex, label = label, axes = axes, xlim = xlim, 
                   ylim = ylim, title = paste(if (means == TRUE){"Confidence ellipses around the categories of"} else {"Concentration ellipses for the categories of"}, 

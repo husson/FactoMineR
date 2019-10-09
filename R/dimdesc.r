@@ -15,7 +15,8 @@ dimdesc=function (res, axes = 1:3, proba = 0.05)
             sup <- NULL
 		    if (!is.null(c(res$call$quanti.sup,res$call$quali.sup))) {
 			  w=res$call$marge.row*length(res$call$marge.row)
-			  sup <- condes(cbind.data.frame(res$row$coord[,axes[k],drop=FALSE],res$call$Xtot[,c(res$call$quali.sup,res$call$quanti.sup),drop=FALSE]),1,weights=w,proba=proba)
+			  if (is.null(res$call$row.sup)) sup <- condes(cbind.data.frame(res$row$coord[,axes[k],drop=FALSE],res$call$Xtot[,c(res$call$quali.sup,res$call$quanti.sup),drop=FALSE]),1,weights=w,proba=proba)
+			  else sup <- condes(cbind.data.frame(res$row$coord[,drop=FALSE],res$call$Xtot[-res$call$row.sup,c(res$call$quali.sup,res$call$quanti.sup),drop=FALSE]),1,weights=w,proba=proba)
 			}
 		    tabcol <- tableaucol[order(tableaucol[,k,drop=FALSE]),k,drop=FALSE]
 		    colnames(tabcol)="coord"
@@ -33,24 +34,7 @@ dimdesc=function (res, axes = 1:3, proba = 0.05)
 			  names(result[[k]])[length(result[[k]])]="category"   ## attention, c'est bien k ici car la list s'est allongee avant
 			}
 		  }
-      }
-     # if (inherits(res, "CA")) {
-         # result <- structure(vector(mode = "list", length = length(axes)), names = colnames(res$row$coord)[axes])
-         # for (k in 1:length(axes)) {
-		   # w=NULL
-		   ## w=res$call$marge.row*res$call$N
-		   # if (!is.null(res$call$row.sup)) tabcol <- condes(cbind.data.frame(res$row$coord[,axes[k],drop=FALSE],res$call$Xtot[-res$call$row.sup,]),1,w=w,proba=proba)
-		   # else tabcol <- condes(cbind.data.frame(res$row$coord[,axes[k],drop=FALSE],res$call$Xtot),1,w=w,proba=proba)
-		   ## w=res$call$marge.col*res$call$N
-		   # if (!is.null(res$call$col.sup)) tab <- condes(cbind.data.frame(res$col$coord[,axes[k],drop=FALSE],t(res$call$Xtot[,-c(res$call$col.sup,res$call$quali.sup)])),1,w=w,proba=proba)
-		   # else {
-		   # if (!is.null(res$call$quali.sup)) tab <- condes(cbind.data.frame(res$col$coord[,axes[k],drop=FALSE],t(res$call$Xtot[,-res$call$quali.sup])),1,w=w,proba=proba)
-		   # else tab <- condes(cbind.data.frame(res$col$coord[,axes[k],drop=FALSE],t(res$call$X)),1,w=w,proba=proba)
-		   # }
-		   # result[[k]] = list(row=tab,col=tabcol)
-		 # }
-     # }
-    else {
+      } else {
         ind.supp = res$call$ind.sup
         result = structure(vector(mode = "list", length = length(axes)), names = colnames(res$ind$coord)[axes])
         for (k in 1:length(axes)) {
