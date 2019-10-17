@@ -46,6 +46,7 @@ ellipseCA <- function(x, ellipse=c("col","row"), method="multinomial", nbsample=
     aux2=cbind.data.frame(paste("row",1:nrow(X),sep=""),rowCA$row.sup$coord[,axes])
     ellRow=coord.ellipse(aux2,level.conf = 0.95)$res
   }
+  nullxlimylim <- (is.null(xlim) & is.null(ylim))
   if (is.null(xlim)){
     if (("col"%in%ellipse)&("row"%in%ellipse)) xlim <- c(min(ellCol[,2],ellRow[,2]),max(ellCol[,2],ellRow[,2]))
     else {
@@ -68,6 +69,8 @@ ellipseCA <- function(x, ellipse=c("col","row"), method="multinomial", nbsample=
     xlim <- c(min(xlim[1],min(x$col.sup$coord[,axes[1]])), max(xlim[2],max(x$col.sup$coord[,axes[1]])))
     ylim <- c(min(ylim[1],min(x$col.sup$coord[,axes[2]])), max(ylim[2],max(x$col.sup$coord[,axes[2]])))
   }
+  if (nullxlimylim & diff(xlim)/diff(ylim)>3) ylim <- (ylim-mean(ylim))*diff(xlim)/diff(ylim)/3 + mean(ylim)
+  if (nullxlimylim & diff(xlim)/diff(ylim)<1/2) xlim <- (xlim-mean(xlim))*diff(ylim)/diff(xlim)/2 + mean(xlim)
   graph <- plot(x,axes=axes,xlim=xlim,ylim=ylim,col.col=col.col,col.row=col.row, graph.type = graph.type, ggoptions = ggoptions, ...)
 
   if ("row"%in%ellipse){

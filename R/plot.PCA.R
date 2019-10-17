@@ -93,6 +93,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       test.invisible[3] <- match("quali", invisible)
     }
     else  test.invisible <- rep(NA, 3)
+	nullxlimylim <- (is.null(xlim) & is.null(ylim))
     if (is.null(xlim)) {
       xmin <- xmax <- 0
       if(is.na(test.invisible[1])) xmin <- min(xmin, coord.actif[,1])
@@ -103,11 +104,9 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       if(!is.null(coord.quali)&is.na(test.invisible[3])) xmax <- max(xmax, coord.quali[, 1])
       if(!is.null(coord.ellipse)&is.na(test.invisible[3])) xmin <- min(xmin, coord.ellipse[, 2])
       if(!is.null(coord.ellipse)&is.na(test.invisible[3])) xmax <- max(xmax, coord.ellipse[, 2])
-      xlim <- c(xmin, xmax) * 1.2
-    }
-    else {
-      xmin = xlim[1]
-      xmax = xlim[2]
+      # xlim <- c(xmin, xmax) * 1.2
+      xlim <- c(xmin, xmax)
+      xlim <- (xlim-mean(xlim))*1.2 + mean(xlim)
     }
     if (is.null(ylim)) {
       ymin <- ymax <- 0
@@ -119,12 +118,12 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       if(!is.null(coord.quali)&is.na(test.invisible[3])) ymax <- max(ymax, coord.quali[, 2])
       if(!is.null(coord.ellipse)&is.na(test.invisible[3])) ymin <- min(ymin, coord.ellipse[, 3])
       if(!is.null(coord.ellipse)&is.na(test.invisible[3])) ymax <- max(ymax, coord.ellipse[, 3])
-      ylim <- c(ymin, ymax) * 1.2
+      # ylim <- c(ymin, ymax) * 1.2
+      ylim <- c(ymin, ymax)
+      ylim <- (ylim-mean(ylim))*1.2 + mean(ylim)
     }
-    else {
-      ymin = ylim[1]
-      ymax = ylim[2]
-    }
+    if (nullxlimylim & diff(xlim)/diff(ylim)>3) ylim <- (ylim-mean(ylim))*diff(xlim)/diff(ylim)/3 + mean(ylim)
+    if (nullxlimylim & diff(xlim)/diff(ylim)<1/2) xlim <- (xlim-mean(xlim))*diff(ylim)/diff(xlim)/2 + mean(xlim)
     if(graph.type=="ggplot") nudge_y <- (ylim[2] - ylim[1])*0.03
     selection <- NULL
     if (!is.null(select)) {
@@ -162,7 +161,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
     }
     ## PARTIE GRAPHIQUE
     if (graph.type =="ggplot") color.ind <- NULL
-    if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new(width=min(14,8*(xmax-xmin)/(ymax-ymin)),height=8)
+    if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new(width=min(14,8*diff(xlim)/diff(ylim)),height=8)
     if (is.null(palette)) palette = (c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
     if (habillage[1] == "none") {
       color.ind <- rep(col.ind,nrow(coord.actif))
@@ -241,7 +240,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       coll2 <- color.sup
       if (!is.null(selectionS)){
         if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
-        else coll2[!((1:length(coll2))%in%selectionS)] = unselect
+        else coll2[!((1:length(coll2))%in%selectionS)] <- unselect
         labe2[!((1:length(coll2))%in%selectionS)] <- ""
       }
       if (length(select)==1){
@@ -384,8 +383,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       if (is.na(test.invisible[1]) & isTRUE(lab.ind)) gg_graph <- gg_graph + text
       
       if ((!is.null(res.pca$ind.sup)) && (is.na(test.invisible[2]))){
-        if(!is.null(select)) df_ind_sup[,1] <- ifelse(rownames(df_ind_sup) %in% rownames(df_ind_sup)[selection], rownames(df_ind_sup), "")
-        if(dim(res.pca$ind.sup$coord)[1] > 1){
+        if(!is.null(select)) df_ind_sup[,1] <- ifelse(rownames(df_ind_sup) %in% rownames(df_ind_sup)[selectionS], rownames(df_ind_sup), "")
+        if(nrow(res.pca$ind.sup$coord) > 1){
           if (isTRUE(lab.ind.sup)){
             if (habillage[1] == "none"){ gg_graph <- gg_graph + geom_point(aes(x = df_ind_sup[,2], y = df_ind_sup[,3]), size = ggoptions_default$size/3, color = col.ind.sup, shape = 1)
             if (autoLab) text_ind.sup <- ggrepel::geom_text_repel(aes(x = df_ind_sup[,2], y = df_ind_sup[,3], label=df_ind_sup[,1]), color = col.ind.sup, size = ggoptions_default$size, fontface = "italic")

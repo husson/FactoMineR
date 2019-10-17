@@ -55,6 +55,7 @@
     coord.ind.sup <- coord.quali.sup <- NULL
     if (!is.null(res.mca$ind.sup)) coord.ind.sup <- res.mca$ind.sup$coord[, axes,drop=FALSE]
     if (!is.null(res.mca$quali.sup)) coord.quali.sup <- res.mca$quali.sup$coord[, axes,drop=FALSE]
+	nullxlimylim <- (is.null(xlim) & is.null(ylim))
     if (is.null(xlim)) {
       xmin <- xmax <- 0
       if(is.na(test.invisible[1])) xmin <- min(xmin, coord.ind[,1])
@@ -65,11 +66,9 @@
       if(is.na(test.invisible[2])) xmax <- max(xmax, coord.var[,1])
       if(is.na(test.invisible[5])) xmin <- min(xmin, coord.quali.sup[, 1])
       if(is.na(test.invisible[5])) xmax <- max(xmax, coord.quali.sup[, 1])
-      xlim <- c(xmin, xmax) * 1.2
-    }
-    else {
-      xmin = xlim[1]
-      xmax = xlim[2]
+      # xlim <- c(xmin, xmax) * 1.2
+      xlim <- c(xmin, xmax)
+      xlim <- (xlim-mean(xlim))*1.2 + mean(xlim)
     }
     if (is.null(ylim)) {
       ymin <- ymax <- 0
@@ -81,12 +80,12 @@
       if(is.na(test.invisible[2])) ymax <- max(ymax, coord.var[,2])
       if(is.na(test.invisible[5])) ymin <- min(ymin, coord.quali.sup[,2])
       if(is.na(test.invisible[5])) ymax <- max(ymax, coord.quali.sup[,2])
-      ylim <- c(ymin, ymax) * 1.2
+      # ylim <- c(ymin, ymax) * 1.2
+      ylim <- c(ymin, ymax)
+      ylim <- (ylim-mean(ylim))*1.2 + mean(ylim)
     }
-    else {
-      ymin = ylim[1]
-      ymax = ylim[2]
-    }
+    if (nullxlimylim & diff(xlim)/diff(ylim)>3) ylim <- (ylim-mean(ylim))*diff(xlim)/diff(ylim)/3 + mean(ylim)
+    if (nullxlimylim & diff(xlim)/diff(ylim)<1/2) xlim <- (xlim-mean(xlim))*diff(ylim)/diff(xlim)/2 + mean(xlim)
     if(graph.type=="ggplot") nudge_y <- (ylim[2] - ylim[1])*0.03
     selection <- selectionS <- selection2 <- selection3 <- NULL
     if (!is.null(select)) {
@@ -152,7 +151,7 @@
           }
           if (grepl("v.test",selectMod)) selection3 <- union(which(abs(res.mca$quali.sup$v.test[,axes[1],drop=FALSE])>sum(as.integer(unlist(strsplit(selectMod,"v.test"))),na.rm=T)),which(abs(res.mca$quali.sup$v.test[,axes[2],drop=FALSE])>sum(as.integer(unlist(strsplit(selectMod,"v.test"))),na.rm=T))) 
           if (is.integer(selectMod)) selection3 <- selectMod
-        }  
+        }
       }
     }
     
@@ -186,7 +185,7 @@
     titre = title
     if (is.null(title)) titre <- "MCA factor map"
     if (is.na(test.invisible[1])|is.na(test.invisible[2])|is.na(test.invisible[4])|is.na(test.invisible[5])) {
-      if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new(width=min(14,max(8,8*(xmax-xmin)/(ymax-ymin))),height=8)
+      if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new(width=min(14,max(8,8*diff(xlim)/diff(ylim))),height=8)
       if (is.null(palette)) palette = c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon")
       if (graph.type == "classic"){
         plot(0, 0, main = titre, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp=1, ...)
@@ -222,9 +221,8 @@
         }
         if (!is.null(selectMod)) {
           if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selection2)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selection2)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll2[!((1:length(coll2))%in%selection2)] = unselect
+          else coll2[!((1:length(coll2))%in%selection2)] <- unselect
           labe2[!((1:length(labe2))%in%selection2)] <- ""
-          
         }
         if (graph.type == "ggplot") df_var <- data.frame(labe2,coord.var,coll2,rep(17,nrow(coord.var)),rep(1,nrow(coord.var)))
         coll <- c(coll,coll2)
@@ -237,10 +235,10 @@
         if (lab.quali.sup){ labe2 <- rownames(coord.quali.sup)
         } else  labe2 <- rep("",nrow(coord.quali.sup))
         coll2 <- col.quali.sup
-        if((graph.type == "ggplot") & !(habillage %in% c("none","quali"))) coll2 <- rep(col.quali.sup, nrow(coord.quali.sup))
+        if((graph.type == "ggplot") & !(habillage %in% c("quali"))) coll2 <- rep(col.quali.sup, nrow(coord.quali.sup))
         if ((!is.null(selectMod))&!is.null(selection3)) {
           if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selection3)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selection3)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll2[!((1:length(coll2))%in%selection3)] = unselect
+          else coll2[!((1:length(coll2))%in%selection3)] <- unselect
           labe2[!((1:length(labe2))%in%selection3)] <- ""
         }
         if (length(selectMod)==1) {
@@ -250,7 +248,6 @@
             labe2[1:length(coll2)] <- ""
           }}
         if (graph.type == "ggplot") df_quali.sup <- data.frame(labe2,coord.quali.sup,coll2,rep(17,nrow(coord.quali.sup)),rep(1,nrow(coord.quali.sup)))
-        
         coll <- c(coll,coll2)
         labe <- c(labe,labe2)
         ipch <- c(ipch,rep(17,nrow(coord.quali.sup)))

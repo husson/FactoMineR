@@ -29,6 +29,14 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     if (!inherits(X, "data.frame")) stop("X is not a data.frame")
     if (!is.null(row.sup)) X <- as.data.frame(X[-row.sup,])
     if ((!is.null(col.sup))||(!is.null(quanti.sup))||(!is.null(quali.sup))) X <- as.data.frame(X[,-c(col.sup,quanti.sup,quali.sup)])
+    if (any(apply(X,1,sum)==0)){
+	  warning(paste0("The rows ",paste(rownames(X)[which(apply(X,1,sum)==0)],collapse=", ")," sum at 0. They were suppressed from the analysis"))
+ 	  X <- X[-which(apply(X,1,sum)==0),,drop=FALSE]
+	}
+    if (any(apply(X,2,sum)==0)){
+	  warning(paste0("The columns ",paste(colnames(X)[which(apply(X,2,sum)==0)],collapse=", ")," sum at 0. They were suppressed from the analysis"))
+ 	  X <- X[,-which(apply(X,2,sum)==0),drop=FALSE]
+	}
 ### 3 lignes rajoutees
     if (is.null(row.w)) row.w = rep(1,nrow(X))
 	row.w.init <- row.w

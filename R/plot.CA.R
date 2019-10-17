@@ -58,6 +58,7 @@ plot.CA <- function (x, axes = c(1, 2),
       test.invisible[5] <- match("quali.sup", invisible)
     }
     else  test.invisible <- rep(NA, 4)
+	nullxlimylim <- (is.null(xlim) & is.null(ylim))
     if (is.null(xlim)) {
       xmin <- xmax <- 0
       if(is.na(test.invisible[1])) xmin <- min(xmin, coord.row[,1])
@@ -70,11 +71,9 @@ plot.CA <- function (x, axes = c(1, 2),
       if(is.na(test.invisible[4])) xmax <- max(xmax, coord.col.sup[, 1])
       if(is.na(test.invisible[5])) xmin <- min(xmin, coord.quali.sup[, 1])
       if(is.na(test.invisible[5])) xmax <- max(xmax, coord.quali.sup[, 1])
-      xlim <- c(xmin, xmax) * 1.2
-    }
-    else {
-      xmin = xlim[1]
-      xmax = xlim[2]
+      # xlim <- c(xmin, xmax) * 1.2
+      xlim <- c(xmin, xmax)
+      xlim <- (xlim-mean(xlim))*1.2 + mean(xlim)
     }
     if (is.null(ylim)) {
       ymin <- ymax <- 0
@@ -88,12 +87,12 @@ plot.CA <- function (x, axes = c(1, 2),
       if(is.na(test.invisible[4])) ymax <- max(ymax, coord.col.sup[,2])
       if(is.na(test.invisible[5])) ymin <- min(ymin, coord.quali.sup[,2])
       if(is.na(test.invisible[5])) ymax <- max(ymax, coord.quali.sup[,2])
-      ylim <- c(ymin, ymax) * 1.2
+      # ylim <- c(ymin, ymax) * 1.2
+      ylim <- c(ymin, ymax)
+      ylim <- (ylim-mean(ylim))*1.2 + mean(ylim)
     }
-    else {
-      ymin = ylim[1]
-      ymax = ylim[2]
-    }
+    if (nullxlimylim & diff(xlim)/diff(ylim)>3) ylim <- (ylim-mean(ylim))*diff(xlim)/diff(ylim)/3 + mean(ylim)
+    if (nullxlimylim & diff(xlim)/diff(ylim)<1/2) xlim <- (xlim-mean(xlim))*diff(ylim)/diff(xlim)/2 + mean(xlim)
     if(graph.type=="ggplot") nudge_y <- (ylim[2] - ylim[1])*0.03
     selection <- selectionC <- selectionC2 <- selectionR2 <- NULL
     if (!is.null(selectRow)) {

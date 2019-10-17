@@ -2,26 +2,15 @@ PCA <- function (X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NUL
     quali.sup = NULL, row.w = NULL, col.w = NULL, graph = TRUE, 
     axes = c(1, 2)) 
 {
-#    moy.p <- function(V, poids) {
-#        res <- sum(V * poids)/sum(poids)
-#    }
     moy.ptab <- function(V, poids) {
-#        res <- colSums(V * (poids/sum(poids)))
         as.vector(crossprod(poids/sum(poids),as.matrix(V)))
     }
-#    ec <- function(V, poids) {
-#        res <- sqrt(sum(V^2 * poids)/sum(poids))
-#    }
 	
     ec.tab <- function(V, poids) {
-#        res <- sqrt(colSums(V^2 * poids)/sum(poids))
         ecart.type <- sqrt(as.vector(crossprod(poids/sum(poids),as.matrix(V^2))))
 		ecart.type[ecart.type <= 1e-16] <- 1
         return(ecart.type)
     }
-    # fct.eta2 <- function(vec,x,weights) {
-      # res <- summary(lm(x~vec,weights=weights))$r.squared
-    # }
 
 fct.eta2 <- function(vec,x,weights) {  
   VB <- function(xx) {
@@ -43,16 +32,9 @@ fct.eta2 <- function(vec,x,weights) {
         else for (j in (1:ncol(X))[-quali.sup]) X[, j] <- replace(X[, j], is.na(X[, j]), mean(X[, j], na.rm = TRUE))
     }
     Xtot <- X
-    if (!is.null(quali.sup)) 
-        X <- X[, -quali.sup,drop=FALSE]
+    if (!is.null(quali.sup))  X <- X[, -quali.sup,drop=FALSE]
     auxi <- colnames(X)[!sapply(X, is.numeric)]
 	if (length(auxi)>0)  stop(paste("\nThe following variables are not quantitative: ", auxi))
-    # if (any(!sapply(X, is.numeric))) {
-        # auxi = NULL
-        # for (j in 1:ncol(X)) if (!is.numeric(X[, j])) 
-            # auxi = c(auxi, colnames(X)[j])
-        # stop(paste("\nThe following variables are not quantitative: ", auxi))
-    # }
     todelete <- c(quali.sup, quanti.sup)
     if (!is.null(todelete)) X <- Xtot[, -todelete,drop=FALSE]
     if (!is.null(ind.sup)) {
@@ -74,8 +56,6 @@ fct.eta2 <- function(vec,x,weights) {
         X <- t(t(X)/ecart.type)
     }
     else ecart.type <- rep(1, length(centre))
-#    dist2.ind <- rowSums(X^2*sqrt(col.w))
-#	dist2.ind <- as.vector(tcrossprod(as.matrix(X^2*col.w),t(rep(1,ncol(X)))))
     dist2.ind <- rowSums(t(t(X^2)*col.w))
     dist2.var <- as.vector(crossprod(rep(1,nrow(X)),as.matrix(X^2*row.w)))
     res.call <- list(row.w = (row.w/sum(row.w)), col.w = col.w, 

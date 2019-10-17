@@ -873,6 +873,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       npoint.ellipse.par <- ellipse.par$call
     }
     else coord.ellipse.par <- NULL
+	nullxlimylim <- (is.null(xlim) & is.null(ylim))
     if (is.null(xlim)) {
       xmin <- xmax <- 0
       if (is.na(test.invisible[1]))  xmin <- min(xmin, coord.ind[, 1])
@@ -910,11 +911,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         xmax <- max(xmax, coord.quali.partiel.sup[unlist(lapply(group.quali.sup, 
                                                                 function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 
                                                   1])
-      xlim <- c(xmin, xmax) * 1.1
-    }
-    else {
-      xmin = xlim[1]
-      xmax = xlim[2]
+      # xlim <- c(xmin, xmax) * 1.1
+      xlim <- c(xmin, xmax)
+      xlim <- (xlim-mean(xlim))*1.1 + mean(xlim)
     }
     if (is.null(ylim)) {
       ymin <- ymax <- 0
@@ -958,12 +957,12 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
         ymax <- max(ymax, coord.quali.partiel.sup[unlist(lapply(group.quali.sup, 
                        function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))),  2])
-      ylim <- c(ymin, ymax) * 1.1
+      # ylim <- c(ymin, ymax) * 1.1
+      ylim <- c(ymin, ymax)
+      ylim <- (ylim-mean(ylim))*1.1 + mean(ylim)
     }
-    else {
-      ymin = ylim[1]
-      ymax = ylim[2]
-    }
+    if (nullxlimylim & diff(xlim)/diff(ylim)>3) ylim <- (ylim-mean(ylim))*diff(xlim)/diff(ylim)/3 + mean(ylim)
+    if (nullxlimylim & diff(xlim)/diff(ylim)<1/2) xlim <- (xlim-mean(xlim))*diff(ylim)/diff(xlim)/2 + mean(xlim)
     if(graph.type=="ggplot") nudge_y <- (ylim[2] - ylim[1])*0.03
     selection <- NULL
     if (!is.null(select)) {
@@ -999,13 +998,23 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         }  
       }
     }
+	
+    # if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse <- col.ellipse.par <- rep("black", nb.ind * (nbre.grpe + 1))
+    if (habillage == "none"){
+      col.ind <- rep("black", nb.ind.actif*(nbre.grpe + 1))
+      if (!is.null(res.mfa$ind.sup)) col.ind.sup <- rep("blue", (nb.ind - nb.ind.actif)*(nbre.grpe + 1))
+      if (!is.null(res.mfa[["quali.var"]])) col.quali <- rep("red", (nbre.grpe + 1)*sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"]))
+      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- rep("darkred", (nbre.grpe + 1)*sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"]))
+      if (!is.null(ellipse)) col.ellipse <- rep("red", nb.ind.actif)
+      if (!is.null(ellipse.par)) col.ellipse.par <- rep("red", nb.ind.actif*(nbre.grpe + 1))
+	}
     if (habillage == "group") {
       if (is.null(col.hab) | length(col.hab) != (nbre.grpe)) col.hab <- 2:(nbre.grpe + 1)
       col.ind <- c(rep(1, nb.ind.actif), rep(col.hab, nb.ind.actif))
       if (!is.null(res.mfa$ind.sup)) col.ind.sup <- c(rep(1, nb.ind - nb.ind.actif), rep(col.hab, nb.ind - nb.ind.actif))
       # if (length(group[type == "n"]) != 0) col.quali <- c(rep(1, sum(res.mfa$call$group.mod[type == "n"])), rep(col.hab, sum(res.mfa$call$group.mod[type == "n"])))
-      if (!is.null(res.mfa["quali.var"])) col.quali <- c(rep(1, sum(res.mfa$call$group.mod[-num.group.sup][type.act == "n"])), rep(col.hab, sum(res.mfa$call$group.mod[-num.group.sup][type.act == "n"])))
-      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- c(rep(1, sum(res.mfa$call$group.mod[num.group.sup][type.sup == "n"])), rep(col.hab, sum(res.mfa$call$group.mod[num.group.sup][type.sup == "n"])))
+      if (!is.null(res.mfa[["quali.var"]])) col.quali <- c(rep(1, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"])), rep(col.hab, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"])))
+      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- c(rep(1, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"])), rep(col.hab, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"])))
       if (!is.null(ellipse)) col.ellipse <- rep(1, nb.ind.actif)
       if (!is.null(ellipse.par)) col.ellipse.par <- rep(col.hab, nb.ind.actif)
     }
@@ -1076,8 +1085,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       }
       col.quali.sup <- c(col.quali.sup, rep(col.quali.sup, each = nbre.grpe))
     }
-    if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse <- col.ellipse.par <- rep("black", nb.ind * (nbre.grpe + 1))
-    if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY")))  dev.new(width = min(14, max(8, 8 * (xmax - xmin)/(ymax - ymin))), height = 8)
+	
+	if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY")))  dev.new(width = min(14, max(8, 8 * diff(xlim)/diff(ylim))), height = 8)
     if (is.null(palette)) palette = palette()
     #    if (is.null(palette)) palette = c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
     if (is.null(title))  title <- "Individual factor map"
@@ -1091,7 +1100,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       text_ind <- text_ind.sup <- text_quali <- text_quali.sup <- NULL
       if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
     }
-    if(graph.type=="ggplot" & !is.na(test.invisible[1])){
+    if(graph.type=="ggplot"){
       gg_graph <- ggplot() +
         coord_fixed(ratio = 1) +
         xlab(lab.x) + ylab(lab.y) +
@@ -1118,36 +1127,18 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         df_ind <- data.frame(labe, coord.ind, coll, ipch, fonte)
           df_ind[,5][which(df_ind[,5] == 20)] = 19
           if(habillage %in% c("none","ind","group")){
-            gg_graph <- ggplot() +
-              coord_fixed(ratio = 1) +
-              geom_point(aes(x=df_ind[,2], y=df_ind[,3]), color= df_ind[,4], shape = df_ind[,5]) + 
-              xlab(lab.x) + ylab(lab.y) +
-              xlim(xlim) + ylim(ylim) +
-              geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
-              geom_vline(xintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
-              theme_light() + 
-              ggoptions_default$theme +
-              ggtitle(title)
+            gg_graph <- gg_graph +
+              geom_point(aes(x=df_ind[,2], y=df_ind[,3]), color= df_ind[,4], shape = df_ind[,5])
             if(autoLab) text_ind <- ggrepel::geom_text_repel(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), size = ggoptions_default$size, color = df_ind[,4], fontface = df_ind[,6])
             else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), size = ggoptions_default$size, color = df_ind[,4], hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25, fontface = df_ind[,6])}
-          }
-          else{
+          } else{
             transparency_ind <- ifelse(rownames(df_ind) %in% df_ind[,1], 1, 1-unselect)
             if(class(habillage) %in% c("numeric","integer")) habillage = colnames(res.mfa$call$X)[habillage]
             if(habillage %in% colnames(res.mfa$call$X)){
-              gg_graph <- ggplot() +
-                coord_fixed(ratio = 1) +
+              gg_graph <- gg_graph +
                 geom_point(aes(x=df_ind[,2], y=df_ind[,3], color = (res.mfa$call$X)[rownames(df_ind),habillage]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
-                xlab(lab.x) + ylab(lab.y) + 
-                xlim(xlim) + ylim(ylim) +
-                geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
-                geom_vline(xintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
                 scale_color_manual(values = palette[unique(as.numeric(coll))]) +
-                labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage)) +
-                theme_light() + 
-                ggoptions_default$theme +
-                ggtitle(title)
-
+                labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage))
               if (autoLab) text_ind <- ggrepel::geom_text_repel(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1], color = (res.mfa$call$X)[rownames(df_ind),habillage]), size = ggoptions_default$size, show.legend = FALSE)
               else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1], color = (res.mfa$call$X)[rownames(df_ind),habillage]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25)}
             } 
@@ -1168,21 +1159,24 @@ if (!is.null(partial)){
         }
       } else {
         liste_ind_partiel <- rep(nbre.grpe*(group.ind.actif-1),each=nbre.grpe) + rep(1:nbre.grpe,length(group.ind.actif))
-	    df_ind_partial <- cbind.data.frame(matrix(rep(cbind(coord.ind[group.ind.actif,,drop=FALSE],col2rgb(coll[group.ind.actif],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.ind.partiel[liste_ind_partiel,1],y=coord.ind.partiel[liste_ind_partiel,2], coul = col.ind[nb.ind.actif+(1:(length(group.ind.actif)*nbre.grpe))])
+	    df_ind_partial <- cbind.data.frame(matrix(rep(cbind(coord.ind[group.ind.actif,,drop=FALSE],col2rgb(coll[group.ind.actif],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.ind.partiel[liste_ind_partiel,1],y=coord.ind.partiel[liste_ind_partiel,2], coul = col.ind[nb.ind.actif+(1:(length(group.ind.actif)*nbre.grpe))], group=rep(1:nbre.grpe,length(group.ind.actif)))
 		colnames(df_ind_partial)[1:3] <- c("xfin","yfin","sel")
 		df_ind_partial <- df_ind_partial[df_ind_partial[,"sel"]==255,]
         text <- NULL
         if(lab.par){
-          if (autoLab) text <- ggrepel::geom_text_repel(data=df_ind_partial, aes_string(x=x, y = y, label = rownames(df_ind_partial), color = coul))
+          if (autoLab) text <- ggrepel::geom_text_repel(data=df_ind_partial, aes(x=x, y = y, label = rownames(df_ind_partial), color = as.factor(coul)))
           else text <- geom_text(aes_string(data=df_ind_partial, x=x, y = y, label = rownames(df_ind_partial), color = coul))
         }
-        gg_graph <- gg_graph + geom_point(data=df_ind_partial, aes(x=x, y = y, color = as.factor(coul)), shape = 19, size = ggoptions_default$size/3) + text
-		if (!chrono) gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin, col=as.factor(coul)), lty=df_ind_partial$coul, data = df_ind_partial)
-		else {
+        if (habillage=="group") gg_graph <- gg_graph + geom_point(data=df_ind_partial, aes(x=x, y = y, color = as.factor(coul)), shape = 19, size = ggoptions_default$size/3) + text
+        else gg_graph <- gg_graph + geom_point(data=df_ind_partial, aes(x=x, y = y), col=as.factor(df_ind_partial[,"coul"]), shape = 19, size = ggoptions_default$size/3) + text
+		if (!chrono) {
+		  if (habillage=="group") gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin, col=as.factor(coul)), lty=df_ind_partial$coul, data = df_ind_partial)
+		  else gg_graph <- gg_graph + geom_segment(data = df_ind_partial, aes(x = x, y = y, xend = xfin, yend = yfin), col=as.factor(df_ind_partial[,"coul"]), lty=df_ind_partial$group)
+		} else {
           for (i in group.ind.actif) {
             if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
               for (j in 2:nbre.grpe) {
-              gg_graph <- gg_graph + geom_line(aes_string(x=c(coord.ind.partiel[(i - 1) * nbre.grpe + (j - 1), 1], coord.ind.partiel[(i - 1) * nbre.grpe + j, 1]), y = c(coord.ind.partiel[(i - 1) * nbre.grpe + (j - 1), 2], coord.ind.partiel[(i - 1) * nbre.grpe + j, 2])), color = col.ind[i])
+                gg_graph <- gg_graph + geom_line(aes_string(x=c(coord.ind.partiel[(i - 1) * nbre.grpe + (j - 1), 1], coord.ind.partiel[(i - 1) * nbre.grpe + j, 1]), y = c(coord.ind.partiel[(i - 1) * nbre.grpe + (j - 1), 2], coord.ind.partiel[(i - 1) * nbre.grpe + j, 2])), color = col.ind[i])
 		  }}}
 		}
       }
@@ -1230,13 +1224,16 @@ if (!is.null(partial)){
         }
       } else {
         liste_ind_sup_partiel <- rep(nbre.grpe*(group.ind.sup-1),each=nbre.grpe) + rep(1:nbre.grpe,length(group.ind.sup))
-	    df_ind_partial_sup <- cbind.data.frame(matrix(rep(cbind(coord.ind.sup[group.ind.sup,,drop=FALSE],col2rgb(coll2[group.ind.sup],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.ind.partiel.sup[liste_ind_sup_partiel,1],y=coord.ind.partiel.sup[liste_ind_sup_partiel,2], coul = col.ind.sup[(nb.ind - nb.ind.actif)+liste_ind_sup_partiel] )
+	    df_ind_partial_sup <- cbind.data.frame(matrix(rep(cbind(coord.ind.sup[group.ind.sup,,drop=FALSE],col2rgb(coll2[group.ind.sup],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.ind.partiel.sup[liste_ind_sup_partiel,1],y=coord.ind.partiel.sup[liste_ind_sup_partiel,2], coul = col.ind.sup[(nb.ind - nb.ind.actif)+liste_ind_sup_partiel], group=rep(1:nbre.grpe,length(group.ind.sup)) )
 		colnames(df_ind_partial_sup)[1:3] <- c("xfin","yfin","sel")
 		df_ind_partial_sup <- df_ind_partial_sup[df_ind_partial_sup[,"sel"]==255,]
-        gg_graph <- gg_graph + geom_point(data=df_ind_partial_sup, aes(x=x, y = y, color = as.factor(coul)), shape = 21, size = ggoptions_default$size/3)
+        if (habillage=="group") gg_graph <- gg_graph + geom_point(data=df_ind_partial_sup, aes(x=x, y = y, color = as.factor(coul)), shape = 21, size = ggoptions_default$size/3)
+        else gg_graph <- gg_graph + geom_point(data=df_ind_partial_sup, aes(x=x, y = y), color = as.factor(df_ind_partial_sup[,"coul",drop=FALSE]), shape = 21, size = ggoptions_default$size/3)
 		
-		if (!chrono) gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin, col=as.factor(coul)), lty=df_ind_partial_sup$coul, data = df_ind_partial_sup)
-		else {
+		if (!chrono) {
+		  if (habillage=="group") gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin, col=as.factor(coul)), lty=df_ind_partial_sup$coul, data = df_ind_partial_sup)
+		  else gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin), col=as.factor(df_ind_partial_sup[,"coul",drop=FALSE]), lty=df_ind_partial_sup$group, data = df_ind_partial_sup)
+		} else {
           for (i in group.ind.sup) {
             if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
               for (j in 2:nbre.grpe) {
@@ -1277,12 +1274,15 @@ if (!is.null(partial)){
         }
       } else {	  
         liste_quali_partiel <- rep(nbre.grpe*(group.quali-1),each=nbre.grpe) + rep(1:nbre.grpe,length(group.quali))
-	    df_quali_partial <- cbind.data.frame(matrix(rep(cbind(coord.quali[group.quali,,drop=FALSE],col2rgb(coll3[group.quali],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.quali.partiel[liste_quali_partiel,1],y=coord.quali.partiel[liste_quali_partiel,2], coul = col.quali[nrow(coord.quali)+liste_quali_partiel])
+	    df_quali_partial <- cbind.data.frame(matrix(rep(cbind(coord.quali[group.quali,,drop=FALSE],col2rgb(coll3[group.quali],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.quali.partiel[liste_quali_partiel,1],y=coord.quali.partiel[liste_quali_partiel,2], coul = col.quali[nrow(coord.quali)+liste_quali_partiel], group=rep(1:nbre.grpe,length(group.quali)))
 		colnames(df_quali_partial)[1:3] <- c("xfin","yfin","sel")
 		df_quali_partial <- df_quali_partial[df_quali_partial[,"sel"]==255,]
-        gg_graph <- gg_graph + geom_point(data=df_quali_partial, aes(x=x, y = y, color = as.factor(coul)), shape = 15, size = ggoptions_default$size/3)		
-		if (!chrono) gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin, col=as.factor(coul)), lty=df_quali_partial$coul, data = df_quali_partial)
-		else {
+        if (habillage=="group") gg_graph <- gg_graph + geom_point(data=df_quali_partial, aes(x=x, y = y, color = as.factor(coul)), shape = 15, size = ggoptions_default$size/3)		
+        else gg_graph <- gg_graph + geom_point(data=df_quali_partial, aes(x=x, y = y), color = as.factor(df_quali_partial$coul), shape = 15, size = ggoptions_default$size/3)		
+		if (!chrono) {
+		  if (habillage=="group") gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin, col=as.factor(coul)), lty=df_quali_partial$coul, data = df_quali_partial)
+		  gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin), col=as.factor(df_quali_partial$coul), lty=df_quali_partial$group, data = df_quali_partial)
+		} else {
           for (i in group.quali) {
             if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
               for (j in 2:nbre.grpe) {
@@ -1322,13 +1322,15 @@ if (!is.null(partial)){
         }
       } else {
         liste_quali_sup_partiel <- rep(nbre.grpe*(group.quali.sup-1),each=nbre.grpe) + rep(1:nbre.grpe,length(group.quali.sup))
-	    df_quali_partial_sup <- cbind.data.frame(matrix(rep(cbind(coord.quali.sup[group.quali.sup,,drop=FALSE],col2rgb(coll4[group.quali.sup],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.quali.partiel.sup[liste_quali_sup_partiel,1],y=coord.quali.partiel.sup[liste_quali_sup_partiel,2], coul = col.quali.sup[nrow(coord.quali.sup)+liste_quali_sup_partiel] )
+	    df_quali_partial_sup <- cbind.data.frame(matrix(rep(cbind(coord.quali.sup[group.quali.sup,,drop=FALSE],col2rgb(coll4[group.quali.sup],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.quali.partiel.sup[liste_quali_sup_partiel,1],y=coord.quali.partiel.sup[liste_quali_sup_partiel,2], coul = col.quali.sup[nrow(coord.quali.sup)+liste_quali_sup_partiel], group=rep(1:nbre.grpe,length(group.quali.sup)) )
 		colnames(df_quali_partial_sup)[1:3] <- c("xfin","yfin","sel")
 		df_quali_partial_sup <- df_quali_partial_sup[df_quali_partial_sup[,"sel"]==255,]
-        gg_graph <- gg_graph + geom_point(data=df_quali_partial_sup, aes(x=x, y = y, color = as.factor(coul)), shape = 15, size = ggoptions_default$size/3)
-		
-		if (!chrono) gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin, col=as.factor(coul)), lty=df_quali_partial_sup$coul, data = df_quali_partial_sup)
-		else {
+        if (habillage=="group") gg_graph <- gg_graph + geom_point(data=df_quali_partial_sup, aes(x=x, y = y, color = as.factor(coul)), shape = 15, size = ggoptions_default$size/3)
+        else gg_graph <- gg_graph + geom_point(data=df_quali_partial_sup, aes(x=x, y = y), col = as.factor(df_quali_partial_sup$coul), shape = 15, size = ggoptions_default$size/3)
+		if (!chrono){
+		  if (habillage=="group") gg_graph <- gg_graph + geom_segment(data = df_quali_partial_sup, aes(x = x, y = y, xend = xfin, yend = yfin, color=as.factor(coul)), lty=df_quali_partial_sup$coul)
+		  else gg_graph <- gg_graph + geom_segment(data = df_quali_partial_sup, aes(x = x, y = y, xend = xfin, yend = yfin), col=as.factor(df_quali_partial_sup[,"coul"]), lty=df_quali_partial_sup$group)
+		} else {
           for (i in group.quali.sup) {
             if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
               for (j in 2:nbre.grpe) {
@@ -1349,11 +1351,6 @@ if (!is.null(partial)){
       }
       if (!shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
     }
-      #        if ((!is.null(partial)) & (habillage == "group")) 
-      #            legend("topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, 
-      #                length(rownames(res.mfa$group$Lg)))], lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, 
-      #                length(rownames(res.mfa$group$Lg)))]), text.col = col.hab, 
-      #                col = col.hab, cex = par("cex")*0.8)
     if ((!is.null(partial)) & (habillage == "group")) {
       L <- list(x="topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, 
                                                                     length(rownames(res.mfa$group$Lg)))], lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, 
@@ -1361,16 +1358,12 @@ if (!is.null(partial)){
         L <- modifyList(L, legend)
         if(graph.type == "classic") do.call(graphics::legend, L)
     }
-      #        if ((!is.null(partial)) & (habillage != "group")) 
-      #            legend("topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))], lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))]), cex = par("cex")*0.8)
     if ((!is.null(partial)) & (habillage != "group")) {
         L <- list(x="topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))], 
                   lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))]), cex = par("cex")*0.8)
         L <- modifyList(L, legend)
         if(graph.type == "classic") do.call(graphics::legend, L)
       }
-      #        if ((habillage != "none") & (habillage != "ind") & (habillage != "group")) 
-      #            legend("topleft", legend = levels(res.mfa$call$X[, habillage]), text.col = col.hab, cex = par("cex")*0.8)
       if ((habillage != "none") & (habillage != "ind") & (habillage != "group")) {
         L <- list(x="topleft", legend = levels(res.mfa$call$X[, habillage]), text.col = col.hab, cex = par("cex")*0.8)
         L <- modifyList(L, legend)
@@ -1407,7 +1400,5 @@ if (!is.null(partial)){
       }
     }
   }
-  if (graph.type == "ggplot"){
-    return(gg_graph)
-  }
+  if (graph.type == "ggplot") return(gg_graph)
 }
