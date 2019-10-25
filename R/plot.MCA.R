@@ -425,7 +425,7 @@
     if (!is.null(res.mca$quanti.sup)) {
       if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
       if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
-      if (is.null(title)) title <- "Supplementary variables on the MCA map"
+      if (is.null(title)) title <- "Supplementary quantitative variables"
       if(graph.type=="classic"){
       plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = c(-1.1,1.1), ylim = c(-1.1,1.1), col = "white", asp=1, ...)
       abline(v=0,lty=2, ...)
@@ -475,10 +475,8 @@
             coord_fixed(ratio = 1) + 
             geom_line(aes(x=x, y=y), data=data.frame(x=-1:1,y=0),lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) + 
             geom_line(aes(x=x, y=y), data=data.frame(x=0,y=-1:1),lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) + 
-            xlab(lab.x) + ylab(lab.y) +
-            ggtitle(title) +
-            theme_light()  + 
-            ggoptions_default$theme
+            theme_light()
+
         if(habillage=="none"){
           gg_graph <- gg_graph + 
             aes(x=df_quanti.sup[,2], y=df_quanti.sup[,3]) +
@@ -487,6 +485,8 @@
           else{text <- geom_text(aes(x=df_quanti.sup[,2], y=df_quanti.sup[,3],label=df_quanti.sup[,1]), size = ggoptions_default$size, color = col.quanti.sup, hjust = (-sign(df_quanti.sup[,2])+1)/2, vjust = -sign(df_quanti.sup[,3])*0.75+0.25)}
         }
         gg_graph <- gg_graph + text + theme + circle
+		gg_graph <- gg_graph + xlab(lab.x) + ylab(lab.y) + ggtitle(title) 
+
       }
     }
   }

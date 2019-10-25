@@ -122,10 +122,7 @@ fct.eta2 <- function(vec,x,weights) {
     for (k in which(lapply(X,class)=="logical")) X[,k] <- as.factor(X[,k])
   }
 
-    if (level.ventil > 0) X <- ventil.tab(X,level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup,quali.sup=quali.sup,quanti.sup=quanti.sup)
-
-  # niveau <- NULL
-  # for (j in 1:ncol(X)) niveau = c(niveau, levels(X[, j]))
+  if (level.ventil > 0) X <- ventil.tab(X,level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup,quali.sup=quali.sup,quanti.sup=quanti.sup)
   niveau <- unlist(lapply(X,levels))
   if (sum(duplicated(niveau))>0){
     for (j in 1:ncol(X)) {
@@ -139,16 +136,27 @@ else act <- (1:ncol(X))
 Z <- tab.disjonctif(X[, act,drop=FALSE])
 if (any(is.na(X[,act]))){
  if (is.null(tab.disj)){
-  if (na.method=="Average") {
-    tab.disj <- tab.disjonctif.prop(X[ind.act, act],row.w=row.w)
-    Z[ind.act,] <- tab.disj
+  if (na.method=="Average"){
+    newRowW <- rep(1e-08,nrow(X))
+	newRowW[-ind.sup] <- row.w
+    Z <- tab.disjonctif.prop(X[, act],row.w=newRowW)
   }
   if (na.method=="NA"){
     warnings('Missing values for one variable are considered as a new category; you can use method="Average" or use the imputeMCA function of the missMDA package')
     for (j in act) X[,j] <- as.factor(replace(as.character(X[,j]),is.na(X[,j]),paste(attributes(X)$names[j],".NA",sep="")))
     Z <- tab.disjonctif(X[, act])
   }
- } else Z[ind.act,] <- tab.disj
+ } else{
+   Vec <- rep("var",ncol(X))
+   NLevels <- sapply(X,nlevels)
+   if (!is.null(quali.sup)) Vec[quali.sup] <- "quali.sup"
+   if (!is.null(quanti.sup)){
+     Vec[quanti.sup] <- "quanti.sup"
+	 NLevels[NLevels==0] <- 1
+   }   
+   TabDisjMod <- rep(Vec,NLevels)
+   Z <- tab.disj[,which(TabDisjMod=="var")]
+ }
 }
 Ztot <- Z
 
@@ -158,7 +166,8 @@ if (!is.null(quali.sup)){
        for (j in quali.sup) X[,j] <- as.factor(replace(as.character(X[,j]),is.na(X[,j]),paste(attributes(X)$names[j],".NA",sep="")))
      }
      X[,quali.sup] <- ventil.tab(X[,quali.sup,drop=FALSE],level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup)
-     Zqs <- tab.disjonctif(X[, quali.sup])
+     if (is.null(tab.disj)) Zqs <- tab.disjonctif(X[, quali.sup])
+     else Zqs <- tab.disj[,which(TabDisjMod=="quali.sup")]
      Ztot <- cbind.data.frame(Z, Zqs)
      col.sup <- (ncol(Z) + 1):ncol(Ztot)
 }
@@ -168,7 +177,8 @@ if (!is.null(quanti.sup)){
      if (any(is.na(X[,quanti.sup,drop=FALSE]))){
        for (j in quanti.sup) X[,j] <- replace(X[,j],is.na(X[,j]), mean(X[,j], na.rm=TRUE))
      }
-     X.quanti.sup <- as.matrix(X[, quanti.sup])
+     if (is.null(tab.disj)) X.quanti.sup <- as.matrix(X[, quanti.sup])
+	 else  X.quanti.sup <- tab.disj[,which(TabDisjMod=="quanti.sup"),drop=FALSE]
      if (!is.null(ind.sup)) X.quanti.sup <- X.quanti.sup[ind.act, ,drop=FALSE]
      colnames(X.quanti.sup) = attributes(X)$names[quanti.sup]
 }

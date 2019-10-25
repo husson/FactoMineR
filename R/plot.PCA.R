@@ -118,7 +118,6 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       if(!is.null(coord.quali)&is.na(test.invisible[3])) ymax <- max(ymax, coord.quali[, 2])
       if(!is.null(coord.ellipse)&is.na(test.invisible[3])) ymin <- min(ymin, coord.ellipse[, 3])
       if(!is.null(coord.ellipse)&is.na(test.invisible[3])) ymax <- max(ymax, coord.ellipse[, 3])
-      # ylim <- c(ymin, ymax) * 1.2
       ylim <- c(ymin, ymax)
       ylim <- (ylim-mean(ylim))*1.2 + mean(ylim)
     }

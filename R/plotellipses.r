@@ -282,6 +282,8 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
     if ((class(model)[1] == "PCA")||(class(model)[1] == "MCA")||(class(model)[1] == "MFA") || (class(model)[1] == "FAMD")) {
       res.pca <- PCA(aux, ncp = max(axes), quali.sup = 1, scale.unit = FALSE, graph = FALSE, axes = 1:max(axes))
       res.pca$eig[axes, ] = model$eig[axes, ]
+  res.pca$ind$cos2[,axes] <- model$ind$cos2[,axes]
+	  res.pca$ind$contrib[,axes] <- model$ind$contrib[,axes]
       coord.ell <- coord.ellipse(aux, bary = means, level.conf = level, axes = axes)
         L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
                   cex = cex, label = label, axes = axes, xlim = xlim, 
@@ -299,8 +301,9 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
                                                # colnames(model$call$X)[var]), autoLab = autoLab, graph.type=graph.type)
       # }
       L <- modifyList(L, p3p)
-      if (graph.type=="ggplot") return(do.call(plot.PCA, L))
-      else do.call(plot.PCA, L)
+      return(do.call(plot.PCA, L))
+      # if (graph.type=="ggplot") return(do.call(plot.PCA, L))
+      # else do.call(plot.PCA, L)
     }
   } else {
     don <- apply(model$ind$coord[, axes], 2, FUN = function(x, 
