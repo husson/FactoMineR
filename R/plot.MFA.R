@@ -533,14 +533,12 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     }
   }
   if (choix=="freq"){
-    if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
+    if (is.null(res.mfa$freq)&is.null(res.mfa$freq.sup)) stop("You have no frequencies groups")
+	if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
 #    if (is.null(palette)) palette = c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
     if (is.null(palette)) palette = palette()
-    if (is.null(col.hab)) col.hab=c("black","grey60","darkblue","blue")
-    col.row = col.hab[1]
-    col.row.sup = col.hab[2]
-    col.col = col.hab[3]
-    col.col.sup = col.hab[4]
+    col.row = "black"
+    col.row.sup = "grey60"
     coord.col <- res.mfa$freq$coord[, axes, drop = FALSE]
     coord.row <- res.mfa$ind$coord[, axes]
     coord.row.sup <- coord.col.sup <- NULL
@@ -549,9 +547,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     
     test.invisible <- vector(length = 4)
     if (!is.null(invisible)) {
-      test.invisible[1] <- match("row", invisible)
+      test.invisible[1] <- match("row", invisible)|match("ind", invisible)
       test.invisible[2] <- match("col", invisible)
-      test.invisible[3] <- match("row.sup", invisible)
+      test.invisible[3] <- match("row.sup", invisible)|match("ind.sup", invisible)
       test.invisible[4] <- match("col.sup", invisible)
     }
     else  test.invisible <- rep(NA, 4)
@@ -588,16 +586,28 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       ymax = ylim[2]
     }
     if(graph.type=="ggplot") nudge_y  <- (xlim[2] - xlim[1])*0.03
-    
-    col <- NULL
+    col <- NULL    
     if (habillage == "group") {
-      if (is.null(col.hab) | length(col.hab) < length(group[type == "f"])) col.hab <- 2:(length(group[type == "f"]) + 1)
-      for (i in 1:length(group[type == "f"])) col <- c(col, rep(col.hab[i], group[type == "f"][i]))
+      if (is.null(col.hab) | length(col.hab) < length(group[type == "f"])){
+        if (!is.null(res.mfa$call$num.group.sup)){
+          col.hab[which(!(1:length(group))%in%(res.mfa$call$num.group.sup))] <- 2:(1+length(group)-length(res.mfa$call$num.group.sup))
+          col.hab[res.mfa$call$num.group.sup] <- length(group)-length(res.mfa$call$num.group.sup)+1+(1:length(res.mfa$call$num.group.sup))
+		  if (!is.null(res.mfa$call$nature.group=="contingency")) col.col <- rep(col.hab[res.mfa$call$nature.group=="contingency"],times=group[res.mfa$call$nature.group=="contingency"])
+		  if (!is.null(res.mfa$call$nature.group=="contingency.sup")) col.col.sup <- rep(col.hab[res.mfa$call$nature.group=="contingency.sup"],times=group[res.mfa$call$nature.group=="contingency.sup"])
+ 	    } else {
+		  col.hab <- 2:(length(group) + 1)
+          col.col <- 1+rep(which(type=="f"),times=group[type=="f"])
+		}
+	  }
     } else {
-      if (is.null(col.hab) | length(col.hab) < sum(group[type == "f"])) col <- rep(1, sum(group[type == "f"]))
-      else col <- col.hab
+      if (is.null(col.hab) | length(col.hab) < sum(group[type == "f"])) {
+ 	    col.hab <- rep(1, sum(group[type == "f"]))
+		col <- col.hab
+		col.col = "blue"
+        col.col.sup = "darkblue"
+      } else col.col <- col.hab
     }
-    
+
     if (is.null(title)) titre <- "Factor map for the contingency table(s)"
     else titre <- title
     if(graph.type=="classic"){
@@ -670,7 +680,6 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       }
     }
     
-    
     coo <- labe <- coll <- ipch <- fonte <- NULL
     if (is.na(test.invisible[1])) {
       coo <- rbind(coo,coord.row)
@@ -687,9 +696,10 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     }
     if (is.na(test.invisible[2])) {
       coo <- rbind(coo,coord.col)
-      if (lab.ind){ labe2 <- rownames(coord.col)
+      if (lab.col){ labe2 <- rownames(coord.col)
       } else  labe2 <- rep("",nrow(coord.col))
-      coll2 <- rep(col.col,nrow(coord.col))
+      if (length(col.col)==1) coll2 <- rep(col.col,nrow(coord.col))
+      else coll2 <- col.col
       ipch <- c(ipch,rep(17,nrow(coord.col)))
       fonte <- c(fonte,rep(1,nrow(coord.col)))
       if (!is.null(selectionC)){
@@ -702,9 +712,10 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     }
     if (!is.null(res.mfa$freq.sup) & is.na(test.invisible[4])) {
       coo <- rbind(coo,coord.col.sup)
-      if (lab.ind){ labe2 <- rownames(coord.col.sup)
+      if (lab.col){ labe2 <- rownames(coord.col.sup)
       } else  labe2 <- rep("",nrow(coord.col.sup))
-      coll2 <- rep(col.col.sup,nrow(coord.col.sup))
+      if (length(col.col.sup==1)) coll2 <- rep(col.col.sup,nrow(coord.col.sup))
+	  else coll2 <- col.col.sup
       ipch <- c(ipch,rep(17,nrow(coord.col.sup)))
       fonte <- c(fonte,rep(1,nrow(coord.col.sup)))
       if (!is.null(selectionCS)){
@@ -745,15 +756,17 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       }
       if (!shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
     }
-    #      if (habillage == "group") legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "f"], text.col = col.hab, cex = 0.8*par("cex"))
     if (habillage == "group"){
-      L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "f"], text.col = col.hab, cex = 0.8*par("cex"))
+      if (is.na(test.invisible[1])) L <- list(x="topleft", legend = c("Individuals",rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),,drop=FALSE ])[type == "f"]), text.col = c(1,col.hab[type == "f"]), cex = 0.8*par("cex"))
+	  else L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),,drop=FALSE ])[type == "f"], text.col = col.hab[type == "f"], cex = 0.8*par("cex"))
+      
       L <- modifyList(L, legend)
       if(graph.type == "classic") do.call(graphics::legend, L)	
     }
     if(graph.type == "ggplot"){
       if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
       df_freq <- data.frame(labe,coo,coll,ipch,fonte)
+	  df_freq[,4] <- as.factor(df_freq[,4])
       if(habillage == "group"){
       gg_graph <- ggplot() +
         coord_fixed(ratio = 1) +
@@ -763,7 +776,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
         geom_vline(xintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
         labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "")) +
-        scale_color_manual(values = levels(df_freq[,4]), labels = L$legend) +
+        scale_color_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)]) +
+        # scale_color_manual(values = levels(df_freq[,4]), labels = L$legend) +
         theme_light() +
         ggoptions_default$theme +
         ggtitle(titre)
@@ -783,7 +797,6 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
           ggtitle(titre)
         if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = df_freq[,4])
         else{text <- geom_text(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = df_freq[,4], hjust = (-sign(df_freq[,2])+1)/2, vjust = -sign(df_freq[,3])*0.75+0.25)}
-        
       }
       gg_graph <- gg_graph + theme + text
     }
