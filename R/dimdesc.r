@@ -40,8 +40,9 @@ dimdesc=function (res, axes = 1:3, proba = 0.05)
         for (k in 1:length(axes)) {
             if (!is.null(ind.supp)) tableau = cbind.data.frame(res$ind$coord[, axes[k],drop=FALSE], res$call$X[-ind.supp, ])
             else tableau = cbind.data.frame(res$ind$coord[, axes[k],drop=FALSE], res$call$X)
-#            result[[k]] <- condes(tableau, 1, proba = proba)
             result[[k]] <- condes(tableau, 1, proba = proba, weights=res$call$row.w.init)
+			if (k==1) result$call <- result[[1]]$call
+			result[[k]]$call <- NULL
         }
     }
     return(result)
