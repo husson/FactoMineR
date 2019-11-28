@@ -97,6 +97,10 @@ hc <- HCPC(res.pca, nb.clust=-1)
 ### Construct a hierarchical tree from a partition (with 10 clusters)
 ### (useful when the number of individuals is very important)
 hc2 <- HCPC(iris[,1:4], kk=10, nb.clust=-1)
+
+## Graphical interface
+require(Factoshiny)
+res <- HCPCshiny(iris[,1:4])
 }
 }
 \keyword{multivariate}

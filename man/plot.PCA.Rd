@@ -91,14 +91,33 @@ Returns the individuals factor map and the variables factor map.
 \examples{
 data(decathlon)
 res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
-plot(res.pca, habillage = 13, col.hab=c("green","blue"))
-## To automatically draw ellipses around the barycentres of all the categorical variables
+plot(res.pca, habillage = 13, cex=0.8)
+\dontrun{
+plot(res.pca, habillage = "cos2")
+plot(res.pca, habillage = "100m")
+plot(res.pca, habillage = c("Competition","100m"))
+}
+## To automatically draw ellipses around the barycentres of the categorical variables
 plotellipses(res.pca)
+
 ## Selection of some individuals
-plot(res.pca,select="contrib 7") #plot the 7 individuals that have the highest cos2 
-plot(res.pca,select="cos2 0.8")  #plot the individuals that have a cos2 greater than 0.8
-plot(res.pca,select="cos2 5")     #plot the 5 individuals that have the highest cos2 
-plot(res.pca,choix="var",select="cos2 0.6")  #plot the variables that have a cos2 greater than 0.6
+plot(res.pca,select="contrib 7") # plot the 7 individuals with the highest contribution 
+plot(res.pca,select="cos2 0.8")  # plot the individuals with cos2 greater than 0.8
+plot(res.pca,select="cos2 5")    # plot the 5 individuals with the highest cos2 
+plot(res.pca,choix="var",select="cos2 0.6")  # plot the variables with cos2 greater than 0.6
+
+plot(res.pca,habillage="100m",
+   ggoptions=list(low.col.quanti="grey90",high.col.quanti="grey10"),legend=list(x="bottom"))
+
+## You can modify the ggplot graphs as ususal with ggplot2
+require(ggplot2)
+gr <- plot(res.pca)
+gr + theme(panel.grid.major = element_blank(),
+   plot.title=element_text(size=14, color="blue"),
+   axis.title = element_text(size=12, color="red"))
+
+## To draw classical R graphs
+plot(res.pca, graph.type = "classic")
 }
 
 \keyword{dplot}

@@ -6,7 +6,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
                       invisible = c("none","ind", "ind.sup", "quali","var", "quanti.sup"), lim.cos2.var = 0.,
                       title = NULL, palette=NULL, autoLab=c("auto","yes","no"),new.plot=FALSE, 
                       select=NULL, unselect = 0.7,shadowtext = FALSE, legend = list(bty = "y", x = "topleft"),
-                      graph.type = c("ggplot","classic"), ggoptions = NULL,  ...){
+                      graph.type = c("classic","ggplot"), ggoptions = NULL,  ...){
   
   res.pca <- x
   argument <- list(...)

@@ -79,9 +79,16 @@ res.mca = MCA (poison, quali.sup = 3:4, quanti.sup = 1:2, graph=FALSE)
 plot(res.mca,invisible=c("var","quali.sup"))
 plot(res.mca,invisible="ind")
 plot(res.mca,choix="var")
-plot(res.mca,invisible=c("ind"),autoLab="yes", selectMod="cos2 10")
+plot(res.mca,invisible=c("ind"), selectMod="cos2 10")
 \dontrun{
-plot(res.mca,autoLab="yes", selectMod="cos2 5", select="cos2 5")
+plot(res.mca, selectMod="cos2 5", select="cos2 5")
+
+## You can modify the ggplot graphs as ususal with ggplot2
+require(ggplot2)
+gr <- plot(res.mca)
+gr + theme(panel.grid.major = element_blank(),
+   plot.title=element_text(size=14, color="blue"),
+   axis.title = element_text(size=12, color="red"))
 }
 }
 

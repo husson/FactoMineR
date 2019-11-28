@@ -63,6 +63,12 @@ ellipseCA(res.ca)
 ## Ellipses around some columns only
 ellipseCA(res.ca,ellipse="col",col.col.ell=c(rep("blue",2),rep("transparent",3)),
      invisible=c("row.sup","col.sup"))
+
+\dontrun{
+## Graphical interface
+require(Factoshiny)
+res <- CAshiny(children)
+}
 }
 
 \keyword{multivariate}

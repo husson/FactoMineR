@@ -73,7 +73,7 @@ plot.CA <- function (x, axes = c(1, 2),
       if(is.na(test.invisible[5])) xmax <- max(xmax, coord.quali.sup[, 1])
       # xlim <- c(xmin, xmax) * 1.2
       xlim <- c(xmin, xmax)
-      xlim <- (xlim-mean(xlim))*1.2 + mean(xlim)
+	  xlim <- (xlim-mean(xlim))*1.2 + mean(xlim)
     }
     if (is.null(ylim)) {
       ymin <- ymax <- 0

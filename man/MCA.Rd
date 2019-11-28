@@ -83,6 +83,10 @@ plotellipses(res.mca,keepvar=1:4)
 data (poison)
 res <- MCA (poison[,3:8],excl=c(1,3))
 
+## Graphical interface
+require(Factoshiny)
+res <- MCAshiny(tea)
+
 ## Example with missing values : use the missMDA package
 require(missMDA)
 data(vnf)

@@ -99,6 +99,16 @@ MFA(poison, group=c(2,2,5,6), type=c("s","n","n","n"),
 data(mortality)
 res<-MFA(mortality,group=c(9,9),type=c("f","f"),
     name.group=c("1979","2006"))
+
+## Graphical interface
+require(Factoshiny)
+res <- MFAshiny(wine)
+
+### with missing values
+require(missMDA)
+data(orange)
+res.impute <- imputeMFA(orange, group=c(5,3), type=rep("s",2),ncp=2) 
+res.mfa <- MFA(res.impute$completeObs,group=c(5,3),type=rep("s",2)) 
 }
 }
 

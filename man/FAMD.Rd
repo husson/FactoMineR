@@ -10,7 +10,7 @@ FAMD is a principal component method dedicated to explore data with both continu
 
 \usage{
 FAMD (base, ncp = 5, graph = TRUE, sup.var = NULL, 
-    ind.sup = NULL, axes = c(1,2), row.w = NULL, tab.comp = NULL)
+    ind.sup = NULL, axes = c(1,2), row.w = NULL, tab.disj = NULL)
 }
 
 \arguments{
@@ -21,7 +21,7 @@ FAMD (base, ncp = 5, graph = TRUE, sup.var = NULL,
   \item{sup.var}{a vector indicating the indexes of the supplementary variables}
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{row.w}{an optional row weights (by default, uniform row weights); the weights are given only for the active individuals}
-  \item{tab.comp}{object obtained from the imputeFAMD function of the missMDA package that allows to handle missing values}
+  \item{tab.disj}{object obtained from the imputeFAMD function of the missMDA package that allows to handle missing values}
 }
 
 \value{
@@ -53,8 +53,15 @@ data(geomorphology)
 res <- FAMD(geomorphology)
 summary(res)
 
-data(wine)
-res <- FAMD(wine[,c(1,2,30,31)])
+## Graphical interface
+require(Factoshiny)
+res <- FAMDshiny(geomorphology)
+
+### with missing values
+require(missMDA)
+data(ozone)
+res.impute <- imputeFAMD(ozone, ncp=3) 
+res.afdm <- FAMD(ozone,tab.disj=res.impute$tab.disj) 
 }
 }
 

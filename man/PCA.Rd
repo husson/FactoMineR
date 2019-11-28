@@ -60,9 +60,13 @@ dimdesc(res.pca, axes = 1:2)
 ## To draw ellipses around the categories of the 13th variable (which is categorical)
 plotellipses(res.pca,13)
 
+\dontrun{
+## Graphical interface
+require(Factoshiny)
+res <- PCAshiny(decathlon)
+
 ## Example with missing data
 ## use package missMDA
-\dontrun{
 require(missMDA)
 data(orange)
 nb <- estim_ncpPCA(orange,ncp.min=0,ncp.max=5,method.cv="Kfold",nbsim=50)

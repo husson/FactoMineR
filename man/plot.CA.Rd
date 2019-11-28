@@ -78,6 +78,15 @@ res.ca <- CA (children, col.sup = 6:8, row.sup = 15:18)
 
 ## select rows and columns that have a cos2 greater than 0.8
 plot(res.ca, selectCol="cos2 0.8", selectRow="cos2 0.8")
+
+\dontrun{
+## You can modify the ggplot graphs as ususal with ggplot2
+require(ggplot2)
+gr <- plot(res.ca)
+gr + theme(panel.grid.major = element_blank(),
+   plot.title=element_text(size=14, color="blue"),
+   axis.title = element_text(size=12, color="red"))
+}
 }
 
 \keyword{dplot}
