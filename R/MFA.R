@@ -86,7 +86,7 @@ for (i in 1:length(group)){
     base <- as.data.frame(base)
     if (!inherits(base, "data.frame")) stop("base should be a data.frame")
     res.separe <- vector(mode = "list", length = nbre.group)
-    if (is.null(name.group)) name.group <- paste("group", 1:nbre.group, sep = ".")
+    if (is.null(name.group)) name.group <- paste0("Gr", 1:nbre.group)
     names(res.separe) <- name.group
     ind.grpe <- 0
     if (any(is.na(base))){

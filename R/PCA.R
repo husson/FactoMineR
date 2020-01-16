@@ -23,7 +23,16 @@ fct.eta2 <- function(vec,x,weights) {
 
 	X <- as.data.frame(X)
     is.quali <- which(!unlist(lapply(X,is.numeric)))
-    X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
+    if (length(is.quali)>0){
+	  X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
+      niveau <- unlist(lapply(X[,is.quali,drop=FALSE],levels))
+      if (sum(duplicated(niveau))>0 | any(niveau%in%(1:nrow(X)))){
+        for (j in 1:ncol(X[,is.quali,drop=FALSE])) {
+          if ((sum(niveau %in% levels(X[,is.quali[j]])) != nlevels(X[,is.quali[j]])) | any(levels(X[,is.quali[j]])%in%(1:nrow(X)))) levels(X[,is.quali[j]]) = paste(attributes(X[,is.quali,drop=FALSE])$names[j], levels(X[,is.quali,drop=FALSE][, j]), sep = "_")
+        }
+      }
+	}
+
 	X <- droplevels(X)
     if (any(is.na(X))) {
         warning("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
@@ -160,15 +169,13 @@ fct.eta2 <- function(vec,x,weights) {
                 nombre <- c(nombre, sum(row.w.init[which(var == ind)]))
             }
             colnames(bary) <- colnames(X)
-            if ((levels(var)[1] %in% (1:nrow(X))) | (levels(var)[1] %in% c("y", "Y", "n", "N"))) row.names(bary) <- paste(colnames(X.quali.sup)[i], as.character(levels(var)))
+            if ((levels(var)[1] %in% (1:nrow(X))) | (levels(var)[1] %in% c("y", "Y", "n", "N"))) row.names(bary) <- paste(colnames(X.quali.sup)[i], as.character(levels(var)),sep=".")
             else row.names(bary) <- as.character(levels(var))
             if (i == 1)  barycentre <- bary
             else barycentre <- rbind(barycentre, bary)
         }
         bary <- t(t(barycentre)-centre)
         if (!is.null(ecart.type)) bary <- t(t(bary)/ecart.type)
-#        bary <- as.matrix(sweep(as.matrix(barycentre), 2, centre, FUN = "-"))
-#        if (!is.null(ecart.type)) bary <- as.matrix(sweep(as.matrix(bary), 2, ecart.type, FUN = "/"))
         dist2 <- rowSums(t(t(bary^2)*col.w))
         coord.barycentre <- t(t(bary)*col.w)
         coord.barycentre <- crossprod(t(coord.barycentre),tmp$V)
@@ -190,8 +197,8 @@ fct.eta2 <- function(vec,x,weights) {
     res$call = res.call
     class(res) <- c("PCA", "list ")
     if (graph & (ncp>1)) {
-        print(plot.PCA(res, choix = "ind", axes = axes,new.plot=TRUE))
-        print(plot.PCA(res, choix = "var", axes = axes,new.plot=TRUE,shadowtext=TRUE))
+        print(plot.PCA(res, choix = "ind", axes = axes))
+        print(plot.PCA(res, choix = "var", axes = axes,shadowtext=TRUE))
     }
     return(res)
 }
