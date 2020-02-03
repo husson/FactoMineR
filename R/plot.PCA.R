@@ -18,6 +18,9 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
   autoLab <- match.arg(autoLab,c("auto","yes","no"))
   if (autoLab == "yes") autoLab=TRUE 
   if (autoLab == "no") autoLab=FALSE
+  old.palette <- palette()
+  if (is.null(palette)) palette <- c("black", "red", "green3", "blue", "magenta", "darkgoldenrod","darkgray", "orange", "cyan", "violet", "lightpink", "lavender", "yellow", "darkgreen","turquoise", "lightgrey", "lightblue", "darkkhaki","darkmagenta","lightgreen", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
+  palette(palette)   # that is necessary
   label <- match.arg(label,c("all","none","ind", "ind.sup", "quali", "var", "quanti.sup"),several.ok=TRUE)
   invisible <- match.arg(invisible,c("none","ind", "ind.sup", "quali","var", "quanti.sup"),several.ok=TRUE)
   if ("none"%in%invisible) invisible = NULL
@@ -471,15 +474,15 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       for (e in 1:nbre.ellipse) {
         data.elli <- coord.ellipse[ellipse$res[, 1] == levels(coord.ellipse[, 1])[e], -1]
         if(graph.type=="classic"){
-          if ((habillage[1] != "none")&(habillage[1] != "ind")) lines(x=data.elli[, 1], y = data.elli[, 2], col = color.mod[e],...)
-          else lines(x=data.elli[, 1], y = data.elli[, 2], col = col.quali,...)}
+          if ((habillage[1] != "none")&(habillage[1] != "ind")) lines(x=data.elli[, 1], y = data.elli[, 2], col = palette[color.mod[e]],...)
+          else lines(x=data.elli[, 1], y = data.elli[, 2], col = palette[col.quali],...)}
         else{
           if(graph.type=="ggplot"){
             if (habillage[1] != "none"){
-              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = color.mod[e])
+              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = palette[color.mod[e]])
             }
             else {
-              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = col.quali)
+              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = palette[col.quali])
             }
           }
         }
@@ -732,5 +735,6 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       if (is.na(test.invisible[1]) & (isTRUE(lab.var))) gg_graph <- gg_graph + text 
     }
   }
+  palette(old.palette)
   if(graph.type == "ggplot") return(gg_graph)
 }

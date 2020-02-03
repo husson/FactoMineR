@@ -7,6 +7,9 @@ plot.FAMD <- function (x, choix = c("ind","var","quanti","quali"), axes = c(1, 2
 autoLab <- match.arg(autoLab,c("auto","yes","no"))
 choix <- match.arg(choix,c("ind","var","quanti","quali"))
 graph.type <- match.arg(graph.type[1],c("ggplot","classic"))
+old.palette <- palette()
+if (is.null(palette)) palette <- c("black", "red", "green3", "blue", "magenta", "darkgoldenrod","darkgray", "orange", "cyan", "violet", "lightpink", "lavender", "yellow", "darkgreen","turquoise", "lightgrey", "lightblue", "darkkhaki","darkmagenta","lightgreen", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
+palette(palette)   # that is necessary
 
 if (choix=="ind" | choix=="quali") {
   class(x) <- c("MFA", "list")
@@ -72,5 +75,6 @@ if (choix=="quanti") {
     xlim = xlim, ylim = ylim, title = title, palette=palette, new.plot = new.plot,
     select = select,unselect = unselect,autoLab = autoLab,shadowtext = shadowtext, graph.type = graph.type, ggoptions = ggoptions, ...)
 } 
+  palette(old.palette)
   if (graph.type == "ggplot") return(gg_graph)
 }

@@ -25,8 +25,8 @@ MFA <- function (base, group, type = rep("s",length(group)), excl = NULL, ind.su
     }
 if (!is.null(tab.comp)){
   if (!is.null(weight.col.mfa)) stop("Weightings on the variables are not allowed with the tab.comp argument")
-  if (!is.null(ind.sup)) stop("Supplementary individuals are not allowed with tab.comp")
-  if (!is.null(num.group.sup)) stop("Supplementary groups are not allowed with tab.comp")
+#  if (!is.null(ind.sup)) stop("Supplementary individuals are not allowed with tab.comp")
+#  if (!is.null(num.group.sup)) stop("Supplementary groups are not allowed with tab.comp")
 }
 
 nature.group <- NULL
@@ -618,12 +618,11 @@ tmp <- tmp*row.w
       inertie.intra.cg.partiel <- matrix(NA, (nrow(barycentre) * length(group.actif) ), ncp)
       tmp <- array(0,dim=c(nrow(res.globale$quali.sup$coord),ncp,length(group.actif)))
       ind.col <- 0
-      for (g in 1:length(group.actif)) {
+ for (g in 1:length(group.actif)) {
         cg.partiel <- as.data.frame(matrix(res.globale$call$centre, nrow(barycentre), ncol(barycentre), byrow = TRUE, dimnames = dimnames(barycentre)))
         cg.partiel[, (ind.col + 1):(ind.col + group.mod[group.actif[g]])] <- barycentre[, (ind.col + 1):(ind.col + group.mod[group.actif[g]])]
         ind.col <- ind.col + group.mod[group.actif[g]]
         Xis <- t((t(cg.partiel)-res.globale$call$centre)/res.globale$call$ecart.type)
-##        coord.quali.sup <- length(group.actif) * as.matrix(Xis)%*%diag((res.globale$call$col.w))%*%res.globale$svd$V
         coord.quali.sup <- length(group.actif) * as.matrix(Xis)
         coord.quali.sup <- t(t(coord.quali.sup)*res.globale$call$col.w)
         coord.quali.sup <- crossprod(t(coord.quali.sup),res.globale$svd$V)

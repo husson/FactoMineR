@@ -26,6 +26,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
   type <- res.mfa$call$type
   type.act <- type
   num.group.sup = NULL
+  old.palette <- palette()
+  if (is.null(palette)) palette <- c("black", "red", "green3", "blue", "magenta", "darkgoldenrod","darkgray", "orange", "cyan", "violet", "lightpink", "lavender", "yellow", "darkgreen","turquoise", "lightgrey", "lightblue", "darkkhaki","darkmagenta","lightgreen", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
+  palette(palette)
   if (!is.null(res.mfa$call$num.group.sup)) {
     num.group.sup <- res.mfa$call$num.group.sup
     nbre.grpe.sup <- length(num.group.sup)
@@ -43,8 +46,6 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
   }
   if (choix == "axes") {
     if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-    if (is.null(palette)) palette = palette()
-#    if (is.null(palette)) palette = c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
     if (is.null(title)) title <- "Partial axes"
     if(graph.type == "classic"){
       plot(0, 0, xlab = lab.x, ylab = lab.y, xlim = c(-1.1, 1.1), ylim = c(-1.1, 1.1), col = "white", asp = 1, main = title,...)
@@ -224,8 +225,6 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     if (habillage == "group") col.hab <- (2:(length(group) + 1))
     
     if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-#    if (is.null(palette)) palette = c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
-    if (is.null(palette)) palette = palette()
     coo <- labe <- coll <- ipch <- fonte <- NULL
     if (is.null(xlim)) xlim <- c(0,1)
     if (is.null(ylim)) ylim <- c(0,1)
@@ -287,7 +286,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       df_group <- data.frame(labe,coo,coll,ipch,fonte)
       gg_graph <- ggplot() +
         coord_fixed(ratio = 1) +
-        geom_point(aes(x=df_group[,2], y=df_group[,3]), color= df_group[,4], shape = df_group[,5]) + 
+        geom_point(aes(x=df_group[,2], y=df_group[,3]), color= rgb(t(col2rgb(df_group[,4])),maxColorValue=255) , shape = df_group[,5], size = ggoptions_default$size/3) + 
         xlab(lab.x) + ylab(lab.y) +
         xlim(xlim) + ylim(ylim) +
         geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
@@ -295,15 +294,13 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         theme_light() + 
         ggoptions_default$theme +
         ggtitle(title)
-      if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_group[,2], y=df_group[,3], label=df_group[,1]), size = ggoptions_default$size, color = df_group[,"coll"], fontface = df_group[,"fonte"])
-      else{text <- geom_text(aes(x=df_group[,2], y=df_group[,3], label=df_group[,1]), size = ggoptions_default$size, color = df_group[,4], hjust = (-sign(df_group[,2])+1)/2, vjust = -sign(df_group[,3])*0.75+0.25, fontface = df_group[,"fonte"])}
+      if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_group[,2], y=df_group[,3], label=df_group[,1]), size = ggoptions_default$size, color = rgb(t(col2rgb(df_group[,"coll"])),maxColorValue=255) , fontface = df_group[,"fonte"])
+      else{text <- geom_text(aes(x=df_group[,2], y=df_group[,3], label=df_group[,1]), size = ggoptions_default$size, color = rgb(t(col2rgb(df_group[,4])),maxColorValue=255) , hjust = (-sign(df_group[,2])+1)/2, vjust = -sign(df_group[,3])*0.75+0.25, fontface = df_group[,"fonte"])}
       gg_graph <- gg_graph + text + theme
     }
   }
   if (choix == "var") {
     if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-#    if (is.null(palette)) palette = c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
-    if (is.null(palette)) palette = palette()
     test.invisible <- vector(length = 2)
     if (!is.null(invisible)) {
       test.invisible[1] <- match("quanti", invisible)
@@ -535,9 +532,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
   if (choix=="freq"){
     if (is.null(res.mfa$freq)&is.null(res.mfa$freq.sup)) stop("You have no frequencies groups")
 	if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-#    if (is.null(palette)) palette = c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
-    if (is.null(palette)) palette = palette()
-    col.row = "black"
+    col.row = 1
     col.row.sup = "grey60"
     coord.col <- res.mfa$freq$coord[, axes, drop = FALSE]
     coord.row <- res.mfa$ind$coord[, axes]
@@ -766,28 +761,27 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     if(graph.type == "ggplot"){
       if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
       df_freq <- data.frame(labe,coo,coll,ipch,fonte)
-	  df_freq[,4] <- as.factor(df_freq[,4])
+#	  df_freq[,4] <- as.factor(df_freq[,4])
       if(habillage == "group"){
       gg_graph <- ggplot() +
         coord_fixed(ratio = 1) +
-        geom_point(aes(x=df_freq[,2], y=df_freq[,3],color=df_freq[,4]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3) +
+        geom_point(aes(x=df_freq[,2], y=df_freq[,3]),color=palette[df_freq[,4]], shape = ggoptions_default$point.shape, size = ggoptions_default$size/3) +
         xlab(lab.x) + ylab(lab.y) +
         xlim(xlim) + ylim(ylim) +
         geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
         geom_vline(xintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
         labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "")) +
         scale_color_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)]) +
-        # scale_color_manual(values = levels(df_freq[,4]), labels = L$legend) +
         theme_light() +
         ggoptions_default$theme +
         ggtitle(titre)
-      if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = df_freq[,4])
-      else{text <- geom_text(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = df_freq[,4], hjust = (-sign(df_freq[,2])+1)/2, vjust = -sign(df_freq[,3])*0.75+0.25)}
+      if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = palette[df_freq[,4]])
+      else{text <- geom_text(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = palette[df_freq[,4]], hjust = (-sign(df_freq[,2])+1)/2, vjust = -sign(df_freq[,3])*0.75+0.25)}
       }
       if(habillage == "none"){
         gg_graph <- ggplot() +
           coord_fixed(ratio = 1) +
-          geom_point(aes(x=df_freq[,2], y=df_freq[,3]), color=df_freq[,4], shape = ggoptions_default$point.shape, size = ggoptions_default$size/3) +
+          geom_point(aes(x=df_freq[,2], y=df_freq[,3]), color=palette[df_freq[,4]], shape = ggoptions_default$point.shape, size = ggoptions_default$size/3) +
           xlab(lab.x) + ylab(lab.y) +
           xlim(xlim) + ylim(ylim) +
           geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
@@ -795,8 +789,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
           theme_light() +
           ggoptions_default$theme +
           ggtitle(titre)
-        if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = df_freq[,4])
-        else{text <- geom_text(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = df_freq[,4], hjust = (-sign(df_freq[,2])+1)/2, vjust = -sign(df_freq[,3])*0.75+0.25)}
+        if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = palette[df_freq[,4]])
+        else{text <- geom_text(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = palette[df_freq[,4]], hjust = (-sign(df_freq[,2])+1)/2, vjust = -sign(df_freq[,3])*0.75+0.25)}
       }
       gg_graph <- gg_graph + theme + text
     }
@@ -835,12 +829,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if (length(partial) == 1) {
         if (partial == "all") {
           group.ind.actif <- 1:nrow(coord.ind)
-          if (!is.null(res.mfa$ind.sup)) 
-            group.ind.sup <- 1:nrow(coord.ind.sup)
-          if (!is.null(res.mfa["quali.var"]$quali.var)) 
-            group.quali <- 1:nrow(coord.quali)
-          if (!is.null(res.mfa["quali.var.sup"]$quali.var.sup)) 
-            group.quali.sup <- 1:nrow(coord.quali.sup)
+          if (!is.null(res.mfa$ind.sup))  group.ind.sup <- 1:nrow(coord.ind.sup)
+          if (!is.null(res.mfa["quali.var"]$quali.var)) group.quali <- 1:nrow(coord.quali)
+          if (!is.null(res.mfa["quali.var.sup"]$quali.var.sup)) group.quali.sup <- 1:nrow(coord.quali.sup)
         }
         else {
           for (i in 1:length(partial)) {
@@ -970,7 +961,6 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
         ymax <- max(ymax, coord.quali.partiel.sup[unlist(lapply(group.quali.sup, 
                        function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))),  2])
-      # ylim <- c(ymin, ymax) * 1.1
       ylim <- c(ymin, ymax)
       ylim <- (ylim-mean(ylim))*1.1 + mean(ylim)
     }
@@ -984,7 +974,6 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         if (sum(rownames(res.mfa$ind$coord)%in%select)!=0) selection <- which(rownames(res.mfa$ind$coord)%in%select)
         else {
           if (grepl("contrib",select)) selection <- (rev(order(res.mfa$ind$contrib[,axes[1],drop=FALSE]*res.mfa$eig[axes[1],1]+res.mfa$ind$contrib[,axes[2],drop=FALSE]*res.mfa$eig[axes[2],1])))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
-          # 		    if (grepl("contrib",select)) selection <- (rev(order(apply(res.mfa$ind$contrib[,axes],1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"contrib"))),na.rm=T))]
           if (grepl("dist",select)) selection <- (rev(order(res.mfa$ind$dist)))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"dist"))),na.rm=T))]
           if (grepl("coord",select)) selection <- (rev(order(apply(res.mfa$ind$coord[,axes]^2,1,sum))))[1:min(nrow(res.mfa$ind$coord),sum(as.integer(unlist(strsplit(select,"coord"))),na.rm=T))]
           if (grepl("cos2",select)) {
@@ -1012,20 +1001,18 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       }
     }
 	
-    # if (habillage == "none") col.ind <- col.ind.sup <- col.quali.sup <- col.quali <- col.ellipse <- col.ellipse.par <- rep("black", nb.ind * (nbre.grpe + 1))
     if (habillage == "none"){
-      col.ind <- rep("black", nb.ind.actif*(nbre.grpe + 1))
-      if (!is.null(res.mfa$ind.sup)) col.ind.sup <- rep("blue", (nb.ind - nb.ind.actif)*(nbre.grpe + 1))
-      if (!is.null(res.mfa[["quali.var"]])) col.quali <- rep("red", (nbre.grpe + 1)*sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"]))
+      col.ind <- rep(1, nb.ind.actif*(nbre.grpe + 1))
+      if (!is.null(res.mfa$ind.sup)) col.ind.sup <- rep(4, (nb.ind - nb.ind.actif)*(nbre.grpe + 1))
+      if (!is.null(res.mfa[["quali.var"]])) col.quali <- rep(2, (nbre.grpe + 1)*sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"]))
       if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- rep("darkred", (nbre.grpe + 1)*sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"]))
-      if (!is.null(ellipse)) col.ellipse <- rep("red", nb.ind.actif)
-      if (!is.null(ellipse.par)) col.ellipse.par <- rep("red", nb.ind.actif*(nbre.grpe + 1))
+      if (!is.null(ellipse)) col.ellipse <- rep(25, nb.ind.actif)
+      if (!is.null(ellipse.par)) col.ellipse.par <- rep(2, nb.ind.actif*(nbre.grpe + 1))
 	}
     if (habillage == "group") {
       if (is.null(col.hab) | length(col.hab) != (nbre.grpe)) col.hab <- 2:(nbre.grpe + 1)
       col.ind <- c(rep(1, nb.ind.actif), rep(col.hab, nb.ind.actif))
       if (!is.null(res.mfa$ind.sup)) col.ind.sup <- c(rep(1, nb.ind - nb.ind.actif), rep(col.hab, nb.ind - nb.ind.actif))
-      # if (length(group[type == "n"]) != 0) col.quali <- c(rep(1, sum(res.mfa$call$group.mod[type == "n"])), rep(col.hab, sum(res.mfa$call$group.mod[type == "n"])))
       if (!is.null(res.mfa[["quali.var"]])) col.quali <- c(rep(1, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"])), rep(col.hab, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"])))
       if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- c(rep(1, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"])), rep(col.hab, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"])))
       if (!is.null(ellipse)) col.ellipse <- rep(1, nb.ind.actif)
@@ -1100,8 +1087,6 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     }
 	
 	if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY")))  dev.new(width = min(14, max(8, 8 * diff(xlim)/diff(ylim))), height = 8)
-    if (is.null(palette)) palette = palette()
-    #    if (is.null(palette)) palette = c("black", "red", "green3", "blue", "magenta", "darkgoldenrod", "darkgreen","darkgray", "cyan", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
     if (is.null(title))  title <- "Individual factor map"
     if(graph.type=="classic"){
       plot(0, 0, main = title, xlab = lab.x, ylab = lab.y, xlim = xlim, ylim = ylim, col = "white", asp = 1, ...)
@@ -1129,35 +1114,39 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if (lab.ind){ labe <- c(labe,rownames(coord.ind))
       } else  labe <- c(labe,rep("",nrow(coord.ind)))
       coll <- c(coll,col.ind[1:nb.ind.actif])
+	  coll_num <- coll   ## useful for the palette with hab = a variable, in linux !
       ipch <- c(ipch,rep(20,nrow(coord.ind)))
       fonte <- c(fonte,rep(1,nrow(coord.ind)))
       if (!is.null(selection)){
         if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255)
         else coll[!((1:length(coll))%in%selection)] = unselect
+		coll[((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[((1:length(coll))%in%selection)])),maxColorValue=255)
         labe[!((1:length(coll))%in%selection)] <- ""
       }
+	  transparency_ind <- col2rgb(coll,alpha=TRUE)[4,]/255
+	  coll_bis <- rgb(t(col2rgb(coll)),maxColorValue=255)
       if(graph.type == "ggplot"){
-        df_ind <- data.frame(labe, coord.ind, coll, ipch, fonte)
+        df_ind <- data.frame(labe, coord.ind, coll, ipch, fonte,coll_bis)
           df_ind[,5][which(df_ind[,5] == 20)] = 19
           if(habillage %in% c("none","ind","group")){
             gg_graph <- gg_graph +
-              geom_point(aes(x=df_ind[,2], y=df_ind[,3]), color= df_ind[,4], shape = df_ind[,5])
-            if(autoLab) text_ind <- ggrepel::geom_text_repel(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), size = ggoptions_default$size, color = df_ind[,4], fontface = df_ind[,6])
-            else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), size = ggoptions_default$size, color = df_ind[,4], hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25, fontface = df_ind[,6])}
+              geom_point(aes(x=df_ind[,2], y=df_ind[,3]), colour= df_ind[,7],alpha = transparency_ind, shape = df_ind[,5],size = ggoptions_default$size/3)
+            if(autoLab) text_ind <- ggrepel::geom_text_repel(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), size = ggoptions_default$size, colour = df_ind[,7], fontface = df_ind[,6])
+            else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), size = ggoptions_default$size, colour = df_ind[,7], hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25, fontface = df_ind[,6])}
           } else{
             transparency_ind <- ifelse(rownames(df_ind) %in% df_ind[,1], 1, 1-unselect)
             if(class(habillage) %in% c("numeric","integer")) habillage = colnames(res.mfa$call$X)[habillage]
             if(habillage %in% colnames(res.mfa$call$X)){
               gg_graph <- gg_graph +
-                geom_point(aes(x=df_ind[,2], y=df_ind[,3], color = (res.mfa$call$X)[rownames(df_ind),habillage]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
-                scale_color_manual(values = palette[unique(as.numeric(coll))]) +
+                geom_point(aes(x=df_ind[,2], y=df_ind[,3], color = res.mfa$call$X[rownames(df_ind),habillage]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
+                scale_color_manual(values = palette[unique(coll_num)]) +
                 labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage))
               if (autoLab) text_ind <- ggrepel::geom_text_repel(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1], color = (res.mfa$call$X)[rownames(df_ind),habillage]), size = ggoptions_default$size, show.legend = FALSE)
-              else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1], color = (res.mfa$call$X)[rownames(df_ind),habillage]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25)}
+              else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1], color = res.mfa$call$X[rownames(df_ind),habillage]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25)}
             } 
           }
       }
-if (!is.null(partial)){
+      if (!is.null(partial)){
       if(graph.type == "classic"){
         for (i in group.ind.actif) {
           if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
@@ -1181,10 +1170,10 @@ if (!is.null(partial)){
           else text <- geom_text(aes_string(data=df_ind_partial, x=x, y = y, label = rownames(df_ind_partial), color = coul))
         }
         if (habillage=="group") gg_graph <- gg_graph + geom_point(data=df_ind_partial, aes(x=x, y = y, color = as.factor(coul)), shape = 19, size = ggoptions_default$size/3) + text
-        else gg_graph <- gg_graph + geom_point(data=df_ind_partial, aes(x=x, y = y), col=as.factor(df_ind_partial[,"coul"]), shape = 19, size = ggoptions_default$size/3) + text
+        else gg_graph <- gg_graph + geom_point(data=df_ind_partial, aes(x=x, y = y), col=palette[df_ind_partial[,"coul"]], shape = 19, size = ggoptions_default$size/3) + text
 		if (!chrono) {
 		  if (habillage=="group") gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin, col=as.factor(coul)), lty=df_ind_partial$coul, data = df_ind_partial)
-		  else gg_graph <- gg_graph + geom_segment(data = df_ind_partial, aes(x = x, y = y, xend = xfin, yend = yfin), col=as.factor(df_ind_partial[,"coul"]), lty=df_ind_partial$group)
+		  else gg_graph <- gg_graph + geom_segment(data = df_ind_partial, aes(x = x, y = y, xend = xfin, yend = yfin), col=palette[df_ind_partial[,"coul"]], lty=df_ind_partial$group)
 		} else {
           for (i in group.ind.actif) {
             if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
@@ -1218,12 +1207,14 @@ if (!is.null(partial)){
           labe2[1:length(coll2)] <- ""
         }}
 	if (graph.type=="ggplot"){
-        df_ind.sup <- data.frame(labe2, coord.ind.sup, col.ind.sup[1:(nb.ind - nb.ind.actif)], rep(21,nrow(coord.ind.sup)), rep(3,nrow(coord.ind.sup)))
-        gg_graph <- gg_graph + geom_point(aes(x=df_ind.sup[,2], y=df_ind.sup[,3]), color= df_ind.sup[,4], shape = df_ind.sup[,5])
-        if(autoLab) text_ind.sup <- ggrepel::geom_text_repel(aes(x=df_ind.sup[,2], y=df_ind.sup[,3], label=df_ind.sup[,1]), size = ggoptions_default$size, color = df_ind.sup[,4], fontface = df_ind.sup[,6])
-        else{text_ind.sup <- geom_text(aes(x=df_ind.sup[,2], y=df_ind.sup[,3], label=df_ind.sup[,1]), size = ggoptions_default$size, color = df_ind.sup[,4], hjust = (-sign(df_ind.sup[,2])+1)/2, vjust = -sign(df_ind.sup[,3])*0.75+0.25, fontface = df_ind.sup[,6])}
-}
-if (!is.null(partial)){
+	    transparency_ind <- col2rgb(coll2,alpha=TRUE)[4,]/255
+	    coll_bis <- rgb(t(col2rgb(coll2)),maxColorValue=255)
+        df_ind.sup <- data.frame(labe2, coord.ind.sup, coll2, rep(21,nrow(coord.ind.sup)), rep(3,nrow(coord.ind.sup)),coll_bis)
+        gg_graph <- gg_graph + geom_point(aes(x=df_ind.sup[,2], y=df_ind.sup[,3]), color= df_ind.sup[,7], alpha = transparency_ind, shape = df_ind.sup[,5],size=ggoptions_default$size/3)
+        if(autoLab) text_ind.sup <- ggrepel::geom_text_repel(aes(x=df_ind.sup[,2], y=df_ind.sup[,3], label=df_ind.sup[,1]), size = ggoptions_default$size, color = df_ind.sup[,7], fontface = df_ind.sup[,6])
+        else{text_ind.sup <- geom_text(aes(x=df_ind.sup[,2], y=df_ind.sup[,3], label=df_ind.sup[,1]), size = ggoptions_default$size, color = df_ind.sup[,7], hjust = (-sign(df_ind.sup[,2])+1)/2, vjust = -sign(df_ind.sup[,3])*0.75+0.25, fontface = df_ind.sup[,6])}
+   }
+  if (!is.null(partial)){
       if(graph.type == "classic"){
         for (i in group.ind.sup) {
           for (j in 1:nbre.grpe) {
@@ -1241,11 +1232,10 @@ if (!is.null(partial)){
 		colnames(df_ind_partial_sup)[1:3] <- c("xfin","yfin","sel")
 		df_ind_partial_sup <- df_ind_partial_sup[df_ind_partial_sup[,"sel"]==255,]
         if (habillage=="group") gg_graph <- gg_graph + geom_point(data=df_ind_partial_sup, aes(x=x, y = y, color = as.factor(coul)), shape = 21, size = ggoptions_default$size/3)
-        else gg_graph <- gg_graph + geom_point(data=df_ind_partial_sup, aes(x=x, y = y), color = as.factor(df_ind_partial_sup[,"coul",drop=FALSE]), shape = 21, size = ggoptions_default$size/3)
-		
+        else gg_graph <- gg_graph + geom_point(data=df_ind_partial_sup, aes(x=x, y = y), color = palette[df_ind_partial_sup[,"coul"]], shape = 21, size = ggoptions_default$size/3)
 		if (!chrono) {
 		  if (habillage=="group") gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin, col=as.factor(coul)), lty=df_ind_partial_sup$coul, data = df_ind_partial_sup)
-		  else gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin), col=as.factor(df_ind_partial_sup[,"coul",drop=FALSE]), lty=df_ind_partial_sup$group, data = df_ind_partial_sup)
+		  else gg_graph <- gg_graph + geom_segment(aes(x = x, y = y, xend = xfin, yend = yfin), col=palette[df_ind_partial_sup[,"coul"]], lty=df_ind_partial_sup$group, data = df_ind_partial_sup)
 		} else {
           for (i in group.ind.sup) {
             if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
@@ -1267,11 +1257,14 @@ if (!is.null(partial)){
       coll <- c(coll,coll3)
       ipch <- c(ipch,ipch3)
       fonte <- c(fonte,fonte3)
+
+
       if(graph.type == "ggplot"){
-        df_quali <- data.frame(labe3, coord.quali, col.quali[1:nrow(coord.quali)], rep(15,nrow(coord.quali)), rep(2,nrow(coord.quali)))
-        gg_graph <- gg_graph + geom_point(aes(x=df_quali[,2], y=df_quali[,3]), color= df_quali[,4], shape = df_quali[,5])
-        if(autoLab) text_quali <- ggrepel::geom_text_repel(aes(x=df_quali[,2], y=df_quali[,3], label=df_quali[,1]), size = ggoptions_default$size, color = df_quali[,4], fontface = df_quali[,6])
-        else{text_quali <- geom_text(aes(x=df_quali[,2], y=df_quali[,3], label=df_quali[,1]), size = ggoptions_default$size, color = df_quali[,4], hjust = (-sign(df_quali[,2])+1)/2, vjust = -sign(df_quali[,3])*0.75+0.25, fontface = df_quali[,6])}
+	    coll_bis <- rgb(t(col2rgb(col.quali[1:nrow(coord.quali)])),maxColorValue=255)
+        df_quali <- data.frame(labe3, coord.quali, col.quali[1:nrow(coord.quali)], rep(15,nrow(coord.quali)), rep(2,nrow(coord.quali)),coll_bis)
+        gg_graph <- gg_graph + geom_point(aes(x=df_quali[,2], y=df_quali[,3]), color= df_quali[,7], shape = df_quali[,5],size=ggoptions_default$size/3)
+        if(autoLab) text_quali <- ggrepel::geom_text_repel(aes(x=df_quali[,2], y=df_quali[,3], label=df_quali[,1]), size = ggoptions_default$size, color = df_quali[,7], fontface = df_quali[,6])
+        else{text_quali <- geom_text(aes(x=df_quali[,2], y=df_quali[,3], label=df_quali[,1]), size = ggoptions_default$size, color = df_quali[,7], hjust = (-sign(df_quali[,2])+1)/2, vjust = -sign(df_quali[,3])*0.75+0.25, fontface = df_quali[,6])}
       }
      if (!is.null(partial)){
       if(graph.type == "classic"){
@@ -1316,10 +1309,11 @@ if (!is.null(partial)){
       ipch <- c(ipch,ipch4)
       fonte <- c(fonte,fonte4)
       if(graph.type == "ggplot"){
-        df_quali.sup <- data.frame(labe4, coord.quali.sup, coll4, ipch4, fonte4)
-        gg_graph <- gg_graph + geom_point(aes(x=df_quali.sup[,2], y=df_quali.sup[,3]), color= df_quali.sup[,4], shape = df_quali.sup[,5])
-        if(autoLab) text_quali.sup <- ggrepel::geom_text_repel(aes(x=df_quali.sup[,2], y=df_quali.sup[,3], label=df_quali.sup[,1]), size = ggoptions_default$size, color = df_quali.sup[,4], fontface = df_quali.sup[,6])
-        else{text_quali.sup <- geom_text(aes(x=df_quali.sup[,2], y=df_quali.sup[,3], label=df_quali.sup[,1]), size = ggoptions_default$size, color = df_quali.sup[,4], hjust = (-sign(df_quali.sup[,2])+1)/2, vjust = -sign(df_quali.sup[,3])*0.75+0.25, fontface = df_quali.sup[,6])}
+	    coll_bis <- rgb(t(col2rgb(coll4)),maxColorValue=255)
+        df_quali.sup <- data.frame(labe4, coord.quali.sup, coll4, ipch4, fonte4,coll_bis)
+        gg_graph <- gg_graph + geom_point(aes(x=df_quali.sup[,2], y=df_quali.sup[,3]), color= df_quali.sup[,7], shape = df_quali.sup[,5],size = ggoptions_default$size/3)
+        if(autoLab) text_quali.sup <- ggrepel::geom_text_repel(aes(x=df_quali.sup[,2], y=df_quali.sup[,3], label=df_quali.sup[,1]), size = ggoptions_default$size, color = df_quali.sup[,7], fontface = df_quali.sup[,6])
+        else{text_quali.sup <- geom_text(aes(x=df_quali.sup[,2], y=df_quali.sup[,3], label=df_quali.sup[,1]), size = ggoptions_default$size, color = df_quali.sup[,7], hjust = (-sign(df_quali.sup[,2])+1)/2, vjust = -sign(df_quali.sup[,3])*0.75+0.25, fontface = df_quali.sup[,6])}
      }
      if (!is.null(partial)){
       if(graph.type == "classic"){
@@ -1413,5 +1407,6 @@ if (!is.null(partial)){
       }
     }
   }
+   palette(old.palette)
   if (graph.type == "ggplot") return(gg_graph)
 }
