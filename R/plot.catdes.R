@@ -243,9 +243,11 @@ if (!barplot){
         catdes.aux=sort(catdes.aux,decreasing=FALSE)					#plot the catdes for every cluster in the graphic window
         coul <- rep(col.upper,length(catdes.aux))
         coul[catdes.aux<0] <- col.lower
+		if (is.null(x$category)) titre <- names(x$quanti)[i]
+		else titre <- names(x$category)[i]
         barplot(catdes.aux, width =c(1,1), col = coul, border = "black", 
                 ylim = c(minimum-1,maximum+1),xlim=c(0,max(long)+1), 
-                main = unique(names(x$category)[i],names(x$quanti)), cex.names = 1, ylab="v.test", 
+                main = titre, cex.names = 1, ylab="v.test", 
                 names.arg = substr(names(catdes.aux), 1, numchar))
 	
       }

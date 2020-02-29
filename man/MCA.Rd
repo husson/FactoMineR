@@ -85,7 +85,7 @@ res <- MCA (poison[,3:8],excl=c(1,3))
 
 ## Graphical interface
 require(Factoshiny)
-res <- MCAshiny(tea)
+res <- Factoshiny(tea)
 
 ## Example with missing values : use the missMDA package
 require(missMDA)

@@ -39,11 +39,13 @@ ellipseCA <- function(x, ellipse=c("col","row"), method="multinomial", nbsample=
     aux3 = colCA$col.sup$coord[,axes]
     rownames(aux3)=paste("r",1:nrow(aux3),sep="")
     aux1=cbind.data.frame(paste("col",1:ncol(X),sep=""),aux3)
+	aux1[,1] <- as.factor(aux1[,1])
     ellCol=coord.ellipse(aux1,level.conf = 0.95)$res
   }
   if ("row"%in%ellipse){
     rowCA = CA(concRow,row.sup=(nrow(X)+1):nrow(concRow),graph=FALSE)
     aux2=cbind.data.frame(paste("row",1:nrow(X),sep=""),rowCA$row.sup$coord[,axes])
+	aux2[,1] <- as.factor(aux2[,1])
     ellRow=coord.ellipse(aux2,level.conf = 0.95)$res
   }
   nullxlimylim <- (is.null(xlim) & is.null(ylim))

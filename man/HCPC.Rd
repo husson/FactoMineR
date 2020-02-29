@@ -100,7 +100,7 @@ hc2 <- HCPC(iris[,1:4], kk=10, nb.clust=-1)
 
 ## Graphical interface
 require(Factoshiny)
-res <- HCPCshiny(iris[,1:4])
+res <- Factoshiny(iris[,1:4])
 }
 }
 \keyword{multivariate}

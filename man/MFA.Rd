@@ -102,7 +102,7 @@ res<-MFA(mortality,group=c(9,9),type=c("f","f"),
 
 ## Graphical interface
 require(Factoshiny)
-res <- MFAshiny(wine)
+res <- Factoshiny(wine)
 
 ### with missing values
 require(missMDA)

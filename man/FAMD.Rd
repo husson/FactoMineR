@@ -55,7 +55,7 @@ summary(res)
 
 ## Graphical interface
 require(Factoshiny)
-res <- FAMDshiny(geomorphology)
+res <- Factoshiny(geomorphology)
 
 ### with missing values
 require(missMDA)

@@ -67,7 +67,7 @@ ellipseCA(res.ca,ellipse="col",col.col.ell=c(rep("blue",2),rep("transparent",3))
 \dontrun{
 ## Graphical interface
 require(Factoshiny)
-res <- CAshiny(children)
+res <- Factoshiny(children)
 }
 }
 

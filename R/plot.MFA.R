@@ -815,14 +815,14 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       coord.ind.sup <- res.mfa$ind.sup$coord[, axes, drop = FALSE]
       coord.ind.partiel.sup <- res.mfa$ind.sup$coord.partiel[, axes, drop = FALSE]
     }
-    coord.quali <- coord.quali.sup <- coord.quali.partiel <- coord.quali.sup.partiel <- NULL
+    coord_quali <- coord_quali_sup <- coord_quali.partiel <- coord_quali_sup.partiel <- NULL
     if (!is.null(res.mfa["quali.var"]$quali.var)) {
-      coord.quali <- res.mfa$quali.var$coord[, axes, drop = FALSE]
-      coord.quali.partiel <- res.mfa$quali.var$coord.partiel[, axes, drop = FALSE]
+      coord_quali <- res.mfa$quali.var$coord[, axes, drop = FALSE]
+      coord_quali.partiel <- res.mfa$quali.var$coord.partiel[, axes, drop = FALSE]
     }
     if (!is.null(res.mfa["quali.var.sup"])) {
-      coord.quali.sup <- res.mfa$quali.var.sup$coord[, axes, drop = FALSE]
-      coord.quali.partiel.sup <- res.mfa$quali.var.sup$coord.partiel[, axes, drop = FALSE]
+      coord_quali_sup <- res.mfa$quali.var.sup$coord[, axes, drop = FALSE]
+      coord_quali.partiel.sup <- res.mfa$quali.var.sup$coord.partiel[, axes, drop = FALSE]
     }
     group.ind.actif <- group.ind.sup <- group.quali <- group.quali.sup <- NULL
     if (!is.null(partial)) {
@@ -830,8 +830,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         if (partial == "all") {
           group.ind.actif <- 1:nrow(coord.ind)
           if (!is.null(res.mfa$ind.sup))  group.ind.sup <- 1:nrow(coord.ind.sup)
-          if (!is.null(res.mfa["quali.var"]$quali.var)) group.quali <- 1:nrow(coord.quali)
-          if (!is.null(res.mfa["quali.var.sup"]$quali.var.sup)) group.quali.sup <- 1:nrow(coord.quali.sup)
+          if (!is.null(res.mfa["quali.var"]$quali.var)) group.quali <- 1:nrow(coord_quali)
+          if (!is.null(res.mfa["quali.var.sup"]$quali.var.sup)) group.quali.sup <- 1:nrow(coord_quali_sup)
         }
         else {
           for (i in 1:length(partial)) {
@@ -841,12 +841,12 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
             if (partial[i] %in% rownames(coord.ind.sup)) 
               group.ind.sup <- c(group.ind.sup, match(partial[i], 
                                                       rownames(coord.ind.sup)))
-            if (partial[i] %in% rownames(coord.quali)) 
+            if (partial[i] %in% rownames(coord_quali)) 
               group.quali <- c(group.quali, match(partial[i], 
-                                                  rownames(coord.quali)))
-            if (partial[i] %in% rownames(coord.quali.sup)) 
+                                                  rownames(coord_quali)))
+            if (partial[i] %in% rownames(coord_quali_sup)) 
               group.quali.sup <- c(group.quali.sup, match(partial[i], 
-                                                          rownames(coord.quali.sup)))
+                                                          rownames(coord_quali_sup)))
           }
         }
       }
@@ -858,12 +858,12 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
           if (partial[i] %in% rownames(coord.ind.sup)) 
             group.ind.sup <- c(group.ind.sup, match(partial[i], 
                                                     rownames(coord.ind.sup)))
-          if (partial[i] %in% rownames(coord.quali)) 
+          if (partial[i] %in% rownames(coord_quali)) 
             group.quali <- c(group.quali, match(partial[i], 
-                                                rownames(coord.quali)))
-          if (partial[i] %in% rownames(coord.quali.sup)) 
+                                                rownames(coord_quali)))
+          if (partial[i] %in% rownames(coord_quali_sup)) 
             group.quali.sup <- c(group.quali.sup, match(partial[i], 
-                                                        rownames(coord.quali.sup)))
+                                                        rownames(coord_quali_sup)))
         }
       }
     }
@@ -894,25 +894,25 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         xmax <- max(xmax, coord.ind.partiel.sup[unlist(lapply(group.ind.sup, function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 
                                                 1])
       if (!is.null(res.mfa["quali.var"]$quali.var) & is.na(test.invisible[3])) 
-        xmin <- min(xmin, coord.quali[, 1])
+        xmin <- min(xmin, coord_quali[, 1])
       if (!is.null(res.mfa["quali.var"]$quali.var) & is.na(test.invisible[3])) 
-        xmax <- max(xmax, coord.quali[, 1])
+        xmax <- max(xmax, coord_quali[, 1])
       if (!is.null(res.mfa["quali.var"]$quali.var) & is.na(test.invisible[3])) 
-        xmin <- min(xmin, coord.quali.partiel[unlist(lapply(group.quali,  function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))),  1])
+        xmin <- min(xmin, coord_quali.partiel[unlist(lapply(group.quali,  function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))),  1])
       if (!is.null(res.mfa["quali.var"]$quali.var) & is.na(test.invisible[3])) 
-        xmax <- max(xmax, coord.quali.partiel[unlist(lapply(group.quali, 
+        xmax <- max(xmax, coord_quali.partiel[unlist(lapply(group.quali, 
                                                             function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 
                                               1])
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
-        xmin <- min(xmin, coord.quali[, 1], coord.quali.sup[,1])
+        xmin <- min(xmin, coord_quali[, 1], coord_quali_sup[,1])
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
-        xmax <- max(xmax, coord.quali[, 1], coord.quali.sup[, 1])
+        xmax <- max(xmax, coord_quali[, 1], coord_quali_sup[, 1])
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
-        xmin <- min(xmin, coord.quali.partiel.sup[unlist(lapply(group.quali.sup, 
+        xmin <- min(xmin, coord_quali.partiel.sup[unlist(lapply(group.quali.sup, 
                                                                 function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 
                                                   1])
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
-        xmax <- max(xmax, coord.quali.partiel.sup[unlist(lapply(group.quali.sup, 
+        xmax <- max(xmax, coord_quali.partiel.sup[unlist(lapply(group.quali.sup, 
                                                                 function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 
                                                   1])
       # xlim <- c(xmin, xmax) * 1.1
@@ -942,24 +942,24 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         ymax <- max(ymax, coord.ind.partiel.sup[unlist(lapply(group.ind.sup, 
                             function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 2])
       if (!is.null(res.mfa["quali.var"]$quali.var) & is.na(test.invisible[3])) 
-        ymin <- min(ymin, coord.quali[, 2])
+        ymin <- min(ymin, coord_quali[, 2])
       if (!is.null(res.mfa["quali.var"]$quali.var) & is.na(test.invisible[3])) 
-        ymax <- max(ymax, coord.quali[, 2])
+        ymax <- max(ymax, coord_quali[, 2])
       if (!is.null(res.mfa["quali.var"]$quali.var) & is.na(test.invisible[3])) 
-        ymin <- min(ymin, coord.quali.partiel[unlist(lapply(group.quali, 
+        ymin <- min(ymin, coord_quali.partiel[unlist(lapply(group.quali, 
                      function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 2])
       if (!is.null(res.mfa["quali.var"]$quali.var) & is.na(test.invisible[3])) 
-        ymax <- max(ymax, coord.quali.partiel[unlist(lapply(group.quali, 
+        ymax <- max(ymax, coord_quali.partiel[unlist(lapply(group.quali, 
                    function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 2])
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
-        ymin <- min(ymin, coord.quali[, 1], coord.quali.sup[, 2])
+        ymin <- min(ymin, coord_quali[, 1], coord_quali_sup[, 2])
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
-        ymax <- max(ymax, coord.quali[, 1], coord.quali.sup[, 2])
+        ymax <- max(ymax, coord_quali[, 1], coord_quali_sup[, 2])
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
-        ymin <- min(ymin, coord.quali.partiel.sup[unlist(lapply(group.quali.sup, 
+        ymin <- min(ymin, coord_quali.partiel.sup[unlist(lapply(group.quali.sup, 
                   function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))), 2])
       if (!is.null(res.mfa$quali.var.sup) & is.na(test.invisible[4])) 
-        ymax <- max(ymax, coord.quali.partiel.sup[unlist(lapply(group.quali.sup, 
+        ymax <- max(ymax, coord_quali.partiel.sup[unlist(lapply(group.quali.sup, 
                        function(k) seq(nbre.grpe * (k - 1) + 1, length = nbre.grpe))),  2])
       ylim <- c(ymin, ymax)
       ylim <- (ylim-mean(ylim))*1.1 + mean(ylim)
@@ -1126,7 +1126,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 	  transparency_ind <- col2rgb(coll,alpha=TRUE)[4,]/255
 	  coll_bis <- rgb(t(col2rgb(coll)),maxColorValue=255)
       if(graph.type == "ggplot"){
-        df_ind <- data.frame(labe, coord.ind, coll, ipch, fonte,coll_bis)
+        df_ind <- cbind.data.frame(labe, coord.ind, coll, ipch, fonte,coll_bis)
           df_ind[,5][which(df_ind[,5] == 20)] = 19
           if(habillage %in% c("none","ind","group")){
             gg_graph <- gg_graph +
@@ -1139,10 +1139,13 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
             if(habillage %in% colnames(res.mfa$call$X)){
               gg_graph <- gg_graph +
                 geom_point(aes(x=df_ind[,2], y=df_ind[,3], color = res.mfa$call$X[rownames(df_ind),habillage]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
-                scale_color_manual(values = palette[unique(coll_num)]) +
-                labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage))
+                # geom_point(aes(x=df_ind[,2], y=df_ind[,3]), color = coll_bis, shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
+                scale_color_manual(values = palette[sort(unique(coll_num))]) +
+			  labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage))
               if (autoLab) text_ind <- ggrepel::geom_text_repel(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1], color = (res.mfa$call$X)[rownames(df_ind),habillage]), size = ggoptions_default$size, show.legend = FALSE)
               else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1], color = res.mfa$call$X[rownames(df_ind),habillage]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25)}
+              # if (autoLab) text_ind <- ggrepel::geom_text_repel(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), color = coll_bis, size = ggoptions_default$size, show.legend = FALSE)
+              # else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), color = coll_bis, size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25)}
             } 
           }
       }
@@ -1246,22 +1249,21 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 	  }
     }
 	}
-    if (!is.null(coord.quali) & is.na(test.invisible[3])) {
-      coo <- rbind(coo,coord.quali)
-      if (lab.var){ labe3 <- rownames(coord.quali)
-      } else  labe3 <- rep("",nrow(coord.quali))
+    if (!is.null(coord_quali) & is.na(test.invisible[3])) {
+      coo <- rbind(coo,coord_quali)
+      if (lab.var){ labe3 <- rownames(coord_quali)
+      } else  labe3 <- rep("",nrow(coord_quali))
       labe <- c(labe,labe3)
-	  coll3 <- col.quali[1:nrow(coord.quali)]
-	  ipch3 <- rep(15,nrow(coord.quali))
-	  fonte3 <- rep(2,nrow(coord.quali))
+	  coll3 <- col.quali[1:nrow(coord_quali)]
+	  ipch3 <- rep(15,nrow(coord_quali))
+	  fonte3 <- rep(2,nrow(coord_quali))
       coll <- c(coll,coll3)
       ipch <- c(ipch,ipch3)
       fonte <- c(fonte,fonte3)
 
-
       if(graph.type == "ggplot"){
-	    coll_bis <- rgb(t(col2rgb(col.quali[1:nrow(coord.quali)])),maxColorValue=255)
-        df_quali <- data.frame(labe3, coord.quali, col.quali[1:nrow(coord.quali)], rep(15,nrow(coord.quali)), rep(2,nrow(coord.quali)),coll_bis)
+	    coll_bis <- rgb(t(col2rgb(col.quali[1:nrow(coord_quali)])),maxColorValue=255)
+        df_quali <- data.frame(labe3, coord_quali, col.quali[1:nrow(coord_quali)], rep(15,nrow(coord_quali)), rep(2,nrow(coord_quali)),coll_bis)
         gg_graph <- gg_graph + geom_point(aes(x=df_quali[,2], y=df_quali[,3]), color= df_quali[,7], shape = df_quali[,5],size=ggoptions_default$size/3)
         if(autoLab) text_quali <- ggrepel::geom_text_repel(aes(x=df_quali[,2], y=df_quali[,3], label=df_quali[,1]), size = ggoptions_default$size, color = df_quali[,7], fontface = df_quali[,6])
         else{text_quali <- geom_text(aes(x=df_quali[,2], y=df_quali[,3], label=df_quali[,1]), size = ggoptions_default$size, color = df_quali[,7], hjust = (-sign(df_quali[,2])+1)/2, vjust = -sign(df_quali[,3])*0.75+0.25, fontface = df_quali[,6])}
@@ -1270,17 +1272,17 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if(graph.type == "classic"){
         for (i in group.quali) {
           for (j in 1:nbre.grpe) {
-              points(coord.quali.partiel[(i - 1) * nbre.grpe +  j, 1],coord.quali.partiel[(i - 1) * nbre.grpe +  j, 2], pch = 15, col = col.quali[nrow(coord.quali) + (i - 1) * nbre.grpe + j], cex = par("cex") * 0.8)
-              if (lab.var & lab.par) text(coord.quali.partiel[(i - 1) * nbre.grpe + j, 1], y = coord.quali.partiel[(i - 1) * nbre.grpe + j, 2], labels = rownames(coord.quali.partiel)[(i - 1) * nbre.grpe + j], pos = 3, col = col.quali[nrow(coord.quali) + (i - 1) * nbre.grpe + j],...)
+              points(coord_quali.partiel[(i - 1) * nbre.grpe +  j, 1],coord_quali.partiel[(i - 1) * nbre.grpe +  j, 2], pch = 15, col = col.quali[nrow(coord_quali) + (i - 1) * nbre.grpe + j], cex = par("cex") * 0.8)
+              if (lab.var & lab.par) text(coord_quali.partiel[(i - 1) * nbre.grpe + j, 1], y = coord_quali.partiel[(i - 1) * nbre.grpe + j, 2], labels = rownames(coord_quali.partiel)[(i - 1) * nbre.grpe + j], pos = 3, col = col.quali[nrow(coord_quali) + (i - 1) * nbre.grpe + j],...)
             } 
             if (chrono) {
               if (j > 1){
-                if(graph.type == "classic") lines(c(coord.quali.partiel[(i - 1) * nbre.grpe + (j - 1), 1], coord.quali.partiel[(i - 1) * nbre.grpe + j, 1]), c(coord.quali.partiel[(i - 1) * nbre.grpe + (j - 1), 2], coord.quali.partiel[(i - 1) * nbre.grpe + j, 2]), col = col.quali[i])
-            }} else lines(c(coord.quali[i, 1], coord.quali.partiel[(i - 1) * nbre.grpe + j, 1]), c(coord.quali[i, 2], coord.quali.partiel[(i - 1) * nbre.grpe + j, 2]), col = col.quali[nrow(coord.quali) + (i - 1) * nbre.grpe + j], lty = j)
+                if(graph.type == "classic") lines(c(coord_quali.partiel[(i - 1) * nbre.grpe + (j - 1), 1], coord_quali.partiel[(i - 1) * nbre.grpe + j, 1]), c(coord_quali.partiel[(i - 1) * nbre.grpe + (j - 1), 2], coord_quali.partiel[(i - 1) * nbre.grpe + j, 2]), col = col.quali[i])
+            }} else lines(c(coord_quali[i, 1], coord_quali.partiel[(i - 1) * nbre.grpe + j, 1]), c(coord_quali[i, 2], coord_quali.partiel[(i - 1) * nbre.grpe + j, 2]), col = col.quali[nrow(coord_quali) + (i - 1) * nbre.grpe + j], lty = j)
         }
       } else {	  
         liste_quali_partiel <- rep(nbre.grpe*(group.quali-1),each=nbre.grpe) + rep(1:nbre.grpe,length(group.quali))
-	    df_quali_partial <- cbind.data.frame(matrix(rep(cbind(coord.quali[group.quali,,drop=FALSE],col2rgb(coll3[group.quali],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.quali.partiel[liste_quali_partiel,1],y=coord.quali.partiel[liste_quali_partiel,2], coul = col.quali[nrow(coord.quali)+liste_quali_partiel], group=rep(1:nbre.grpe,length(group.quali)))
+	    df_quali_partial <- cbind.data.frame(matrix(rep(cbind(coord_quali[group.quali,,drop=FALSE],col2rgb(coll3[group.quali],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord_quali.partiel[liste_quali_partiel,1],y=coord_quali.partiel[liste_quali_partiel,2], coul = col.quali[nrow(coord_quali)+liste_quali_partiel], group=rep(1:nbre.grpe,length(group.quali)))
 		colnames(df_quali_partial)[1:3] <- c("xfin","yfin","sel")
 		df_quali_partial <- df_quali_partial[df_quali_partial[,"sel"]==255,]
         if (habillage=="group") gg_graph <- gg_graph + geom_point(data=df_quali_partial, aes(x=x, y = y, color = as.factor(coul)), shape = 15, size = ggoptions_default$size/3)		
@@ -1292,44 +1294,44 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
           for (i in group.quali) {
             if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
               for (j in 2:nbre.grpe) {
-			  gg_graph <- gg_graph + geom_line(aes_string(x=c(coord.quali[i, 1], coord.quali.partiel[(i - 1) * nbre.grpe + j, 1]), y=c(coord.quali[i, 2], coord.quali.partiel[(i - 1) * nbre.grpe + j, 2])), color = col.quali[nrow(coord.quali) + (i - 1) * nbre.grpe + j])}
+			  gg_graph <- gg_graph + geom_line(aes_string(x=c(coord_quali[i, 1], coord_quali.partiel[(i - 1) * nbre.grpe + j, 1]), y=c(coord_quali[i, 2], coord_quali.partiel[(i - 1) * nbre.grpe + j, 2])), color = col.quali[nrow(coord_quali) + (i - 1) * nbre.grpe + j])}
 		  }}}
 		}
 	  }
     }
-    if (!is.null(coord.quali.sup) & is.na(test.invisible[4])) {
-      coo <- rbind(coo,coord.quali.sup)
-      if (lab.var){ labe4 <- rownames(coord.quali.sup)
-      } else  labe4 <- rep("",nrow(coord.quali.sup))
-	  coll4 <- col.quali.sup[1:nrow(coord.quali.sup)]
-	  ipch4 <- rep(22,nrow(coord.quali.sup))
-	  fonte4 <- rep(4,nrow(coord.quali.sup))
+    if (!is.null(coord_quali_sup) & is.na(test.invisible[4])) {
+      coo <- rbind(coo,coord_quali_sup)
+      if (lab.var){ labe4 <- rownames(coord_quali_sup)
+      } else  labe4 <- rep("",nrow(coord_quali_sup))
+	  coll4 <- col.quali.sup[1:nrow(coord_quali_sup)]
+	  ipch4 <- rep(22,nrow(coord_quali_sup))
+	  fonte4 <- rep(4,nrow(coord_quali_sup))
       labe <- c(labe,labe4)
       coll <- c(coll,coll4)
       ipch <- c(ipch,ipch4)
       fonte <- c(fonte,fonte4)
       if(graph.type == "ggplot"){
 	    coll_bis <- rgb(t(col2rgb(coll4)),maxColorValue=255)
-        df_quali.sup <- data.frame(labe4, coord.quali.sup, coll4, ipch4, fonte4,coll_bis)
-        gg_graph <- gg_graph + geom_point(aes(x=df_quali.sup[,2], y=df_quali.sup[,3]), color= df_quali.sup[,7], shape = df_quali.sup[,5],size = ggoptions_default$size/3)
-        if(autoLab) text_quali.sup <- ggrepel::geom_text_repel(aes(x=df_quali.sup[,2], y=df_quali.sup[,3], label=df_quali.sup[,1]), size = ggoptions_default$size, color = df_quali.sup[,7], fontface = df_quali.sup[,6])
-        else{text_quali.sup <- geom_text(aes(x=df_quali.sup[,2], y=df_quali.sup[,3], label=df_quali.sup[,1]), size = ggoptions_default$size, color = df_quali.sup[,7], hjust = (-sign(df_quali.sup[,2])+1)/2, vjust = -sign(df_quali.sup[,3])*0.75+0.25, fontface = df_quali.sup[,6])}
+        df_quali_sup <- data.frame(labe4, coord_quali_sup, coll4, ipch4, fonte4,coll_bis)
+        gg_graph <- gg_graph + geom_point(aes(x=df_quali_sup[,2], y=df_quali_sup[,3]), color= df_quali_sup[,7], shape = df_quali_sup[,5],size = ggoptions_default$size/3)
+        if(autoLab) text_quali.sup <- ggrepel::geom_text_repel(aes(x=df_quali_sup[,2], y=df_quali_sup[,3], label=df_quali_sup[,1]), size = ggoptions_default$size, color = df_quali_sup[,7], fontface = df_quali_sup[,6])
+        else{text_quali.sup <- geom_text(aes(x=df_quali_sup[,2], y=df_quali_sup[,3], label=df_quali_sup[,1]), size = ggoptions_default$size, color = df_quali_sup[,7], hjust = (-sign(df_quali_sup[,2])+1)/2, vjust = -sign(df_quali_sup[,3])*0.75+0.25, fontface = df_quali_sup[,6])}
      }
      if (!is.null(partial)){
       if(graph.type == "classic"){
         for (i in group.quali.sup) {
           for (j in 1:nbre.grpe) {
-              points(coord.quali.partiel.sup[(i - 1) * nbre.grpe +j, 1],coord.quali.partiel.sup[(i - 1) * nbre.grpe +j, 2], pch = 22, col = col.quali.sup[nrow(coord.quali.sup) + (i - 1) * nbre.grpe + j], cex = par("cex") * 0.8)
-              if (lab.var & lab.par) text(coord.quali.partiel.sup[(i - 1) * nbre.grpe + j, 1], y = coord.quali.partiel.sup[(i - 1) * nbre.grpe + j, 2], labels = rownames(coord.quali.partiel.sup)[(i - 1) * nbre.grpe + j], pos = 3, col = col.quali.sup[nrow(coord.quali.sup) + (i - 1) * nbre.grpe + j],...)
+              points(coord_quali.partiel.sup[(i - 1) * nbre.grpe +j, 1],coord_quali.partiel.sup[(i - 1) * nbre.grpe +j, 2], pch = 22, col = col.quali.sup[nrow(coord_quali_sup) + (i - 1) * nbre.grpe + j], cex = par("cex") * 0.8)
+              if (lab.var & lab.par) text(coord_quali.partiel.sup[(i - 1) * nbre.grpe + j, 1], y = coord_quali.partiel.sup[(i - 1) * nbre.grpe + j, 2], labels = rownames(coord_quali.partiel.sup)[(i - 1) * nbre.grpe + j], pos = 3, col = col.quali.sup[nrow(coord_quali_sup) + (i - 1) * nbre.grpe + j],...)
             } 
             if (chrono) {
               if (j > 1){
-                if(graph.type == "classic") lines(c(coord.quali.partiel.sup[(i - 1) * nbre.grpe + (j - 1), 1], coord.quali.partiel.sup[(i - 1) * nbre.grpe + j, 1]), c(coord.quali.partiel.sup[(i - 1) * nbre.grpe + (j - 1), 2], coord.quali.partiel.sup[(i - 1) * nbre.grpe + j, 2]), col = col.quali.sup[nrow(coord.quali.sup) + i])
-            }} else lines(c(coord.quali.sup[i, 1], coord.quali.partiel.sup[(i - 1) * nbre.grpe + j, 1]), c(coord.quali.sup[i, 2], coord.quali.partiel.sup[(i - 1) * nbre.grpe + j, 2]), col = col.quali.sup[nrow(coord.quali.sup) + (i - 1) * nbre.grpe + j], lty = j)
+                if(graph.type == "classic") lines(c(coord_quali.partiel.sup[(i - 1) * nbre.grpe + (j - 1), 1], coord_quali.partiel.sup[(i - 1) * nbre.grpe + j, 1]), c(coord_quali.partiel.sup[(i - 1) * nbre.grpe + (j - 1), 2], coord_quali.partiel.sup[(i - 1) * nbre.grpe + j, 2]), col = col.quali.sup[nrow(coord_quali_sup) + i])
+            }} else lines(c(coord_quali_sup[i, 1], coord_quali.partiel.sup[(i - 1) * nbre.grpe + j, 1]), c(coord_quali_sup[i, 2], coord_quali.partiel.sup[(i - 1) * nbre.grpe + j, 2]), col = col.quali.sup[nrow(coord_quali_sup) + (i - 1) * nbre.grpe + j], lty = j)
         }
       } else {
         liste_quali_sup_partiel <- rep(nbre.grpe*(group.quali.sup-1),each=nbre.grpe) + rep(1:nbre.grpe,length(group.quali.sup))
-	    df_quali_partial_sup <- cbind.data.frame(matrix(rep(cbind(coord.quali.sup[group.quali.sup,,drop=FALSE],col2rgb(coll4[group.quali.sup],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord.quali.partiel.sup[liste_quali_sup_partiel,1],y=coord.quali.partiel.sup[liste_quali_sup_partiel,2], coul = col.quali.sup[nrow(coord.quali.sup)+liste_quali_sup_partiel], group=rep(1:nbre.grpe,length(group.quali.sup)) )
+	    df_quali_partial_sup <- cbind.data.frame(matrix(rep(cbind(coord_quali_sup[group.quali.sup,,drop=FALSE],col2rgb(coll4[group.quali.sup],alpha=TRUE)[4,]),each=nbre.grpe),ncol=3),x=coord_quali.partiel.sup[liste_quali_sup_partiel,1],y=coord_quali.partiel.sup[liste_quali_sup_partiel,2], coul = col.quali.sup[nrow(coord_quali_sup)+liste_quali_sup_partiel], group=rep(1:nbre.grpe,length(group.quali.sup)) )
 		colnames(df_quali_partial_sup)[1:3] <- c("xfin","yfin","sel")
 		df_quali_partial_sup <- df_quali_partial_sup[df_quali_partial_sup[,"sel"]==255,]
         if (habillage=="group") gg_graph <- gg_graph + geom_point(data=df_quali_partial_sup, aes(x=x, y = y, color = as.factor(coul)), shape = 15, size = ggoptions_default$size/3)
@@ -1341,7 +1343,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
           for (i in group.quali.sup) {
             if (col2rgb(coll[i],alpha=TRUE)[4]== 255){
               for (j in 2:nbre.grpe) {
-			  gg_graph <- gg_graph + geom_line(aes_string(x=c(coord.quali.sup[i, 1], coord.quali.partiel.sup[(i - 1) * nbre.grpe + j, 1]), y=c(coord.quali.sup[i, 2], coord.quali.partiel.sup[(i - 1) * nbre.grpe + j, 2])), color = col.quali.sup[nrow(coord.quali.sup) + (i - 1) * nbre.grpe + j])}
+			  gg_graph <- gg_graph + geom_line(aes_string(x=c(coord_quali_sup[i, 1], coord_quali.partiel.sup[(i - 1) * nbre.grpe + j, 1]), y=c(coord_quali_sup[i, 2], coord_quali.partiel.sup[(i - 1) * nbre.grpe + j, 2])), color = col.quali.sup[nrow(coord_quali_sup) + (i - 1) * nbre.grpe + j])}
 		  }}}
 		}
 	  }

@@ -301,27 +301,39 @@ if (!is.null(tab.comp)){
         if (type[g] == "n")  ind.quali <- c(ind.quali, c((ind.var + 1):(ind.var + group[g])))
         ind.var <- ind.var + group[g]
     }
-    aux.quali.sup.indice <- aux.quali.sup <- data.sup <- NULL
+    aux_quali_sup_indice <- aux_quali_sup <- data.sup <- NULL
     if (!is.null(ind.quali)){
-      aux.quali.sup <- as.data.frame(base[, ind.quali,drop=FALSE])
-      if (is.null(data.group.sup)) aux.quali.sup.indice <- (ncol(data)+1):(ncol(data)+ncol(aux.quali.sup))
-      else aux.quali.sup.indice <- (ncol(data)+ncol(data.group.sup)+1):(ncol(data)+ncol(data.group.sup)+ncol(aux.quali.sup))
-      data.pca <- cbind.data.frame(data.pca,aux.quali.sup)
+      aux_quali_sup <- as.data.frame(base[, ind.quali,drop=FALSE])
+      if (is.null(data.group.sup)) aux_quali_sup_indice <- (ncol(data)+1):(ncol(data)+ncol(aux_quali_sup))
+      else aux_quali_sup_indice <- (ncol(data)+ncol(data.group.sup)+1):(ncol(data)+ncol(data.group.sup)+ncol(aux_quali_sup))
+      data.pca <- cbind.data.frame(data.pca,aux_quali_sup)
     }
 row.w = row.w[1:nb.actif]
 ###  Begin handle missing values
 if ((!is.null(tab.comp))&(any("n"%in%type))){
-  data.pca <- data.pca[,-aux.quali.sup.indice]
-  aux.quali.sup.indice <- NULL
+  data.pca <- data.pca[,-aux_quali_sup_indice]
+  aux_quali_sup_indice <- NULL
 }
 ###  End handle missing values
- res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, row.w=row.w,ncp = ncp, ind.sup = ind.sup, quali.sup = aux.quali.sup.indice, quanti.sup = data.group.sup.indice, graph = FALSE)
-# res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, row.w=row.w,ncp = ncp.tmp, ind.sup = ind.sup, quali.sup = aux.quali.sup.indice, quanti.sup = data.group.sup.indice, graph = FALSE)
+ res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, row.w=row.w,ncp = ncp, ind.sup = ind.sup, quali.sup = aux_quali_sup_indice, quanti.sup = data.group.sup.indice, graph = FALSE)
+# res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, row.w=row.w,ncp = ncp.tmp, ind.sup = ind.sup, quali.sup = aux_quali_sup_indice, quanti.sup = data.group.sup.indice, graph = FALSE)
 ###  Begin handle missing values
+
 if ((!is.null(tab.comp))&(any("n"%in%type))){
-  res.globale$quali.var$coord <- res.globale$var$coord[unlist(ind.var.group[type%in%"n"]),]
-  res.globale$quali.var$contrib <- res.globale$var$contrib[unlist(ind.var.group[type%in%"n"]),]
-  res.globale$quali.var$cos2 <- res.globale$var$cos2[unlist(ind.var.group[type%in%"n"]),]
+  # res.globale$quali.var$coord <- res.globale$var$coord[unlist(ind.var.group[type%in%"n"]),]
+  # res.globale$quali.var$contrib <- res.globale$var$contrib[unlist(ind.var.group[type%in%"n"]),]
+  # res.globale$quali.var$cos2 <- res.globale$var$cos2[unlist(ind.var.group[type%in%"n"]),]
+  if (!is.null(type.var%in%"quali")) {
+    if (any(type.var%in%c("freq","quanti"))){
+	  res.globale$quali.var$coord <- res.globale$var$coord[-(1:sum(type.var%in%c("freq","quanti"))),]
+      res.globale$quali.var$cos2 <- res.globale$var$cos2[-(1:sum(type.var%in%c("freq","quanti"))),]
+      res.globale$quali.var$contrib <- res.globale$var$contrib[-(1:sum(type.var%in%c("freq","quanti"))),]
+	} else{
+	  res.globale$quali.var$coord <- res.globale$var$coord
+      res.globale$quali.var$cos2 <- res.globale$var$cos2
+      res.globale$quali.var$contrib <- res.globale$var$contrib
+	}
+  }
   res.globale$call$quali.sup$barycentre <- sweep(crossprod(tab.comp[,unlist(ind.var.group[type%in%"n"])],as.matrix(data.pca)),1,apply(tab.comp[,unlist(ind.var.group[type%in%"n"])],2,sum),FUN="/")
   res.globale$quali.sup$coord <- sweep(crossprod(tab.comp[,unlist(ind.var.group[type%in%"n"])],res.globale$ind$coord),1,apply(tab.comp[,unlist(ind.var.group[type%in%"n"])],2,sum),FUN="/")
 }
@@ -351,7 +363,7 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
     }
     coord.group <- t(t(contrib.group)*res.globale$eig[1:ncol(contrib.group),1])
     cos2.group <- coord.group^2/dist2.group
-
+	
     if (!is.null(num.group.sup)){
       coord.group.sup <- matrix(NA, length(num.group.sup), ncp)
       dimnames(coord.group.sup) <- list(name.group[num.group.sup], paste("Dim", c(1:ncp), sep = "."))
@@ -407,7 +419,6 @@ if ((!is.null(tab.comp))&(any("n"%in%type))){
     }
     res.ind.partiel <- vector(mode = "list", length = nbre.group)
     names(res.ind.partiel) <- name.group
-
     for (g in group.actif){
       Xis <- t(t(as.matrix(data.partiel[[g]]))-res.globale$call$centre) 
       Xis <- t(t(Xis)/res.globale$call$ecart.type)
@@ -619,7 +630,8 @@ tmp <- tmp*row.w
       tmp <- array(0,dim=c(nrow(res.globale$quali.sup$coord),ncp,length(group.actif)))
       ind.col <- 0
  for (g in 1:length(group.actif)) {
-        cg.partiel <- as.data.frame(matrix(res.globale$call$centre, nrow(barycentre), ncol(barycentre), byrow = TRUE, dimnames = dimnames(barycentre)))
+        # cg.partiel <- as.data.frame(matrix(res.globale$call$centre, nrow(barycentre), ncol(barycentre), byrow = TRUE, dimnames = dimnames(barycentre)))
+        cg.partiel <- as.data.frame(matrix(res.globale$call$centre[sum(group.mod[group.actif[1:length(group.actif)]])], nrow(barycentre), sum(group.mod[group.actif[1:length(group.actif)]]), byrow = TRUE, dimnames = dimnames(barycentre[,1:sum(group.mod[group.actif[1:length(group.actif)]]),drop=FALSE])))
         cg.partiel[, (ind.col + 1):(ind.col + group.mod[group.actif[g]])] <- barycentre[, (ind.col + 1):(ind.col + group.mod[group.actif[g]])]
         ind.col <- ind.col + group.mod[group.actif[g]]
         Xis <- t((t(cg.partiel)-res.globale$call$centre)/res.globale$call$ecart.type)

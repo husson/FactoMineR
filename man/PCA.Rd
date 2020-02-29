@@ -63,7 +63,7 @@ plotellipses(res.pca,13)
 \dontrun{
 ## Graphical interface
 require(Factoshiny)
-res <- PCAshiny(decathlon)
+res <- Factoshiny(decathlon)
 
 ## Example with missing data
 ## use package missMDA

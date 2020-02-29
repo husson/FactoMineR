@@ -1,4 +1,4 @@
- plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
+plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
                       xlim = NULL, ylim = NULL, invisible = c("none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"), 
                       col.ind = "black", col.var = "red", col.quali.sup = "darkgreen",
                       col.ind.sup = "blue", col.quanti.sup = "blue",
@@ -238,7 +238,7 @@
         if (lab.quali.sup){ labe2 <- rownames(coord.quali.sup)
         } else  labe2 <- rep("",nrow(coord.quali.sup))
         coll2 <- col.quali.sup
-        if((graph.type == "ggplot") & !(habillage %in% c("quali"))) coll2 <- rep(col.quali.sup, nrow(coord.quali.sup))
+#        if((graph.type == "ggplot") & !(habillage %in% c("quali"))) coll2 <- rep(col.quali.sup, nrow(coord.quali.sup))
         if ((!is.null(selectMod))&!is.null(selection3)) {
           if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selection3)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selection3)])),alpha=255*(1-unselect),maxColorValue=255) 
           else coll2[!((1:length(coll2))%in%selection3)] <- unselect
