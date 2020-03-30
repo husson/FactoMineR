@@ -2,7 +2,7 @@ export(FAMD,AovSum,autoLab,CA,CaGalt,catdes,coeffRV,condes,coord.ellipse,descfre
 importFrom(stats,aggregate,aov,as.formula,as.hclust,chisq.test,cor,cov,cov.wt,cutree,dhyper,fitted.values,kmeans,lm,na.exclude,na.omit,pchisq,pgamma,pf,phyper,pnorm,printCoefmat,pt,qchisq,qnorm,rect.hclust,rmultinom,rnorm,runif,sd,summary.lm,vcov)
 importFrom(utils,modifyList,flush.console)
 importFrom(graphics,abline,arrows,barplot,contour,image,layout,legend,lines,locator,par,points,plot,plot.new,rect,strheight,strwidth,text)
-importFrom(grDevices,colours,dev.new,dev.off,rgb,col2rgb,xy.coords,palette,terrain.colors)
+importFrom(grDevices,colours,colorRampPalette,dev.new,dev.off,rgb,col2rgb,xy.coords,palette,terrain.colors)
 importFrom(leaps,leaps)
 importFrom(ggrepel,geom_text_repel)
 importFrom(ggplot2,aes,aes_string,annotate,arrow,coord_fixed,element_rect,element_text,geom_hline,geom_line,geom_path,geom_point,geom_segment,geom_text,geom_vline,ggplot,ggtitle,labs,margin,unit,scale_color_gradient,scale_color_manual,theme,theme_light,xlab,xlim,ylab,ylim)
@@ -11,6 +11,7 @@ importFrom(lattice,xyplot,ltext,llines,lpoints,panel.xyplot,panel.grid,trellis.p
 importFrom(scatterplot3d,scatterplot3d)
 importFrom(cluster,agnes)
 importFrom(flashClust,hclust)
+importFrom(DT,datatable,formatStyle,styleInterval)
 
 S3method(plot, CA)
 S3method(plot, CaGalt)

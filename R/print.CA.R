@@ -10,7 +10,7 @@ print.CA <- function (x, file = NULL, sep = ";", ...){
     cat("The chi square of independence between the two variables is equal to", IT, 
         "(p-value = ", pc, ").\n")
     cat("*The results are available in the following objects:\n\n")
-    res <- array("", c(17, 2), list(1:17, c("name", "description")))
+    res <- array("", c(21, 2), list(1:21, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues")
     res[2, ] <- c("$col", "results for the columns")
     res[3, ] <- c("$col$coord", "coord. for the columns")

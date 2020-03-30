@@ -8,7 +8,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
   
   label <- match.arg(label,c("all","none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"),several.ok=TRUE)
   choix <- match.arg(choix,c("ind","var","quanti.sup"))
-    graph.type <- match.arg(graph.type[1],c("ggplot","classic"))
+  graph.type <- match.arg(graph.type[1],c("ggplot","classic"))
   autoLab <- match.arg(autoLab,c("auto","yes","no"))
   argument <- list(...)
   if (!is.null(argument[["cex"]]) & is.null(ggoptions["size"]))  ggoptions["size"] <- 4*argument$cex
@@ -323,7 +323,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
         if(habillage %in% c("none","quali")){
           if(!is.null(df_ind2)){
           gg_graph <- gg_graph +
-            geom_point(aes(x=df_ind2[,2], y=df_ind2[,3]), color= df_ind2[,4], shape = df_ind2[,5]) 
+            geom_point(aes(x=df_ind2[,2], y=df_ind2[,3]), color= df_ind2[,4], shape = df_ind2[,5], size = ggoptions_default$size/2.8) 
             if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1]), size = ggoptions_default$size, color = df_ind2[,4], fontface = df_ind2[,6])
             else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1]), size = ggoptions_default$size, color = df_ind2[,4], hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25, fontface = df_ind2[,6])}
             gg_graph <- gg_graph + text
@@ -331,17 +331,17 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
           if(!is.null(df_var)){
             if(autoLab) text_var <- ggrepel::geom_text_repel(aes(x=df_var[,2], y=df_var[,3], label=df_var[,1]), size = ggoptions_default$size, color = df_var[,4], fontface = df_var[,6])
             else{text_var <- geom_text(aes(x=df_var[,2], y=df_var[,3], label=df_var[,1]), size = ggoptions_default$size, color = df_var[,4], hjust = (-sign(df_var[,2])+1)/2, vjust = -sign(df_var[,3])*0.75+0.25, fontface = df_var[,6])}
-            gg_graph <- gg_graph + geom_point(aes(x=df_var[,2], y=df_var[,3]), color= df_var[,4], shape = df_var[,5]) + text_var
+            gg_graph <- gg_graph + geom_point(aes(x=df_var[,2], y=df_var[,3]), color= df_var[,4], shape = df_var[,5], size = ggoptions_default$size/2.8) + text_var
           }
           if(!is.null(df_quali.sup)){
             if(autoLab) text_quali.sup <- ggrepel::geom_text_repel(aes(x=df_quali.sup[,2], y=df_quali.sup[,3], label=df_quali.sup[,1]), size = ggoptions_default$size, color = df_quali.sup[,4], fontface = df_quali.sup[,6])
             else{text_quali.sup <- geom_text(aes(x=df_quali.sup[,2], y=df_quali.sup[,3], label=df_quali.sup[,1]), size = ggoptions_default$size, color = df_quali.sup[,4], hjust = (-sign(df_quali.sup[,2])+1)/2, vjust = -sign(df_quali.sup[,3])*0.75+0.25, fontface = df_quali.sup[,6])}
-            gg_graph <- gg_graph + geom_point(aes(x=df_quali.sup[,2], y=df_quali.sup[,3]), color= df_quali.sup[,4], shape = df_quali.sup[,5]) + text_quali.sup
+            gg_graph <- gg_graph + geom_point(aes(x=df_quali.sup[,2], y=df_quali.sup[,3]), color= df_quali.sup[,4], shape = df_quali.sup[,5], size = ggoptions_default$size/2.8) + text_quali.sup
           }
         } else{
          if(is.na(test.invisible[1]) || is.na(test.invisible[4]) & !is.null(df_ind2)){ 
            gg_graph <- gg_graph +
-           geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color= (res.mca$call$X)[rownames(df_ind2),habillage]), shape = df_ind2[,5], alpha = transparency_ind) + 
+           geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color= (res.mca$call$X)[rownames(df_ind2),habillage]), shape = df_ind2[,5], alpha = transparency_ind, size = ggoptions_default$size/2.8) + 
            scale_color_manual(values = palette[1:length(levels(res.mca$call$X[rownames(df_ind2),habillage]))], labels = levels(res.mca$call$X[,habillage])) +
            labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage)) 
            if(autoLab)text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1]), size = ggoptions_default$size, color = df_ind2[,4], fontface = df_ind2[,6])
@@ -351,7 +351,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
           if(is.na(test.invisible[2]) & !is.null(df_var)){
             if (habillage %in% res.mca$call$quali){
 			  gg_graph <- gg_graph +
-              geom_point(aes(x=df_var[levels(res.mca$call$X[,habillage]),2], y=df_var[levels(res.mca$call$X[,habillage]),3]), color= palette[1:length(levels(res.mca$call$X[,habillage]))], shape = df_var[,5]) 
+              geom_point(aes(x=df_var[levels(res.mca$call$X[,habillage]),2], y=df_var[levels(res.mca$call$X[,habillage]),3]), color= palette[1:length(levels(res.mca$call$X[,habillage]))], shape = df_var[,5], size = ggoptions_default$size/2.8) 
               if(autoLab) text_var <- ggrepel::geom_text_repel(aes(x=df_var[levels(res.mca$call$X[,habillage]),2], y=df_var[levels(res.mca$call$X[,habillage]),3], label=levels(res.mca$call$X[,habillage])), size = ggoptions_default$size, color = palette[1:length(levels(res.mca$call$X[,habillage]))], fontface = df_var[levels(res.mca$call$X[,habillage]),6])
               else{text_var <- geom_text(aes(x=df_var[levels(res.mca$call$X[,habillage]),2], y=df_var[levels(res.mca$call$X[,habillage]),3], label=levels(res.mca$call$X[,habillage])), size = ggoptions_default$size, color = palette[1:length(levels(res.mca$call$X[,habillage]))], fontface = df_var[levels(res.mca$call$X[,habillage]),6])}
               gg_graph <- gg_graph + text_var
@@ -402,13 +402,13 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
         df_quali.sup[,4] <- coll_quali.sup
         if(is.na(test.invisible[1])){
           gg_graph <- gg_graph +
-          geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color = df_ind2[,4]), shape = df_ind2[,5], alpha = transparency_ind) 
+          geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color = df_ind2[,4]), shape = df_ind2[,5], alpha = transparency_ind, size = ggoptions_default$size/2.8) 
           if (autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = df_ind2[,4]), size = ggoptions_default$size, show.legend = FALSE,fontface=df_ind2[,6])
           else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = df_ind2[,4]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25,fontface=df_ind2[,6])}
           gg_graph <- gg_graph + text
         }
         if(is.na(test.invisible[2]) & !is.null(df_var)){
-           gg_graph <- gg_graph + geom_point(aes(x=df_var[,2], y=df_var[,3], color= df_var[,4]), shape = df_var[,5]) 
+           gg_graph <- gg_graph + geom_point(aes(x=df_var[,2], y=df_var[,3], color= df_var[,4]), shape = df_var[,5], size = ggoptions_default$size/2.8) 
           if(autoLab) text_var <- ggrepel::geom_text_repel(aes(x=df_var[,2], y=df_var[,3], label=df_var[,1], color = df_var[,4]), size = ggoptions_default$size, fontface = df_var[,6])
           else{text_var <- geom_text(aes(x=df_var[,2], y=df_var[,3], label=df_var[,1], color = df_var[,4]), size = ggoptions_default$size, fontface = df_var[,6])}
           gg_graph <- gg_graph + text_var

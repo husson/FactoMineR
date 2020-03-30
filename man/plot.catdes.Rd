@@ -8,25 +8,27 @@
   Plots a graph from a catdes output.}
 
 \usage{
-\method{plot}{catdes}(x, show="all", level=0.01, sort=NULL,
+\method{plot}{catdes}(x, show="all",output=c("figure","dt") , level=0.01, sort=NULL,
    col.upper="indianred2", col.lower="royalblue1", numchar = 10,
-   barplot = FALSE, \dots)
+   barplot = FALSE,cex.names=1, \dots)
 }
 
 \arguments{
   \item{x}{A catdes object, see \code{\link{catdes}} for details.}
-  \item{show}{a strig. If "quali", only the categorical variables are
+  \item{show}{a string. If "quali", only the categorical variables are
   used. If "quanti", only the the quantitative variables are used. If
-  "all", both quali and quanti are used.}
+  "all", both quali and quanti are used. If "quanti.var" is used the characterization of the quantitative variables is given; if "test.chi2" is used the characterization of the qualitative variables is given.}
+\item{output}{string: "dt" for a datatable or "figure" for a figure}
 \item{level}{a positive float. Indicates a critical value the p-value.}
 \item{sort}{NULL (default) or an integer between 1 and the number of clusters or a character (the name of a group). If it is an integer or the name of a group, the features are sorted according to their significances in the construction of the given cluster.}
 \item{col.upper}{The color used for under-represented features.}
 \item{col.lower}{The color used for over-represented features.}
   \item{numchar}{number of characters for the labels}
   \item{barplot}{a boolean; if true a barplot per category is drawn, else a table}
+  \item{cex.names}{the magnification to be used for the names}
   \item{\dots}{further arguments passed to or from other methods}
-
   }
+  
 \value{
 if barplot is true, a barplot is drawn per category with variables that significantly describe the category.\cr
 If barplot is false; it returns a grid. The rows stand for the clusters and the columns for the significant variables. 

@@ -709,7 +709,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       coo <- rbind(coo,coord.col.sup)
       if (lab.col){ labe2 <- rownames(coord.col.sup)
       } else  labe2 <- rep("",nrow(coord.col.sup))
-      if (length(col.col.sup==1)) coll2 <- rep(col.col.sup,nrow(coord.col.sup))
+      if (length(col.col.sup)==1) coll2 <- rep(col.col.sup,nrow(coord.col.sup))
 	  else coll2 <- col.col.sup
       ipch <- c(ipch,rep(17,nrow(coord.col.sup)))
       fonte <- c(fonte,rep(1,nrow(coord.col.sup)))
