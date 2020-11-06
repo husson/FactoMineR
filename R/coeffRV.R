@@ -23,24 +23,33 @@
         }
         perm
     }
-    coefficientRV <- function(X, Y) {
-        if (dim(X)[[1]] != dim(Y)[[1]])
-            stop("no the same dimension for X and Y")
-        if (dim(X)[[1]] == 1) {
-            print("1 configuration RV is  NA")
-            rv = NA
-        }
-        else {
-            Y <- scale(Y, scale = FALSE)
-            X <- scale(X, scale = FALSE)
-            W1 <- X %*% t(X)
-            W2 <- Y %*% t(Y)
-            rv <- sum(diag(W1 %*% W2))/(sum(diag(W1 %*% W1)) *
-                sum(diag(W2 %*% W2)))^0.5
-        }
-        return(rv)
-    }
- asym=function(X,Y){
+	
+coefficientRV <- function(X, Y) {
+  tr <- function(Z) { sum(diag(Z)) }
+  if (dim(X)[[1]] != dim(Y)[[1]]) 
+    stop("no the same dimension for X and Y")
+  if (dim(X)[[1]] == 1) {
+    print("1 configuration RV is  NA")
+    rv = NA
+  } else {
+    Y <- scale(Y, scale = FALSE)
+    X <- scale(X, scale = FALSE)
+    if (nrow(X) < min(ncol(X),ncol(Y))) {
+      W1 <- X %*% t(X)
+      W2 <- Y %*% t(Y)
+      rv <- tr(W1 %*% W2)/(tr(W1 %*% W1) * tr(W2 %*% W2))^0.5
+	} else {
+      W1 <- t(X) %*% X
+      W2 <- t(Y) %*% Y
+      W3 <- t(X) %*% Y
+      W4 <- t(Y) %*% X
+	  
+      rv <- tr(W3 %*% W4) / (tr(W1 %*% W1) * tr(W2 %*% W2))^0.5
+	}
+  }
+  return(rv)
+}
+ asym <- function(X,Y){
 
         n <- dim(X)[[1]]
         X <- scale(X, scale = FALSE)

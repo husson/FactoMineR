@@ -95,7 +95,7 @@ test.aov.w <- function(y,x,w=NULL){
     }
 	if (is.null(quali) & is.null(quanti)) print(paste("The value of proba is too small. Choose a proba greater than",proba))
 	result$call <- list(num.var=num.var, proba=proba, weights=weights, X=donnee)
-	class(result) <- c("condes", "list ")
+	class(result) <- c("condes", "list")
 
     return(result)
 }

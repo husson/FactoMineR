@@ -180,7 +180,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
       col.ind.sup <- col.ind[res.mca$call$ind.sup]
       if (!is.null(res.mca$call$ind.sup)) col.ind <- col.ind[-res.mca$call$ind.sup]
     }
-    if (habillage == "none" & graph.type == "classic") {
+#    if (habillage == "none" & graph.type == "classic") {
+    if (habillage == "none") {
       if (length(col.var)==1) col.var <- rep(col.var,nrow(coord.var))
       if (!is.null(res.mca$call$quali.sup) & length(col.quali.sup)==1) col.quali.sup <- rep(col.quali.sup,nrow(coord.quali.sup))
     }

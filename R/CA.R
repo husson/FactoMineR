@@ -143,10 +143,17 @@ dist2.col <- colSums((X.col.sup-marge.row)^2/marge.row)
       if (!is.null(row.sup)) X.del <- as.data.frame(Xtot[-row.sup,-c(col.sup,quanti.sup,quali.sup)])
 	  else X.del <- Xtot[,-c(col.sup,quanti.sup,quali.sup)]
 	  X.quali.sup <- NULL
-	  for (j in 1:length(quali.sup)){
-	    if (!is.null(row.sup)) X.quali.sup <- rbind(X.quali.sup,matrix(unlist(by(X.del,Xtot[-row.sup,quali.sup[j]],colSums)),ncol=ncol(X.del),byrow=T))
-	    else X.quali.sup <- rbind(X.quali.sup,matrix(unlist(by(X.del,Xtot[,quali.sup[j]],colSums)),ncol=ncol(X.del),byrow=T))
-	  }
+	  # for (j in 1:length(quali.sup)){
+	    # if (!is.null(row.sup)) X.quali.sup <- rbind(X.quali.sup,matrix(unlist(by(X.del,Xtot[-row.sup,quali.sup[j]],colSums)),ncol=ncol(X.del),byrow=T))
+	    # else X.quali.sup <- rbind(X.quali.sup,matrix(unlist(by(X.del,Xtot[,quali.sup[j]],colSums)),ncol=ncol(X.del),byrow=T))
+	  # }
+      Xtot2 <- Xtot
+      if (!is.null(row.sup))  Xtot2 <- Xtot[-row.sup,] 
+      for (j in 1:length(quali.sup)) {
+        Xtot2[,quali.sup[j]] <- droplevels(Xtot2[,quali.sup[j]] , reorder=FALSE)  
+        X.quali.sup <- rbind(X.quali.sup, matrix(unlist(by(X.del, 
+              Xtot2[, quali.sup[j]], colSums)), ncol = ncol(X.del), byrow = T))
+      }
       somme.quali <- rowSums(X.quali.sup)
       X.quali.sup <- X.quali.sup/somme.quali
       coord.quali.sup <- crossprod(t(as.matrix(X.quali.sup)),V)
@@ -154,63 +161,19 @@ dist2.col <- colSums((X.col.sup-marge.row)^2/marge.row)
       cos2.quali.sup <- coord.quali.sup^2/dist2.quali
       coord.quali.sup <- coord.quali.sup[, 1:ncp,drop=FALSE]
       cos2.quali.sup <- cos2.quali.sup[, 1:ncp,drop=FALSE]
-      rownames(coord.quali.sup) <- rownames(cos2.quali.sup) <- paste(rep(colnames(Xtot)[quali.sup],lapply(Xtot[,quali.sup,drop=FALSE],nlevels)) , unlist(lapply(Xtot[,quali.sup,drop=FALSE],levels)),sep=".")
+      rownames(coord.quali.sup) <- rownames(cos2.quali.sup) <- paste(rep(colnames(Xtot2)[quali.sup],lapply(Xtot2[, quali.sup, drop = FALSE], nlevels)), unlist(lapply(Xtot2[, quali.sup, drop = FALSE], levels)),sep = ".") 
       colnames(coord.quali.sup) <- colnames(cos2.quali.sup) <- paste("Dim", 1:ncp)
       res$quali.sup <- list(coord = coord.quali.sup, cos2 = cos2.quali.sup)
 
-        if (!is.null(row.sup)) Zqs <- tab.disjonctif(Xtot[-row.sup,quali.sup])
-		else Zqs <- tab.disjonctif(Xtot[,quali.sup])
+        Zqs <- tab.disjonctif(Xtot2[, quali.sup])
         Nj <- colSums(Zqs * row.w)
         Nj <- colSums(Zqs * marge.row)*total
         if (total>1) coef <- sqrt(Nj * ((total - 1)/(total - Nj)))
 		else coef <- sqrt(Nj)
         res$quali.sup$v.test <- res$quali.sup$coord*coef
 
-
-##########
-    # if (!is.null(row.sup)) X.del <- as.data.frame(Xtot[-row.sup,-c(col.sup,quanti.sup,quali.sup)])
-	# else X.del <- Xtot[,-c(col.sup,quanti.sup,quali.sup)]
-	# X.quali.sup <- NULL
-	# for (j in 1:length(quali.sup)){
-	  # if (!is.null(row.sup)) X.quali.sup <- rbind(X.quali.sup,matrix(unlist(by(X.del,Xtot[-row.sup,quali.sup[j]],colSums)),ncol=ncol(X.del),byrow=T))
-	  # else X.quali.sup <- rbind(X.quali.sup,matrix(unlist(by(X.del,Xtot[,quali.sup[j]],colSums)),ncol=ncol(X.del),byrow=T))
-	# }
-# print(X.quali.sup)
-    # somme.quali <- rowSums(X.quali.sup)
-    # X.quali.sup <- X.quali.sup/somme.quali
-    # coord.quali.sup <- crossprod(t(as.matrix(X.quali.sup)),V)
-    # dist2.quali <- rowSums(t((t(X.quali.sup)-marge.col)^2/marge.col))
-    # cos2.quali.sup <- coord.quali.sup^2/dist2.quali
-    # coord.quali.sup <- coord.quali.sup[, 1:ncp,drop=FALSE]
-    # cos2.quali.sup <- cos2.quali.sup[, 1:ncp,drop=FALSE]
-    # colnames(coord.quali.sup) <- colnames(cos2.quali.sup) <- paste("Dim", 1:ncp)
-    # rownames(coord.quali.sup) <- rownames(cos2.quali.sup) <- rownames(X.quali.sup)
-    # res.quali.sup <- list(coord = coord.quali.sup, cos2 = cos2.quali.sup)
-    # res$quali.sup <- res.quali.sup
-    # res$call$quali.sup <- quali.sup
-
-##########
-
-
-
-
-
-
-
-
-
 		eta2 = matrix(NA, length(quali.sup), ncp)
-         # if (is.null(row.sup)) {
-		   # for (i in 1:ncp)  eta2[, i] <- unlist(lapply(as.data.frame(Xtot[, quali.sup]),fct.eta2,res$row$coord[,i],weights=marge.row))
-		 # } else {
-		   # for (i in 1:ncp)  eta2[, i] <- unlist(lapply(as.data.frame(Xtot[-row.sup, quali.sup]),fct.eta2,res$row$coord[,i],weights=marge.row))
-		 # }	  
-
-         if (is.null(row.sup)) {
-		   eta2 <- sapply(as.data.frame(Xtot[, quali.sup,drop=FALSE]),fct.eta2,res$row$coord,weights=marge.row)
-		 } else {
-		   eta2 <- sapply(as.data.frame(Xtot[-row.sup, quali.sup,drop=FALSE]),fct.eta2,res$row$coord,weights=marge.row)
-		 }
+        eta2 <- sapply(as.data.frame(Xtot2[, quali.sup, drop = FALSE]), fct.eta2, res$row$coord, weights = marge.row)
 		eta2 <- t(as.matrix(eta2,ncol=ncp))
         colnames(eta2) = paste("Dim", 1:ncp)
         rownames(eta2) = colnames(Xtot)[quali.sup]
