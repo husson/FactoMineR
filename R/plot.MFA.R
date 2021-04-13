@@ -491,15 +491,16 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       df_var <- data.frame(labe,coo)
       transparency_var <- 1
       if (!is.null(select)) transparency_var <- ifelse(df_var[,1] != "", 1, 1-unselect)
+
       if(habillage == "group"){
-        df_var <- data.frame(df_var,col)
+        df_var <- data.frame(df_var,col,transparency_var)
         df_var[,4] <- as.factor(df_var[,4])
         df_var <- df_var[which(df_var[,4] != "transparent"),]
       gg_graph <- ggplot() + 
         coord_fixed(ratio = 1) + 
         geom_line(aes(x=x, y=y), data=data.frame(x=-1:1,y=0),lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) + 
         geom_line(aes(x=x, y=y), data=data.frame(x=0,y=-1:1),lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) + 
-        geom_segment(aes(x=0,y=0,xend=df_var[,2], yend=df_var[,3], color = df_var[,4]),arrow=arrow(length=unit(0.2,"cm")), lty = ggoptions_default$segment.lty, lwd = ggoptions_default$segment.lwd, alpha = transparency_var) + 
+        geom_segment(aes(x=0,y=0,xend=df_var[,2], yend=df_var[,3], color = df_var[,4]),arrow=arrow(length=unit(0.2,"cm")), lty = ggoptions_default$segment.lty, lwd = ggoptions_default$segment.lwd, alpha = df_var[,5]) + 
         xlab(lab.x) + ylab(lab.y) +
         xlim(c(-1.3,1.3)) + ylim(c(-1.1,1.1)) +
         ggtitle(title) +
@@ -516,7 +517,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
           coord_fixed(ratio = 1) + 
           geom_line(aes(x=x, y=y), data=data.frame(x=-1:1,y=0),lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) + 
           geom_line(aes(x=x, y=y), data=data.frame(x=0,y=-1:1),lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) + 
-          geom_segment(aes(x=0,y=0,xend=df_var[,2], yend=df_var[,3]),arrow=arrow(length=unit(0.2,"cm")), lty = ggoptions_default$segment.lty, lwd = ggoptions_default$segment.lwd, alpha = transparency_var) + 
+          geom_segment(aes(x=0,y=0,xend=df_var[,2], yend=df_var[,3]),arrow=arrow(length=unit(0.2,"cm")), lty = ggoptions_default$segment.lty, lwd = ggoptions_default$segment.lwd, alpha = df_var[,5]) + 
           xlab(lab.x) + ylab(lab.y) +
           ggtitle(title) +
           theme_light()  + 
@@ -525,8 +526,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         else{text <- geom_text(aes(x=df_var[,2], y=df_var[,3],label=df_var[,1]), size = ggoptions_default$size, hjust = (-sign(df_var[,2])+1)/2, vjust = -sign(df_var[,3])*0.75+0.25,show.legend = FALSE)}
         
       }
-      gg_graph <- gg_graph + text + theme + circle
-      
+      gg_graph <- gg_graph + text + theme + circle      
     }
   }
   if (choix=="freq"){

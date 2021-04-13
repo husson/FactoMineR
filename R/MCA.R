@@ -134,6 +134,10 @@ nonact <- c(quanti.sup,quali.sup)
 if (!is.null(nonact)) act <- (1:ncol(X))[-nonact]
 else act <- (1:ncol(X))
 Z <- tab.disjonctif(X[, act,drop=FALSE])
+## add for ecxl
+aux <- colnames(Z)%in%excl
+if (any(aux)) excl <- which(aux)
+
 if (any(is.na(X[,act]))){
  if (is.null(tab.disj)){
   if (na.method=="Average"){
@@ -279,7 +283,6 @@ if (!is.null(quanti.sup)){
 		
         res.mca$quali.sup$eta2 <- eta2
     }
-
     if (!is.null(quanti.sup)) {
         U <- res.mca$svd$U
         coord.quanti.sup <- matrix(NA, ncol(X.quanti.sup), ncp)

@@ -23,7 +23,7 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
   \item{ind.sup}{a vector indicating the indexes of the supplementary individuals}
   \item{quanti.sup}{a vector indicating the indexes of the quantitative supplementary variables}
   \item{quali.sup}{a vector indicating the indexes of the categorical supplementary variables}
-  \item{excl}{numeric vector indicating the indexes of the "junk" categories (default is NULL)}
+  \item{excl}{vector indicating the indexes of the "junk" categories (default is NULL), it can be a vector of the names of the categories or a vector of the indexes in the disjunctive data table}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{level.ventil}{a proportion corresponding to the level under which the category is ventilated; by default, 0 and no ventilation is done}
   \item{axes}{a length 2 vector specifying the components to plot}

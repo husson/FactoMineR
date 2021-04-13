@@ -44,6 +44,6 @@ descfreq <- function(donnee,by.quali=NULL,proba = 0.05){
   res = tri
 
   options(old.warn)
-class(res) <- c("descfreq", "list ")
+class(res) <- c("descfreq", "list")
   return(res)
 }

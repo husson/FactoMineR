@@ -195,7 +195,7 @@ fct.eta2 <- function(vec,x,weights) {
         res.call$quali.sup = call.quali.sup
     }
     res$call = res.call
-    class(res) <- c("PCA", "list ")
+    class(res) <- c("PCA", "list")
     if (graph & (ncp>1)) {
         print(plot.PCA(res, choix = "ind", axes = axes))
         print(plot.PCA(res, choix = "var", axes = axes,shadowtext=TRUE,new.plot=TRUE))

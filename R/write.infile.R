@@ -1,7 +1,6 @@
     write.infile <- function(X, file, sep=";", append = FALSE,nb.dec=4) {
         if (!append) cat("", file = file, append = FALSE,sep="")
-        if (inherits(X, "array")) affichetableau(X, file, sep, nb.dec=nb.dec)
-        else if (is.matrix(X)) affichmatrice(X, file, sep,nb.dec=nb.dec)
+        if (is.matrix(X)) affichmatrice(X, file, sep,nb.dec=nb.dec)        else if (inherits(X, "array")) affichetableau(X, file, sep, nb.dec=nb.dec)
         else if (is.data.frame(X)) affichtabldon(X, file, sep,nb.dec=nb.dec)
         else if (is.list(X)) affichlist(X, file,sep=sep,nb.dec=nb.dec)
         else if (is.numeric(X)) cat(X, "\n", file = file, append = TRUE,sep=sep)

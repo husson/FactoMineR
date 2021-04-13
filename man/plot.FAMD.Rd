@@ -54,9 +54,11 @@ Returns the individuals factor map and the variables factor map.
 }
 
 \examples{
+\dontrun{
 data(geomorphology)
 res <- FAMD(geomorphology)
 plot(res,choix="ind",habillage=4)
+}
 }
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
 

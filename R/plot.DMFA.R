@@ -6,7 +6,7 @@ plot.DMFA <- function (x, axes = c(1, 2), choix = "ind", label = "all",
     autoLab <- match.arg(autoLab,c("auto","yes","no"))
 	if (autoLab=="yes") autoLab=TRUE
 	if (autoLab=="no") autoLab=FALSE
-    class(res.dmfa) <- c("PCA", "list ")
+    class(res.dmfa) <- c("PCA", "list")
     if (choix == "ind"){
 	if(is.null(title)) titre = "Individuals factor map (PCA)"
 	else titre = title
