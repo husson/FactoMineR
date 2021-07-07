@@ -100,6 +100,7 @@ plot(res.pca, habillage = c("Competition","100m"))
 ## To automatically draw ellipses around the barycentres of the categorical variables
 plotellipses(res.pca)
 
+\dontrun{
 ## Selection of some individuals
 plot(res.pca,select="contrib 7") # plot the 7 individuals with the highest contribution 
 plot(res.pca,select="cos2 0.8")  # plot the individuals with cos2 greater than 0.8
@@ -118,6 +119,7 @@ gr + theme(panel.grid.major = element_blank(),
 
 ## To draw classical R graphs
 plot(res.pca, graph.type = "classic")
+}
 }
 
 \keyword{dplot}

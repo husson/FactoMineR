@@ -3,6 +3,8 @@ DMFA = function(don, num.fact = ncol(don), scale.unit=TRUE, ncp=5,quanti.sup=NUL
   if (is.null(rownames(don))) rownames(don) = 1:nrow(don)
   if (is.null(colnames(don))) colnames(don) = paste("V",1:ncol(don),sep="")
   for (j in 1:ncol(don)) if (colnames(don)[j]=="") colnames(don)[j] = paste("V",j,sep="")
+  if (!is.null(quali.sup) & !is.numeric(quali.sup)) quali.sup<- which(colnames(X)%in%quali.sup)
+  if (!is.null(quanti.sup) & !is.numeric(quanti.sup)) quanti.sup<- which(colnames(X)%in%quanti.sup)
   for (j in 1:nrow(don)) if (is.null(rownames(don)[j])) rownames(don)[j] = paste("row",j,sep="")
   don <- as.data.frame(don)
   is.quali <- which(!unlist(lapply(don,is.numeric)))

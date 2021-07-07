@@ -122,6 +122,8 @@ fct.eta2 <- function(vec,x,weights) {
     for (k in which(lapply(X,class)=="logical")) X[,k] <- as.factor(X[,k])
   }
 
+  if (!is.null(quali.sup) & !is.numeric(quali.sup)) quali.sup<- which(colnames(X)%in%quali.sup)
+  if (!is.null(quanti.sup) & !is.numeric(quanti.sup)) quanti.sup<- which(colnames(X)%in%quanti.sup)
   if (level.ventil > 0) X <- ventil.tab(X,level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup,quali.sup=quali.sup,quanti.sup=quanti.sup)
   niveau <- unlist(lapply(X,levels))
   if (sum(duplicated(niveau))>0){
