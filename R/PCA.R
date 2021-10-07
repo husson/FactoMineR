@@ -97,9 +97,9 @@ fct.eta2 <- function(vec,x,weights) {
     rownames(coord.var) <- rownames(cos2.var) <- rownames(cor.var) <- rownames(contrib.var) <- colnames(X)
     colnames(coord.var) <- colnames(cos2.var) <- colnames(cor.var) <- colnames(contrib.var) <- paste("Dim", 
         c(1:ncol(V)), sep = ".")
-    res.var <- list(coord = coord.var[, 1:ncp], cor = cor.var[, 
-        1:ncp], cos2 = cos2.var[, 1:ncp], contrib = contrib.var[, 
-        1:ncp] * 100)
+    res.var <- list(coord = coord.var[, 1:ncp,drop=FALSE], cor = cor.var[, 
+        1:ncp,drop=FALSE], cos2 = cos2.var[, 1:ncp,drop=FALSE], contrib = contrib.var[, 
+        1:ncp,drop=FALSE] * 100)
     dist2 <- dist2.ind
     cos2.ind <- coord.ind^2/dist2
     contrib.ind <- t(t(coord.ind^2*row.w/sum(row.w))/eig)
