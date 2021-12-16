@@ -133,7 +133,7 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
         jj <- 1
         for (j in 1:length(H[[k]])) {
           index.col <- index.col +1
-          if (j == sum(H[[k+1]][1:jj])+1 ) jj=jj+1
+          if (j == sum(H[[k+1]][1:jj])+1 ) jj <- jj+1
           if(length(H[[k]])>1) {
             points(coord.partial[[k]][,coord,j],col=color[index.col],pch=20,cex=cex*0.8)
             for (i in 1:nrow(coord.partial[[k]])) lines(c(coord.partial[[k+1]][i,coord[1],jj],coord.partial[[k]][i,coord[1],j]),c(coord.partial[[k+1]][i,coord[2],jj],coord.partial[[k]][i,coord[2],j]))
@@ -178,7 +178,7 @@ plot.partial <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL
         jj <- 1
         for (j in 1:length(H[[k]])) {
           index.col <- index.col +1
-          if (j == sum(H[[k+1]][1:jj])+1 ) jj=jj+1
+          if (j == sum(H[[k+1]][1:jj])+1 ) jj<-jj+1
           if(length(H[[k]])>1) {
             points(coord.partial[[k]][,coord,j],col=color[index.col],pch=15,cex=cex*0.8)
             for (i in 1:nrow(coord.partial[[k]])) lines(c(coord.partial[[k+1]][i,coord[1],jj],coord.partial[[k]][i,coord[1],j]),c(coord.partial[[k+1]][i,coord[2],jj],coord.partial[[k]][i,coord[2],j]))
@@ -258,7 +258,7 @@ plot.moy <- function(res.hmfa , coord=c(1,2), invisible = NULL, title = NULL, ce
 
     res.hmfa <- x
     if (!inherits(res.hmfa, "HMFA")) stop("non convenient data")
-    color = c("black","red","green3","blue",
+    color <- c("black","red","green3","blue",
       "cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey",
       "lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange",
       "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey",

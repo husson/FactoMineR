@@ -39,29 +39,29 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
         return(nbvarh)
     }
     hweight <- function(X, H, type = rep("s", length(H[[1]]))) {
-        Hq = H
-        niv1 = MFA(X, group = H[[1]], type = type, graph = FALSE)
+        Hq <- H
+        niv1 <- MFA(X, group = H[[1]], type = type, graph = FALSE)
         cw <- niv1$call$col.w
-        Hq[[1]] = niv1$call$group.mod
-        Hinter = htabdes(Hq)
+        Hq[[1]] <- niv1$call$group.mod
+        Hinter <- htabdes(Hq)
         nbnivh <- length(Hq)
         cw.partiel <- H
         cw.partiel[[1]] <- cw
         for (n in 2:nbnivh) {
-            niv2 = MFA(niv1$call$XTDC, group = Hinter[[n]], type = c(rep("c", length(Hinter[[n]]))), weight.col.mfa = cw, graph = FALSE)
-            cw = niv2$call$col.w * cw
+            niv2 <- MFA(niv1$call$XTDC, group = Hinter[[n]], type = c(rep("c", length(Hinter[[n]]))), weight.col.mfa = cw, graph = FALSE)
+            cw <- niv2$call$col.w * cw
             cw.partiel[[n]] <- cw
         }
         return(cw.partiel)
     }
 
-    if (is.null(rownames(X))) rownames(X) = 1:nrow(X)
-    if (is.null(colnames(X))) colnames(X) = paste("V",1:ncol(X),sep="")
+    if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
+    if (is.null(colnames(X))) colnames(X) <- paste("V",1:ncol(X),sep="")
 	X <- as.data.frame(X)
 	is.quali <- which(!unlist(lapply(X,is.numeric)))
     X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
-    for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] = paste("V",j,sep="")
-    for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] = paste("row",j,sep="")
+    for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] <- paste("V",j,sep="")
+    for (j in 1:nrow(X)) if (is.null(rownames(X)[j])) rownames(X)[j] <- paste("row",j,sep="")
 	## avoid problem when a category has 0 individuals
     for (j in 1:ncol(X)) {
       if (!is.numeric(X[,j])) levels(X[,j])[which(table(X[,j])==0)] <- levels(X[,j])[which(table(X[,j])!=0)[1]]
@@ -72,13 +72,13 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
     nbnivo <- length(H)
     res1 <- list()
     for (j in 1:ncol(X)) {
-      if (is.numeric(X[,j])) X[,j] = scale(X[,j],scale=FALSE)
+      if (is.numeric(X[,j])) X[,j] <- scale(X[,j],scale=FALSE)
     }
-    niv1 = MFA(X, group = H[[1]], type = type, ncp = ncp, graph = FALSE)
+    niv1 <- MFA(X, group = H[[1]], type = type, ncp = ncp, graph = FALSE)
     X <- niv1$call$XTDC
-    Hq = H
-    Hq[[1]] = niv1$call$group.mod
-    Xdes = htabdes(Hq)
+    Hq <- H
+    Hq[[1]] <- niv1$call$group.mod
+    Xdes <- htabdes(Hq)
     ind.var <- 0
     ind.quali <- NULL
     nbgroup <- length(H[[1]])
@@ -158,11 +158,11 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
 
 ## ajout
     canonical <- matrix(0, 0 ,ncol(res.afmh$ind$coord))
-	colnames(canonical)=colnames(res.afmh$ind$coord)
+	colnames(canonical) <- colnames(res.afmh$ind$coord)
     for (h in 1:nbnivo) {
       nbgroup <- length(H[[h]])
 	  for (g in 1:nbgroup) {
-	  canonical = rbind(canonical, diag(cor(res.afmh$ind$coord,part1[[h]][,,g])))
+	  canonical <- rbind(canonical, diag(cor(res.afmh$ind$coord,part1[[h]][,,g])))
 	  }
       if (is.null(name.group)){
         name.aux <- paste("L", h, ".", sep = "")
@@ -171,7 +171,7 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
       else rownames(canonical)[(nrow(canonical)-nbgroup+1):nrow(canonical)] <- name.group[[h]]
 	}
 	## fin ajout
-	res.afmh$group = list(coord=coord.group,canonical=canonical)
+	res.afmh$group <- list(coord=coord.group,canonical=canonical)
     results <- list(eig = res.afmh$eig, group = res.afmh$group, ind = res.afmh$ind, partial = part1)
     if (!is.null(ind.quali) & length(ind.quali) < nrow(res.afmh$var$coord)) {
         results$quanti.var$coord <- res.afmh$var$coord[-ind.quali, ]

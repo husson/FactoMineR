@@ -8,40 +8,40 @@ graph.var <- function (x, axes = c(1, 2),
     coord.quanti <- NULL
     if (inherits(x, "PCA")|inherits(x, "DMFA")){
       coord.var <- x$var$coord[, axes]
-      var.cos2 = x$var$cos2[,axes]
+      var.cos2 <- x$var$cos2[,axes]
       if (!is.null(x$quanti.sup)){
         coord.quanti <- x$quanti.sup$coord[, axes]
-        quanti.cos2 = x$quanti.sup$cos2[,axes]
+        quanti.cos2 <- x$quanti.sup$cos2[,axes]
       }
     }
     if (inherits(x, "MCA")){
       if (!is.null(x$quanti.sup)){
         coord.quanti <- x$quanti.sup$cor[, axes]
-        quanti.cos2 = x$quanti.sup$cos2[,axes]
+        quanti.cos2 <- x$quanti.sup$cos2[,axes]
       }
     }
     if (inherits(x, "MFA")|inherits(x, "HMFA")){
       if (!is.null(x["quanti.var"])){
         coord.var <- x$quanti.var$cor[, axes]
-        var.cos2 = x$quanti.var$cos2[,axes]
+        var.cos2 <- x$quanti.var$cos2[,axes]
       }
       if (!is.null(x$quanti.var.sup)){
         coord.quanti <- x$quanti.var.sup$cor[, axes]
-        quanti.cos2 = x$quanti.var.sup$cos2[,axes]
+        quanti.cos2 <- x$quanti.var.sup$cos2[,axes]
       }
     }
-    draw.var = lab.var <- rep(FALSE,nrow(coord.var))
-    if (!is.null(coord.quanti)) draw.quanti = lab.quanti <- rep(FALSE,nrow(coord.quanti))
+    draw.var <- lab.var <- rep(FALSE,nrow(coord.var))
+    if (!is.null(coord.quanti)) draw.quanti <- lab.quanti <- rep(FALSE,nrow(coord.quanti))
     if("all"%in%label){
       lab.var <- rep(TRUE,nrow(coord.var))
       if (!is.null(coord.quanti)) lab.quanti <- rep(TRUE,nrow(coord.quanti))
     }
     else {
-      if("var" %in% label) lab.var = rep(TRUE,nrow(coord.var))
-      else for (j in 1:nrow(coord.var)) if (rownames(coord.var)[j]%in%label) lab.var[j] = TRUE
+      if("var" %in% label) lab.var <- rep(TRUE,nrow(coord.var))
+      else for (j in 1:nrow(coord.var)) if (rownames(coord.var)[j]%in%label) lab.var[j] <- TRUE
       if (!is.null(coord.quanti)){
         if ("quanti.sup" %in% label) lab.quanti<- rep(TRUE,nrow(coord.quanti))
-        else for (j in 1:nrow(coord.quanti)) if (rownames(coord.quanti)[j]%in%label) lab.quanti[j] = TRUE
+        else for (j in 1:nrow(coord.quanti)) if (rownames(coord.quanti)[j]%in%label) lab.quanti[j] <- TRUE
       }
     }
     if("all"%in%draw){
@@ -49,11 +49,11 @@ graph.var <- function (x, axes = c(1, 2),
       if (!is.null(coord.quanti)) draw.quanti <- rep(TRUE,nrow(coord.quanti))
     }
     else {
-      if("var" %in% draw) draw.var = rep(TRUE,nrow(coord.var))
-      else for (j in 1:nrow(coord.var)) if (rownames(coord.var)[j]%in%draw) draw.var[j] = TRUE
+      if("var" %in% draw) draw.var <- rep(TRUE,nrow(coord.var))
+      else for (j in 1:nrow(coord.var)) if (rownames(coord.var)[j]%in%draw) draw.var[j] <- TRUE
       if (!is.null(coord.quanti)){
         if("quanti.sup" %in% draw) draw.quanti<- rep(TRUE,nrow(coord.quanti))
-        else for (j in 1:nrow(coord.quanti)) if (rownames(coord.quanti)[j]%in%draw) draw.quanti[j] = TRUE
+        else for (j in 1:nrow(coord.quanti)) if (rownames(coord.quanti)[j]%in%draw) draw.quanti[j] <- TRUE
       }
     }
 
@@ -69,7 +69,7 @@ graph.var <- function (x, axes = c(1, 2),
       sub.titre  <- "Variables factor map (PCA)"
     }
     scale.unit <- TRUE
-    if (inherits(x, "PCA")) scale.unit = x$call$scale.unit
+    if (inherits(x, "PCA")) scale.unit <- x$call$scale.unit
     if (scale.unit)  xlim <- ylim <- c(-1, 1)
     else {
       xmin <- min(coord.var[, 1], coord.quanti[, 1])
@@ -98,7 +98,7 @@ graph.var <- function (x, axes = c(1, 2),
     }
     col.var<-rep(col.var, length=nrow(coord.var))
     for (v in 1:nrow(coord.var)) {
-      if (sum(var.cos2[v, ], na.rm = TRUE) < lim.cos2.var) draw.var[v]=FALSE
+      if (sum(var.cos2[v, ], na.rm = TRUE) < lim.cos2.var) draw.var[v] <- FALSE
       if (draw.var[v]) {
         arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col.var[v])
         if (lab.var[v]) {
@@ -117,7 +117,7 @@ graph.var <- function (x, axes = c(1, 2),
     if (!is.null(coord.quanti)) {
       col.sup<-rep(col.sup, length=nrow(coord.quanti))
       for (q in 1:nrow(coord.quanti)) {
-        if (sum(quanti.cos2[q, ], na.rm = TRUE) < lim.cos2.var) draw.quanti[q]=FALSE
+        if (sum(quanti.cos2[q, ], na.rm = TRUE) < lim.cos2.var) draw.quanti[q] <- FALSE
         if (draw.quanti[q]) {
          arrows(0, 0, coord.quanti[q, 1], coord.quanti[q, 2], length = 0.1, angle = 15, code = 2, lty = 2, col=col.sup[q])
          if (lab.quanti[q]) {

@@ -25,7 +25,7 @@ if (choix=="ind" | choix=="quali") {
   x$call$group.mod <- sapply(x$call$X,nlevels)
   x$call$group.mod[x$call$group.mod==0] <- 1
   x$call$group <- rep(1,length(x$call$type))
-  x$separate.analyses=vector(mode = "list", length = ncol(x$call$X))
+  x$separate.analyses <- vector(mode = "list", length = ncol(x$call$X))
   for (i in 1:ncol(x$call$X)) x$separate.analyses[[i]]$call$X <- x$call$X[,i,drop=FALSE]
   gg_graph <- plot.MFA (x, axes = axes, choix = "ind", lab.var = lab.var,
             lab.ind = lab.ind, lab.par = FALSE, habillage = habillage,
@@ -61,8 +61,8 @@ if (choix=="var") {
 if (choix=="quanti") {
   class(x) <- c("PCA", "list")
 	x$call$scale.unit <- TRUE
-	if (lab.var==TRUE) label="all"
-	else label="none"
+	if (lab.var==TRUE) label <- "all"
+	else label <- "none"
 	col.var <- "black"
 	col.quanti.sup <- "blue"
 	x$var <- x$quanti.var

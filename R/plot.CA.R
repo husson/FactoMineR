@@ -10,7 +10,7 @@ plot.CA <- function (x, axes = c(1, 2),
   argument <- list(...)
   if (!is.null(argument[["cex"]]) & is.null(ggoptions["size"]))  ggoptions["size"] <- 4*argument$cex
   ggoptions_default <- list(size = 4, point.shape = 19, line.lty = 2, line.lwd = 0.5, line.color = "black", segment.lty = 1, segment.lwd = 0.5, circle.lty = 1, circle.lwd = 0.5, circle.color = "black", low.col.quanti = "blue", high.col.quanti = "red3")
-  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] = ggoptions[names(ggoptions)]
+  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] <- ggoptions[names(ggoptions)]
   old.palette <- palette()
   if (is.null(palette)) palette <- c("black", "red", "green3", "blue", "magenta", "darkgoldenrod","darkgray", "orange", "cyan", "violet", "lightpink", "lavender", "yellow", "darkgreen","turquoise", "lightgrey", "lightblue", "darkkhaki","darkmagenta","lightgreen", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
   palette(palette)   # that is necessary
@@ -21,10 +21,10 @@ plot.CA <- function (x, axes = c(1, 2),
   choix <- tolower(choix)
   autoLab <- match.arg(autoLab,c("auto","yes","no"))
   graph.type <- match.arg(graph.type[1],c("ggplot","classic"))
-  if (autoLab=="yes") autoLab=TRUE
-  if (autoLab=="no") autoLab=FALSE
+  if (autoLab=="yes") autoLab <- TRUE
+  if (autoLab=="no") autoLab <- FALSE
   invisible <- match.arg(invisible,c("none","row", "col", "row.sup", "col.sup","quali.sup"),several.ok=TRUE)
-  if ("none"%in%invisible) invisible = NULL
+  if ("none"%in%invisible) invisible <- NULL
   if (graph.type == "ggplot"){
     lab.x <- paste("Dim ",axes[1]," (",format(res.ca$eig[axes[1],2],nsmall=2,digits=2),"%)",sep="")
     lab.y <- paste("Dim ",axes[2]," (",format(res.ca$eig[axes[2],2],nsmall=2,digits=2),"%)",sep="")
@@ -199,8 +199,8 @@ plot.CA <- function (x, axes = c(1, 2),
       if (lab.row==TRUE) labe <- rownames(coord.row)
       else labe <- rep("",nrow(coord.row))
       if (!is.null(selection)){
-        if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255)
-        else coll[!((1:length(coll))%in%selection)] = unselect
+        if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] <- rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255)
+        else coll[!((1:length(coll))%in%selection)] <- unselect
         labe[!((1:length(coll))%in%selection)] <- ""
       }
       df_rowa <- data.frame(labe,coord.row,coll,ipch,fonte)
@@ -214,8 +214,8 @@ plot.CA <- function (x, axes = c(1, 2),
       if (lab.col==TRUE) labe2 <- rownames(coord.col)
       else labe2 <- rep("",nrow(coord.col))
       if (!is.null(selectionC)){
-        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionC)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionC)])),alpha=255*(1-unselect),maxColorValue=255)
-        else coll2[!((1:length(coll2))%in%selectionC)] = unselect
+        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionC)] <- rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionC)])),alpha=255*(1-unselect),maxColorValue=255)
+        else coll2[!((1:length(coll2))%in%selectionC)] <- unselect
         labe2[!((1:length(coll2))%in%selectionC)] <- ""
       }
       df_cola <- data.frame(labe2,coord.col,coll2,rep(17,nrow(coord.col)),rep(1,nrow(coord.col)))
@@ -231,14 +231,14 @@ plot.CA <- function (x, axes = c(1, 2),
       if (lab.col.sup==TRUE) labe2 <- rownames(coord.col.sup)
       else labe2 <- rep("",nrow(coord.col.sup))
       if (!is.null(selectionC2)){
-        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionC2)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionC2)])),alpha=255*(1-unselect),maxColorValue=255)
-        else coll2[!((1:length(coll2))%in%selectionC2)] = unselect
+        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionC2)] <- rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionC2)])),alpha=255*(1-unselect),maxColorValue=255)
+        else coll2[!((1:length(coll2))%in%selectionC2)] <- unselect
         labe2[!((1:length(coll2))%in%selectionC2)] <- ""
       }
       if (length(selectCol)==1){
         if (grepl("contrib",selectCol)){
-          if (is.numeric(unselect)) coll2[1:length(coll2)] = rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255)
-          else coll2[1:length(coll2)] = unselect
+          if (is.numeric(unselect)) coll2[1:length(coll2)] <- rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255)
+          else coll2[1:length(coll2)] <- unselect
           labe2[1:length(coll2)] <- ""
         }}
       df_colb <- data.frame(labe2,coord.col.sup,coll2,rep(17,nrow(coord.col.sup)),rep(3,nrow(coord.col.sup)))
@@ -255,8 +255,8 @@ plot.CA <- function (x, axes = c(1, 2),
       if (lab.row.sup==TRUE) labe2 <- rownames(coord.row.sup)
       else labe2 <- rep("",nrow(coord.row.sup))
       if (!is.null(selectionR2)){
-        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionR2)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionR2)])),alpha=255*(1-unselect),maxColorValue=255)
-        else coll2[!((1:length(coll2))%in%selectionR2)] = unselect
+        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionR2)] <- rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionR2)])),alpha=255*(1-unselect),maxColorValue=255)
+        else coll2[!((1:length(coll2))%in%selectionR2)] <- unselect
         labe2[!((1:length(coll2))%in%selectionR2)] <- ""
       }
       if (length(selectRow)==1){
@@ -287,7 +287,7 @@ plot.CA <- function (x, axes = c(1, 2),
     if(graph.type == "classic"){
       if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll,...)
       if (any(labe!="")){
-        if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+        if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
         if (autoLab ==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],shadotext=shadowtext,...)
         if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)
       }
@@ -307,7 +307,7 @@ plot.CA <- function (x, axes = c(1, 2),
       text_col<- text<- NULL
       df_ind <- data.frame(labe,coo,coll,ipch,fonte)
       if(dim(df_ind)[1] == 0) df_ind <- NULL
-      if(!is.null(df_ind)) df_ind[,5][which(df_ind[,5] == 20)] = 19
+      if(!is.null(df_ind)) df_ind[,5][which(df_ind[,5] == 20)] <- 19
         gg_graph <- ggplot() +
           coord_fixed(ratio = 1) +
           xlab(lab.x) + ylab(lab.y) +
@@ -318,7 +318,7 @@ plot.CA <- function (x, axes = c(1, 2),
           ggoptions_default$theme +
           ggtitle(titre)
       
-      if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+      if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
       if (habillage == "none" & !is.null(df_ind)){
         gg_graph <- gg_graph +
           geom_point(aes(x=df_ind[,2], y=df_ind[,3]), color= df_ind[,4], shape = df_ind[,5])
@@ -326,7 +326,7 @@ plot.CA <- function (x, axes = c(1, 2),
         else{text <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), size = ggoptions_default$size, color = df_ind[,4], hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25, fontface = df_ind[,6])}
       }
       if(habillage != "none"){
-        if(class(habillage) == "numeric") habillage = colnames(res.ca$call$Xtot)[habillage]
+        if(class(habillage) == "numeric") habillage <- colnames(res.ca$call$Xtot)[habillage]
         if (habillage %in% liste.quali){
         gg_graph <- gg_graph +
             geom_point(aes(x=df_row[,2], y=df_row[,3], color = (res.ca$call$Xtot)[rownames(df_row),habillage]), shape = df_row[,5]) + 
@@ -340,7 +340,7 @@ plot.CA <- function (x, axes = c(1, 2),
         }
         if(habillage=="cos2"){
           df_ind <- rbind(df_rowa,df_cola,df_colb,df_rowb)
-          df_ind[,5][which(df_ind[,5] == 20)] = 19
+          df_ind[,5][which(df_ind[,5] == 20)] <- 19
           coll_col <- coll_row <- coll_col.sup <- coll_row.sup <- NULL
           if(!is.null(res.ca$row$cos2) & (is.na(test.invisible[1]))) coll_row <- apply(res.ca$row$cos2[,axes,drop = FALSE],1,FUN=sum)
           if(!is.null(res.ca$col$cos2) & (is.na(test.invisible[2]))) coll_col <- apply(res.ca$col$cos2[,axes,drop = FALSE],1,FUN=sum)
@@ -358,7 +358,7 @@ plot.CA <- function (x, axes = c(1, 2),
         }
         if(habillage=="contrib"){
           df_ind <- rbind(df_rowa,df_cola,df_colb,df_rowb)
-          df_ind[,5][which(df_ind[,5] == 20)] = 19
+          df_ind[,5][which(df_ind[,5] == 20)] <- 19
           
           coll_row <- coll_col <- coll_col.sup <- coll_row.sup <- coll_quali.sup <- NULL
           if(is.na(test.invisible[1]))  coll_row <- res.ca$row$contrib[,axes[1]]*res.ca$eig[axes[1],1] + res.ca$row$contrib[,axes[2]]*res.ca$eig[axes[2],1]
@@ -384,7 +384,7 @@ plot.CA <- function (x, axes = c(1, 2),
             gg_graph <- gg_graph + text_quali.sup
           } else{
             if (habillage %in% liste.quali) {
-              levels(res.ca$call$Xtot[,habillage]) = paste(habillage,".",levels(res.ca$call$Xtot[,habillage]),sep="")
+              levels(res.ca$call$Xtot[,habillage]) <- paste(habillage,".",levels(res.ca$call$Xtot[,habillage]),sep="")
               gg_graph <- gg_graph +
                 geom_point(aes(x = df_quali.sup[levels(res.ca$call$Xtot[,habillage]),2], y = df_quali.sup[levels(res.ca$call$Xtot[,habillage]),3]), size = ggoptions_default$size/2.8, color = palette[1:length(levels(res.ca$call$Xtot[,habillage]))], shape = df_quali.sup[levels(res.ca$call$Xtot[,habillage]),5])
               if (autoLab) text_quali.sup.hab <- ggrepel::geom_text_repel(aes(x = df_quali.sup[levels(res.ca$call$Xtot[,habillage]),2], y = df_quali.sup[levels(res.ca$call$Xtot[,habillage]),3], label=levels(res.ca$call$Xtot[,habillage])), color = palette[1:length(levels(res.ca$call$Xtot[,habillage]))], size = ggoptions_default$size, fontface = df_quali.sup[levels(res.ca$call$Xtot[,habillage]),6])
@@ -435,7 +435,7 @@ plot.CA <- function (x, axes = c(1, 2),
         }
       }
       if(graph.type=="ggplot"){
-        if (autoLab=="auto") autoLab = (length(which(rownames(res.ca$quanti.sup$coord)!=""))<50)
+        if (autoLab=="auto") autoLab <- (length(which(rownames(res.ca$quanti.sup$coord)!=""))<50)
         df_var <- data.frame(rownames(res.ca$quanti.sup$coord),res.ca$quanti.sup$coord[,axes[1]],res.ca$quanti.sup$coord[,axes[2]])
         circle <- annotate("path",
                            x=0+1*cos(seq(0,2*pi,length.out=100)),

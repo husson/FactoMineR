@@ -24,7 +24,7 @@ if (!is.null(ylim)) point.haut <- ylim[2]
 nbpoint <-0
 while (nbpoint < 1000){
   pos <- locator(n=1)
-  if (is.null(pos$y)) nbpoint = 1000
+  if (is.null(pos$y)) nbpoint <- 1000
   else{ 
     for (i in 1:nrow(tab)) disto[i] <- (tab[i,1]-pos$x)^2+(tab[i,2]-pos$y)^2
     draw.partial[order(disto)[1]] <- !draw.partial[order(disto)[1]]
@@ -33,7 +33,7 @@ while (nbpoint < 1000){
     dev.off()
     plot.GPA(res.gpa, axes = axes, lab.ind.moy = lab.ind.moy, habillage = habillage,
       xlim = xlim, ylim = ylim, chrono = chrono, cex = cex, title = title, partial = partial, palette=palette)
-    nbpoint = nbpoint+1
+    nbpoint <- nbpoint+1
   }
 }
 return(as.data.frame(draw.partial))

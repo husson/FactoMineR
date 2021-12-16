@@ -5,13 +5,13 @@ predict.MCA <- function(object, newdata, ...){
 	}
 	olddata <- object$call$X[,rownames(object$var$eta),drop=FALSE]
 	newdata <- newdata[,colnames(olddata),drop=FALSE]
-	pb = NULL
+	pb <- NULL
 	for (i in 1:ncol(newdata)) {
 	  if (sum(!levels(newdata[,i])%in%levels(olddata[,i]))>0) pb <- c(pb, levels(newdata[,i])[which(!levels(newdata[,i])%in%levels(olddata[,i]))])
 	}
 	if (!is.null(pb)) stop("The following categories are not in the active dataset: ",pb)
 	newdata <- rbind(olddata,newdata)[-(1:nrow(olddata)),,drop=FALSE]
-	tab.newdata=tab.disjonctif(newdata)
+	tab.newdata <- tab.disjonctif(newdata)
     marge.col <- object$call$marge.col
 	ncp <- ncol(object$ind$coord)
 	

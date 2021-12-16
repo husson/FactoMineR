@@ -19,8 +19,8 @@
       unlist(lapply(as.data.frame(x),VB))/colSums(x^2*weights)
     }
 
-    if (is.null(rownames(base))) rownames(base) = 1:nrow(base)
-    if (is.null(colnames(base))) colnames(base) = paste("V",1:ncol(base),sep="")
+    if (is.null(rownames(base))) rownames(base) <- 1:nrow(base)
+    if (is.null(colnames(base))) colnames(base) <- paste("V",1:ncol(base),sep="")
     if (!is.null(sup.var) & !is.numeric(sup.var)) sup.var<- which(colnames(base)%in%sup.var)
 	base <- as.data.frame(base)
     is.quali <- which(!unlist(lapply(base,is.numeric)))
@@ -113,7 +113,7 @@
 	if (is.null(tab.disj)){
  	  aux1 <- lapply(base[,facAct,drop=FALSE],tt,X[,1:(ncol(QuantiAct)+ncol(QualiAct)),drop=FALSE],poids=row.w.init)
       bary <- NULL
-	  for (i in 1:length(aux1)) bary=rbind(bary,aux1[[i]])
+	  for (i in 1:length(aux1)) bary <- rbind(bary,aux1[[i]])
 	  rownames(bary) <- unlist(sapply(base[,facAct,drop=FALSE],levels))
 	} else {
 	  if (is.null(ind.sup)){

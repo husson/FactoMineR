@@ -6,7 +6,7 @@ plotMFApartial <- function (x, axes = c(1, 2),
     res.mfa <- x
     if (!inherits(res.mfa, "MFA")) stop("non convenient data")
     # if (is.null(palette)) palette(c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
-    if (is.null(palette)) palette = palette()
+    if (is.null(palette)) palette <- palette()
   
 if (is.null(title)) title <- "Partial points graph"
 tab <- res.mfa$ind$coord[,axes]
@@ -31,7 +31,7 @@ if (!is.null(ylim)) point.haut <- ylim[2]
 nbpoint <-0
 while (nbpoint < 1000){
     pos <- locator(n=1)
-    if (is.null(pos$y)) nbpoint = 1000
+    if (is.null(pos$y)) nbpoint <- 1000
     else{
       for (i in 1:nrow(tab)) disto[i] <- (tab[i,1]-pos$x)^2+(tab[i,2]-pos$y)^2
       draw.partial[order(disto)[1]] <- !draw.partial[order(disto)[1]]
@@ -41,7 +41,7 @@ while (nbpoint < 1000){
     dev.off()
     plot.MFA(res.mfa, axes = axes, lab.ind = lab.ind, lab.par = lab.par, habillage = habillage,
       col.hab = col.hab, invisible = invisible, xlim = xlim, ylim = ylim, chrono = chrono, cex = cex, title = title, partial = partial, palette=palette, graph.type="classic")
-    nbpoint = nbpoint+1
+    nbpoint <- nbpoint+1
   }
 return(partial)
 }

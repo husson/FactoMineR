@@ -12,18 +12,18 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
   argument <- list(...)
   if (!is.null(argument[["cex"]]) & is.null(ggoptions["size"]))  ggoptions["size"] <- 4*argument$cex
   ggoptions_default <- list(size = 4, point.shape = 19, line.lty = 2, line.lwd = 0.5, line.color = "black", segment.lty = 1, segment.lwd = 0.5, circle.lty = 1, circle.lwd = 0.5, circle.color = "black", low.col.quanti = "blue", high.col.quanti = "red3")
-  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] = ggoptions[names(ggoptions)]
+  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] <- ggoptions[names(ggoptions)]
   if (!inherits(res.pca, "PCA")) stop("non convenient data")
   if (is.numeric(unselect)) if ((unselect>1)|(unselect<0)) stop("unselect should be betwwen 0 and 1")
   autoLab <- match.arg(autoLab,c("auto","yes","no"))
-  if (autoLab == "yes") autoLab=TRUE 
-  if (autoLab == "no") autoLab=FALSE
+  if (autoLab == "yes") autoLab <- TRUE 
+  if (autoLab == "no") autoLab <- FALSE
   old.palette <- palette()
   if (is.null(palette)) palette <- c("black", "red", "green3", "blue", "magenta", "darkgoldenrod","darkgray", "orange", "cyan", "violet", "lightpink", "lavender", "yellow", "darkgreen","turquoise", "lightgrey", "lightblue", "darkkhaki","darkmagenta","lightgreen", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
   palette(palette)   # that is necessary
   label <- match.arg(label,c("all","none","ind", "ind.sup", "quali", "var", "quanti.sup"),several.ok=TRUE)
   invisible <- match.arg(invisible,c("none","ind", "ind.sup", "quali","var", "quanti.sup"),several.ok=TRUE)
-  if ("none"%in%invisible) invisible = NULL
+  if ("none"%in%invisible) invisible <- NULL
   choix <- match.arg(choix,c("ind","var","varcor"))
   graph.type <- match.arg(graph.type[1],c("ggplot","classic"))
   lab.ind <- lab.quali <- lab.var <- lab.quanti <- lab.ind.sup <- FALSE
@@ -49,33 +49,33 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
     liste.quanti <- colnames(res.pca$call$X)[which(!(colnames(res.pca$call$X) %in% liste.quali))]
     hab_2 <- c(colnames(res.pca$call$X), "contrib", "cos2")
     
-    if((habillage != "none") && !(habillage[1] %in% hab_2) && (habillage != "ind")) habillage[1] = colnames(res.pca$call$X)[as.numeric(habillage[1])]
+    if((habillage != "none") && !(habillage[1] %in% hab_2) && (habillage != "ind")) habillage[1] <- colnames(res.pca$call$X)[as.numeric(habillage[1])]
     
     if(habillage[1] != "none" && length(habillage) == 2){
-      if(!habillage[2] %in% hab_2) habillage[2] = colnames(res.pca$call$X)[as.numeric(habillage[2])]
+      if(!habillage[2] %in% hab_2) habillage[2] <- colnames(res.pca$call$X)[as.numeric(habillage[2])]
       if (length(habillage) > 2) {
         warning("Habillage must be either length 1 or 2 : only 2 first arguments will be used")
-        habillage = habillage[1:2]
+        habillage <- habillage[1:2]
       }
       if ((length(habillage) == 2) & !("cos2" %in% habillage) & !("contrib" %in% habillage)){
         if(!(habillage[2] %in% liste.quali)){
           if (!(habillage[1] %in% liste.quali)){
-            habillage = habillage[1]
+            habillage <- habillage[1]
           }
           else{
-            habillage = habillage[2:1]
+            habillage <- habillage[2:1]
           }
         }}
       
-      if(length(habillage) == 1 && !(habillage %in% hab_2)) habillage = as.numeric(habillage)
-      if((length(habillage) == 2) & (habillage[2] %in% c("contrib","cos2"))) habillage = habillage[2:1]
-      if((length(habillage) == 2) & (habillage[1] %in% c("contrib","cos2")) & !(habillage[2] %in% hab_2)) habillage[2] = colnames(res.pca$call$X)[as.integer(habillage[2])]
-      if(class(habillage[1]) %in% c("numeric","integer") && class(habillage[2]) %in% c("numeric","integer")) habillage = c(colnames(res.pca$call$X)[habillage[1]],colnames(res.pca$call$X)[habillage[2]])
+      if(length(habillage) == 1 && !(habillage %in% hab_2)) habillage <- as.numeric(habillage)
+      if((length(habillage) == 2) & (habillage[2] %in% c("contrib","cos2"))) habillage <- habillage[2:1]
+      if((length(habillage) == 2) & (habillage[1] %in% c("contrib","cos2")) & !(habillage[2] %in% hab_2)) habillage[2] <- colnames(res.pca$call$X)[as.integer(habillage[2])]
+      if(class(habillage[1]) %in% c("numeric","integer") && class(habillage[2]) %in% c("numeric","integer")) habillage <- c(colnames(res.pca$call$X)[habillage[1]],colnames(res.pca$call$X)[habillage[2]])
       
       if(("cos2" %in% habillage) || ("contrib" %in% habillage)){
-        if((habillage[2] %in% liste.quanti) || (habillage[1] %in% liste.quanti)) habillage = habillage[1]
+        if((habillage[2] %in% liste.quanti) || (habillage[1] %in% liste.quanti)) habillage <- habillage[1]
       }
-      if(("cos2" %in% habillage) && ("contrib" %in% habillage)) habillage = habillage[1]
+      if(("cos2" %in% habillage) && ("contrib" %in% habillage)) habillage <- habillage[1]
       
     }
   }
@@ -164,7 +164,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
     ## PARTIE GRAPHIQUE
     if (graph.type =="ggplot") color.ind <- NULL
     if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new(width=min(14,8*diff(xlim)/diff(ylim)),height=8)
-    if (is.null(palette)) palette = (c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
+    if (is.null(palette)) palette <- (c("black","red","green3","blue","cyan","magenta","darkgray","darkgoldenrod","darkgreen","violet","turquoise","orange","lightpink","lavender","yellow","lightgreen","lightgrey","lightblue","darkkhaki", "darkmagenta","darkolivegreen","lightcyan", "darkorange", "darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet", "lightgray","lightsalmon","lightyellow", "maroon"))
     if (habillage[1] == "none") {
       color.ind <- rep(col.ind,nrow(coord.actif))
       color.mod <- col.quali
@@ -235,8 +235,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       ipch <- c(ipch,rep(20,nrow(coord.actif)))
       fonte <- c(fonte,rep(1,nrow(coord.actif)))
       if (!is.null(selection)){
-        if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
-        else coll[!((1:length(coll))%in%selection)] = unselect
+        if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] <- rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
+        else coll[!((1:length(coll))%in%selection)] <- unselect
         labe[!((1:length(coll))%in%selection)] <- ""
       }
       df_ind2 <- data.frame(labe,coord.actif,ipch,fonte)
@@ -249,14 +249,14 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       if (length(color.sup)>1) coll2 <- color.sup
 	  else coll2 <- rep(color.sup,nrow(res.pca$ind.sup$coord))
       if (!is.null(selectionS)){
-        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
+        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] <- rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
         else coll2[!((1:length(coll2))%in%selectionS)] <- unselect
         labe2[!((1:length(coll2))%in%selectionS)] <- ""
       }
       if (length(select)==1){
         if (grepl("contrib",select)){
-          if (is.numeric(unselect)) coll2[1:length(coll2)] = rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll2[1:length(coll2)] = unselect
+          if (is.numeric(unselect)) coll2[1:length(coll2)] <- rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
+          else coll2[1:length(coll2)] <- unselect
           labe2[1:length(coll2)] <- ""
         }}
       df_ind_sup <- data.frame(labe2, res.pca$ind.sup$coord[,axes], coll2, rep(1,nrow(res.pca$ind.sup$coord)), rep(3,nrow(res.pca$ind.sup$coord)))
@@ -292,7 +292,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
     }
     if (graph.type == "ggplot") {
-      if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+      if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
       df_ind <- data.frame(labe,coo,ipch,fonte)
           gg_graph <- ggplot() +
             coord_fixed(ratio = 1) +
@@ -305,7 +305,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       if(!is.null(select)) df_ind2[,1] <- ifelse(rownames(df_ind2) %in% rownames(df_ind2)[selection], rownames(df_ind2), "")
        transparency_ind <- col2rgb(col.ind,alpha=TRUE)[4]/255
        if (!is.null(select)) transparency_ind <- ifelse(rownames(res.pca$ind$coord) %in% rownames(res.pca$ind$coord)[selection], transparency_ind, transparency_ind*(1-unselect))
-      if((!is.na(test.invisible[1])) & (habillage[1] != "none") & (is.null(legend["title"][[1]]))) legend["title"][[1]] = habillage[1]
+      if((!is.na(test.invisible[1])) & (habillage[1] != "none") & (is.null(legend["title"][[1]]))) legend["title"][[1]] <- habillage[1]
       if (is.na(test.invisible[1])){
         if (habillage[1] == "none" | habillage[1]=="ind"){
           gg_graph <- gg_graph +
@@ -417,7 +417,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           }
         }
         else{ if(dim(res.pca$ind.sup$coord)[1] == 1){
-          if (is.null(select)) selectionS = 1
+          if (is.null(select)) selectionS <- 1
           if (isTRUE(lab.ind.sup)){
             if (habillage[1] == "none") gg_graph <- gg_graph + geom_point(aes(x = res.pca$ind.sup$coord[,axes[1]], y = res.pca$ind.sup$coord[,axes[2]]), size = ggoptions_default$size/3, color = color.ind.sup, shape = 1) + ggrepel::geom_text_repel(aes(x = res.pca$ind.sup$coord[,axes[1]], y = res.pca$ind.sup$coord[,axes[2]], label=ifelse(!is.null(selectionS), rownames(res.pca$ind.sup$coord), "")), color = color.ind.sup, size = ggoptions_default$size, fontface = "italic")
             else{ if (habillage[1] == "cos2") gg_graph <- gg_graph + geom_point(aes(x = res.pca$ind.sup$coord[,axes[1]], y = res.pca$ind.sup$coord[,axes[2]], color = res.pca$ind.sup$cos2[,axes[1]] + res.pca$ind.sup$cos2[,axes[2]]), size = ggoptions_default$size/3, shape = 1) + ggrepel::geom_text_repel(aes(x = res.pca$ind.sup$coord[,axes[1]], y = res.pca$ind.sup$coord[,axes[2]], label=ifelse(!is.null(selectionS), rownames(res.pca$ind.sup$coord), ""), color = res.pca$ind.sup$cos2[,axes[1]] + res.pca$ind.sup$cos2[,axes[2]]), size = ggoptions_default$size, fontface = "italic")
@@ -466,7 +466,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
     }
     if (graph.type == "classic"){
       if (any(labe!="")){
-        if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+        if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
         if (autoLab ==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],shadotext=shadowtext,...)
         if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)
       }}
@@ -589,8 +589,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       if (lab.var){ labe <- c(labe,rownames(coord.var))
       } else  labe <- c(labe,rep("",nrow(coord.var)))
       if (!is.null(selection)){
-        if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
-        else coll[!((1:length(coll))%in%selection)] = unselect
+        if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] <- rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
+        else coll[!((1:length(coll))%in%selection)] <- unselect
         labe[!((1:length(coll))%in%selection)] <- ""
       }
       if(graph.type == "ggplot"){
@@ -624,13 +624,13 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
         } else  labe2 <- rep("",nrow(coord.quanti))
         if (length(select)==1){
           if (grepl("contrib",select)){
-            if (is.numeric(unselect)) coll2[1:length(coll2)] = rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
-            else coll2[1:length(coll2)] = unselect
+            if (is.numeric(unselect)) coll2[1:length(coll2)] <- rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
+            else coll2[1:length(coll2)] <- unselect
             labe2[1:length(coll2)] <- ""
           }}
         if (!is.null(selectionS)){
-          if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll2[!((1:length(coll2))%in%selectionS)] = unselect
+          if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] <- rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
+          else coll2[!((1:length(coll2))%in%selectionS)] <- unselect
           labe2[!((1:length(coll2))%in%selectionS)] <- ""
         }
         if (graph.type == "ggplot") df_quanti.sup <- data.frame(labe2,coord.quanti,coll2)
@@ -658,14 +658,14 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
     }
     if (graph.type == "classic"){
       if (any(labe!="")){
-        if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+        if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
         if (autoLab==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], pos = posi[labe!=""], col = coll[labe!=""],...)
         if (autoLab==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""], shadotext=shadowtext,...)
       }
 	} else {
       if((!is.na(test.invisible[1])) & (habillage[1] != "none") & (is.null(legend["title"][[1]]))){
-        legend["title"][[1]] = habillage[1]}
-      if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+        legend["title"][[1]] <- habillage[1]}
+      if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
       if (length(habillage) != 1){
         warning("Habillage must be length 1")
         habillage <- habillage[1]

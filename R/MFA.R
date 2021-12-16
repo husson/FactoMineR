@@ -51,8 +51,8 @@ for (i in 1:length(group)){
   if (((type[i] == "f")||(type[i] == "f2")||(type[i] == "f3"))&&(i%in%num.group.sup)) type.var <- c(type.var,rep(paste(type[i],"sup",sep="_"),group[i]))
 }
 ## End add
-    if (is.null(rownames(base))) rownames(base) = 1:nrow(base)
-    if (is.null(colnames(base))) colnames(base) = paste("V",1:ncol(base),sep="")
+    if (is.null(rownames(base))) rownames(base) <- 1:nrow(base)
+    if (is.null(colnames(base))) colnames(base) <- paste("V",1:ncol(base),sep="")
 #    for (j in 1:ncol(base)) if (colnames(base)[j]=="") colnames(base)[j] = paste("V",j,sep="")
 #    for (j in 1:nrow(base)) if (is.null(rownames(base)[j])) rownames(base)[j] = paste("row",j,sep="")
     base <- as.data.frame(base)
@@ -67,13 +67,13 @@ for (i in 1:length(group)){
     nbre.group <- length(group)
     group.actif <- NULL
     if ("n"%in%type){
-      niveau = NULL
+      niveau <- NULL
       for (j in 1:ncol(base)){
-        if (!is.numeric(base[,j])) niveau = c(niveau,levels(base[,j]))
+        if (!is.numeric(base[,j])) niveau <- c(niveau,levels(base[,j]))
       }
       for (j in 1:ncol(base)) {
         if (!is.numeric(base[,j])){
-          if (sum(niveau%in%levels(base[,j]))!=nlevels(base[,j])) levels(base[,j]) = paste(colnames(base)[j],levels(base[,j]),sep="_")
+          if (sum(niveau%in%levels(base[,j]))!=nlevels(base[,j])) levels(base[,j]) <- paste(colnames(base)[j],levels(base[,j]),sep="_")
         }
       }
     }
@@ -151,8 +151,8 @@ for (i in 1:length(group)){
 		for (t in grfrec){
 			if (t==1) {
 			    base[,1:group[t]]<-sweep(base[,1:group[t]],2,F.jt[[t]],FUN="/")
-			    base[,1:group[t]]=sweep(base[,1:group[t]],1,Fi.t[[t]]/F..t[t],FUN="-")
-			    base[,1:group[t]]=sweep(base[,1:group[t]],1,row.w,FUN="/")
+			    base[,1:group[t]] <- sweep(base[,1:group[t]],1,Fi.t[[t]]/F..t[t],FUN="-")
+			    base[,1:group[t]] <- sweep(base[,1:group[t]],1,row.w,FUN="/")
 			}
 			else {
 			    base[,(sum(group[1:(t-1)])+1):sum(group[1:t])]<-sweep(base[,(sum(group[1:(t-1)])+1):sum(group[1:t])],2,F.jt[[t]],FUN="/")
@@ -217,7 +217,7 @@ if (!is.null(tab.comp)){
           ecart.type.aux.base <- apply(as.data.frame(aux.base), 2, ec, row.w.moy.ec)
           ecart.type.aux.base[ecart.type.aux.base <= 1e-08] <- 1
           aux.base <- t(t(aux.base)/ecart.type.aux.base)
-          type[g]="c"
+          type[g] <- "c"
         }
         if (type[g] == "c") {
           data <- cbind.data.frame(data, aux.base)
@@ -308,7 +308,7 @@ if (!is.null(tab.comp)){
       else aux_quali_sup_indice <- (ncol(data)+ncol(data.group.sup)+1):(ncol(data)+ncol(data.group.sup)+ncol(aux_quali_sup))
       data.pca <- cbind.data.frame(data.pca,aux_quali_sup)
     }
-row.w = row.w[1:nb.actif]
+row.w <- row.w[1:nb.actif]
 ###  Begin handle missing values
 if ((!is.null(tab.comp))&(any("n"%in%type))){
   data.pca <- data.pca[,-aux_quali_sup_indice]
@@ -665,7 +665,7 @@ tmp <- tmp*row.w
             ind.excl <- ind.col + excl[[g]]
             ind.excl.act <- c(ind.excl.act, ind.excl)
           }
-          ind.col = ind.col + group.mod[g]
+          ind.col <- ind.col + group.mod[g]
         }
       }
       if(!is.null(ind.excl.act)) ind.col.act <- ind.col.act[-ind.excl.act]
@@ -775,7 +775,7 @@ tmp <- tmp*row.w
     name.aux <- paste(colnames(res.separe[[1]]$ind$coord),name.group[1],sep=".")
     for (g in 2:nbre.group) {
       aux <- cbind(aux,res.separe[[g]]$ind$coord)
-      name.aux = c(name.aux,paste(colnames(res.separe[[g]]$ind$coord),name.group[g],sep="."))
+      name.aux <- c(name.aux,paste(colnames(res.separe[[g]]$ind$coord),name.group[g],sep="."))
     }
 ## modif Avril 2011
 #    cor.partial.axes <- cor(aux)
@@ -785,18 +785,18 @@ cor.partial.axes <- cov.wt(aux,wt=row.w/sum(row.w),method="ML",cor=TRUE)$cor
     resultats <- list(separate.analyses = res.separe, eig = eig, group = res.groupes, 
         inertia.ratio = rap.inertie[1:ncp], ind = res.ind)
     if (!is.null(ind.sup)) resultats$ind.sup <- res.ind.sup
-    if (!is.null(c(res.quanti.var,res.quanti.var.sup))) resultats$summary.quanti = summary.c
-    if (!is.null(c(bool.act,bool.sup))) resultats$summary.quali = summary.n
-    if (!is.null(res.quanti.var)) resultats$quanti.var = res.quanti.var
-    if (!is.null(res.quanti.var.sup)) resultats$quanti.var.sup = res.quanti.var.sup
-    if (!is.null(res.freq)) resultats$freq = res.freq
-    if (!is.null(res.freq.sup)) resultats$freq.sup = res.freq.sup
-    if (bool.act) resultats$quali.var = res.quali.var
-    if (bool.sup) resultats$quali.var.sup = res.quali.var.sup
-    resultats$partial.axes = res.partial.axes
-    resultats$call = call
+    if (!is.null(c(res.quanti.var,res.quanti.var.sup))) resultats$summary.quanti <- summary.c
+    if (!is.null(c(bool.act,bool.sup))) resultats$summary.quali <- summary.n
+    if (!is.null(res.quanti.var)) resultats$quanti.var <- res.quanti.var
+    if (!is.null(res.quanti.var.sup)) resultats$quanti.var.sup <- res.quanti.var.sup
+    if (!is.null(res.freq)) resultats$freq <- res.freq
+    if (!is.null(res.freq.sup)) resultats$freq.sup <- res.freq.sup
+    if (bool.act) resultats$quali.var <- res.quali.var
+    if (bool.sup) resultats$quali.var.sup <- res.quali.var.sup
+    resultats$partial.axes <- res.partial.axes
+    resultats$call <- call
 	resultats$call$call <- match.call()
-    resultats$global.pca = res.globale
+    resultats$global.pca <- res.globale
     class(resultats) <- c("MFA", "list")
 
     if (graph & (ncp>1)){

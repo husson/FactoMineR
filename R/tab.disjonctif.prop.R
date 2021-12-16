@@ -1,11 +1,11 @@
-tab.disjonctif.prop<-function (tab,seed=NULL,row.w=NULL) 
+tab.disjonctif.prop <- function (tab,seed=NULL,row.w=NULL) 
 {
     if (!is.null(seed)){set.seed(seed)}
     moy.p <- function(V, poids) {
         res <- sum(V * poids,na.rm=TRUE)/sum(poids[!is.na(V)])
     }
 
-	if (is.null(row.w)) row.w=rep(1/nrow(tab),nrow(tab))
+	if (is.null(row.w)) row.w <- rep(1/nrow(tab),nrow(tab))
     tab <- as.data.frame(tab)
     modalite.disjonctif <- function(i) {
         moda <- tab[, i]
@@ -25,7 +25,7 @@ tab.disjonctif.prop<-function (tab,seed=NULL,row.w=NULL)
           } else {
            for (k in 1:length(indNA)) {
             aux <- runif(length(levels(moda)))
-            x[indNA[k],]=aux/sum(aux)
+            x[indNA[k],] <- aux/sum(aux)
            }
           }
          }

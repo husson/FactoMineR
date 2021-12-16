@@ -30,7 +30,7 @@ coefficientRV <- function(X, Y) {
     stop("no the same dimension for X and Y")
   if (dim(X)[[1]] == 1) {
     print("1 configuration RV is  NA")
-    rv = NA
+    rv <- NA
   } else {
     Y <- scale(Y, scale = FALSE)
     X <- scale(X, scale = FALSE)
@@ -55,31 +55,31 @@ coefficientRV <- function(X, Y) {
         X <- scale(X, scale = FALSE)
         Y <- scale(Y, scale = FALSE)
 
-       S3=sum(diag(X %*% t(X))^3)    #S3OK
-       S3etoile= sum(diag(Y %*% t(Y))^3)
+       S3 <- sum(diag(X %*% t(X))^3)    #S3OK
+       S3etoile <-  sum(diag(Y %*% t(Y))^3)
 
-       U=sum((X %*% t(X))^3)    #U OK
-       Uetoile=sum((Y %*% t(Y))^3)
+       U <- sum((X %*% t(X))^3)    #U OK
+       Uetoile <- sum((Y %*% t(Y))^3)
 
-       B= t(diag(X %*% t(X))) %*%  (X %*% t(X)) %*% diag(X %*% t(X))      #B OK
-       Betoile= t(diag(Y %*% t(Y))) %*%  (Y %*% t(Y)) %*% diag(Y %*% t(Y))
+       B <-  t(diag(X %*% t(X))) %*%  (X %*% t(X)) %*% diag(X %*% t(X))      #B OK
+       Betoile <-  t(diag(Y %*% t(Y))) %*%  (Y %*% t(Y)) %*% diag(Y %*% t(Y))
 
-       R=t(diag( X %*% t(X)))%*%    diag(X %*%t(X) %*% X %*% t(X))       #R OK
-       Retoile= t(diag( Y %*% t(Y)))%*%    diag(Y %*%t(Y) %*% Y %*% t(Y))
+       R <- t(diag( X %*% t(X)))%*%    diag(X %*%t(X) %*% X %*% t(X))       #R OK
+       Retoile <-  t(diag( Y %*% t(Y)))%*%    diag(Y %*%t(Y) %*% Y %*% t(Y))
 
-       TT=sum(diag(  X %*% t(X)))         #TT OK
-       Tetoile=   sum(diag(  Y %*% t(Y)))
+       TT <- sum(diag(  X %*% t(X)))         #TT OK
+       Tetoile <-   sum(diag(  Y %*% t(Y)))
 
-       S2= sum(diag(X %*% t(X))^2)         #S2OK
-       S2etoile= sum(diag(Y %*% t(Y))^2)
+       S2 <-  sum(diag(X %*% t(X))^2)         #S2OK
+       S2etoile <-  sum(diag(Y %*% t(Y))^2)
 
-       T2= sum(diag(X %*%t(X) %*% X %*% t(X) ))
-       T2etoile=sum(diag(Y %*%t(Y) %*% Y %*% t(Y) ))
+       T2 <-  sum(diag(X %*%t(X) %*% X %*% t(X) ))
+       T2etoile <- sum(diag(Y %*%t(Y) %*% Y %*% t(Y) ))
 
-       T3=sum(diag(X %*%t(X) %*% X %*% t(X) %*% X %*% t(X) ))   #OH
-       T3etoile=sum(diag(Y %*%t(Y) %*% Y %*% t(Y)%*% Y %*% t(Y) ))
+       T3 <- sum(diag(X %*%t(X) %*% X %*% t(X) %*% X %*% t(X) ))   #OH
+       T3etoile <- sum(diag(Y %*%t(Y) %*% Y %*% t(Y)%*% Y %*% t(Y) ))
 
-        total  = n^2*(n+1)*(n^2+15*n-4)* S3  *  S3etoile   +
+        total  <- n^2*(n+1)*(n^2+15*n-4)* S3  *  S3etoile   +
           4*(n^4-8*n^3+19*n^2-4*n-16)*U  * Uetoile  +
           24*(n^2-n-4)*(U*Betoile[,1] + B[,1]*Uetoile)+
           6*(n^4-8*n^3+21*n^2-6*n-24)* B[,1]*Betoile[,1]+
@@ -109,14 +109,14 @@ coefficientRV <- function(X, Y) {
            6*(TT*T2*Tetoile*S2etoile+TT*S2*Tetoile*T2etoile)*(n^2-5*n+6)+
            48*(T3*Tetoile*S2etoile+TT*S2*T3etoile))
 
-           esperancet3=total/(n*(n-1)*(n-2)*(n-3)*(n-4)*(n-5) )
+           esperancet3 <- total/(n*(n-1)*(n-2)*(n-3)*(n-4)*(n-5) )
 
-           esperance=TT*Tetoile/(n-1)
-           variance= (2*((n-1)*T2-TT^2)*((n-1)*T2etoile-Tetoile^2)/(((n-1)^2)*(n+1)*(n-2))) + (n*(n+1)*S2-(n-1)*(TT^2+2*T2))*(n*(n+1)*S2etoile-(n-1)*(Tetoile^2+2*T2etoile))/((n+1)*n*(n-1)*(n-2)*(n-3))
+           esperance <- TT*Tetoile/(n-1)
+           variance <- (2*((n-1)*T2-TT^2)*((n-1)*T2etoile-Tetoile^2)/(((n-1)^2)*(n+1)*(n-2))) + (n*(n+1)*S2-(n-1)*(TT^2+2*T2))*(n*(n+1)*S2etoile-(n-1)*(Tetoile^2+2*T2etoile))/((n+1)*n*(n-1)*(n-2)*(n-3))
 
 
-           cumulant3=esperancet3-3*esperance *variance-esperance^3
-           asym=cumulant3/(variance^(3/2) )
+           cumulant3 <- esperancet3-3*esperance *variance-esperance^3
+           asym <- cumulant3/(variance^(3/2) )
            return (asym=asym)
           }
           
@@ -129,7 +129,7 @@ coefficientRV <- function(X, Y) {
 #        if (n < 4) {
         if (n < 6) {
             if (n == 1) {
-                rvstd = NA
+                rvstd <- NA
                 esperance <- variance <- NA
             }
             else {
@@ -174,7 +174,7 @@ coefficientRV <- function(X, Y) {
         rvstd <- (rv - esperance)/variance^0.5
         a <- asym(X,Y)
         if (a>=0) prob <- pgamma(rvstd-(-2/a),shape=(4/a^2),scale=(a/2),lower.tail=FALSE)
-        if (a<0) prob = pgamma(a/abs(a)*rvstd+2/abs(a),shape=(4/a^2),scale=(abs(a)/2))
+        if (a<0) prob <- pgamma(a/abs(a)*rvstd+2/abs(a),shape=(4/a^2),scale=(abs(a)/2))
 
         return(list(rv = rv, rvstd = rvstd, mean = esperance,
             variance = variance, skewness = a, p.value = prob))

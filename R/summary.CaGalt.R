@@ -60,8 +60,8 @@ summary.CaGalt<-function (object, nb.dec = 3, nbelements = 10, nbind = nbelement
     	width.row <- 0
     	aux <- match.arg(names(res), c("ind", "freq", "quanti.var", "quali.var"), several.ok = TRUE)
     	if (align.names == TRUE) {
-		width.row = max(nchar(rownames(res[aux[1]][[1]]$coord)))
-        	for (k in 1:length(aux)) width.row = max(width.row, nchar(rownames(res[aux[k]][[1]]$coord)[1:min(nrow(res[aux[k]][[1]]$coord), nbelements)]))
+		width.row <- max(nchar(rownames(res[aux[1]][[1]]$coord)))
+        	for (k in 1:length(aux)) width.row <- max(width.row, nchar(rownames(res[aux[k]][[1]]$coord)[1:min(nrow(res[aux[k]][[1]]$coord), nbelements)]))
     	}
     	if (nbind > 0) {
 		cat("\nIndividuals", file = file, append = TRUE)

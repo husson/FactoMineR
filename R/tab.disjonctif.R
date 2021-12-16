@@ -46,7 +46,7 @@ tab.disjonctif <- function (tab){
                      as.integer(unlist(lapply(tab, nlevels))))
 	  } else {
         nomMod <- lapply(tab, levels)
-	    nomMod[isQuanti]=names(nomMod[isQuanti]) 
+	    nomMod[isQuanti] <- names(nomMod[isQuanti]) 
         tabdisj <- .Call("disjoMat", as.integer(data.matrix(tab[,isQuali,drop=FALSE])),
                      as.integer(dim(tab[,isQuali,drop=FALSE])),
                      as.integer(unlist(lapply(tab[,isQuali,drop=FALSE], nlevels))))

@@ -537,7 +537,7 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
         while (cte <= dim(consensus)[[2]]) {
             if (all(abs(consensus[, cte]) < sqrt(.Machine$double.eps))) {
                 fina <- cte - 1
-                cte = dim(consensus)[[2]] + 1
+                cte <- dim(consensus)[[2]] + 1
             }
             else {
                 fina <- cte

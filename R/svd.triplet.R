@@ -1,4 +1,4 @@
-svd.triplet = function (X, row.w = NULL, col.w = NULL,ncp=Inf) {
+svd.triplet <- function (X, row.w = NULL, col.w = NULL,ncp=Inf) {
 
 
 tryCatch.W.E <- function(expr){  ## function proposed by Maechler
@@ -31,7 +31,7 @@ if (ncol(X)<nrow(X)){
       } else{
           bb <- eigen(crossprod(X,X),symmetric=TRUE)
  		  svd.usuelle <- vector(mode = "list", length = 3)
-          svd.usuelle$d[svd.usuelle$d<0]=0
+          svd.usuelle$d[svd.usuelle$d<0]<-0
 	      svd.usuelle$d <- sqrt(svd.usuelle$d)
           svd.usuelle$v <- bb$vec[,1:ncp]
 #          svd.usuelle$u <- sweep(X%*%svd.usuelle$v,2,svd.usuelle$d[1:ncp],FUN="/")
@@ -60,7 +60,7 @@ else{
       } else{
           bb <- eigen(crossprod(t(X),t(X)),symmetric=TRUE)
 		  svd.usuelle <- vector(mode = "list", length = 3)
-          svd.usuelle$d[svd.usuelle$d<0]=0
+          svd.usuelle$d[svd.usuelle$d<0]<-0
 	      svd.usuelle$d <- sqrt(svd.usuelle$d)
           svd.usuelle$v <- bb$vec[,1:ncp]
           svd.usuelle$u <- t(t(crossprod(X,svd.usuelle$v))/svd.usuelle$d[1:ncp])

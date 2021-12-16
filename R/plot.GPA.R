@@ -43,7 +43,7 @@ plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE,
             xmax <- max(xmax, coord.ind.partiel[group.ind, 1, 
                 ],na.rm=TRUE)
         }
-        xlim = c(xmin, xmax)
+        xlim <- c(xmin, xmax)
     }
     if (is.null(ylim)) {
         ymin <- min(coord.ind[, 2],na.rm=TRUE) * 1.1
@@ -54,7 +54,7 @@ plot.GPA<-function (x, axes = c(1, 2), lab.ind.moy = TRUE,
             ymax <- max(ymax, coord.ind.partiel[group.ind, 2, 
                 ],na.rm=TRUE)
         }
-        ylim = c(ymin, ymax)
+        ylim <- c(ymin, ymax)
     }
 
     if (habillage == "group") {

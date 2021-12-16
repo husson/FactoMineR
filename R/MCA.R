@@ -6,7 +6,7 @@ MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL
 ventil.tab <- function (tab, level.ventil=0.05,row.w=NULL,ind.sup=NULL,quali.sup=NULL,quanti.sup=NULL) {
  if (is.null(row.w)) row.w <- rep(1,nrow(tab)-length(ind.sup))
  col.var <- 1:ncol(tab)
- if (!is.null(c(quali.sup,quanti.sup))) col.var = col.var[-c(quali.sup,quanti.sup)]
+ if (!is.null(c(quali.sup,quanti.sup))) col.var <- col.var[-c(quali.sup,quanti.sup)]
  for (i in col.var) {
    if (is.factor(tab[,i])){
       tab[,i] <- ventilation(tab[,i],level.ventil=level.ventil,row.w=row.w,ind.sup=ind.sup)
@@ -128,7 +128,7 @@ fct.eta2 <- function(vec,x,weights) {
   niveau <- unlist(lapply(X,levels))
   if (sum(duplicated(niveau))>0){
     for (j in 1:ncol(X)) {
-      if (sum(niveau %in% levels(X[, j])) != nlevels(X[, j])) levels(X[, j]) = paste(attributes(X)$names[j], levels(X[, j]), sep = "_")
+      if (sum(niveau %in% levels(X[, j])) != nlevels(X[, j])) levels(X[, j]) <- paste(attributes(X)$names[j], levels(X[, j]), sep = "_")
     }
   }
 
@@ -186,10 +186,10 @@ if (!is.null(quanti.sup)){
      if (is.null(tab.disj)) X.quanti.sup <- as.matrix(X[, quanti.sup])
 	 else  X.quanti.sup <- tab.disj[,which(TabDisjMod=="quanti.sup"),drop=FALSE]
      if (!is.null(ind.sup)) X.quanti.sup <- X.quanti.sup[ind.act, ,drop=FALSE]
-     colnames(X.quanti.sup) = attributes(X)$names[quanti.sup]
+     colnames(X.quanti.sup) <- attributes(X)$names[quanti.sup]
 }
 
-    if (is.null(row.w)) row.w = rep(1, nrow(X) - length(ind.sup))
+    if (is.null(row.w)) row.w <- rep(1, nrow(X) - length(ind.sup))
     if (length(row.w) != nrow(X) - length(ind.sup)) stop("length of vector row.w should be the number of active rows")
     if (tolower(method)=="burt") {  ## boucle utile pour calculer la distance au cdg et pour calculer les cos2
       res.mca <- CA(Ztot, ncp = ncol(Z)-length(act), row.sup = ind.sup, col.sup = col.sup, graph = FALSE, row.w = row.w, excl=excl) 
@@ -201,16 +201,16 @@ if (!is.null(quanti.sup)){
 	  }
     }
     res.mca <- CA(Ztot, ncp = min(ncp,ncol(Z)-length(act)), row.sup = ind.sup, excl=excl, col.sup = col.sup, graph = FALSE, row.w = row.w)
-    if (is.null(ncol(res.mca$row$coord))) res.mca$row$coord = matrix(res.mca$row$coord,ncol=1) 
+    if (is.null(ncol(res.mca$row$coord))) res.mca$row$coord <- matrix(res.mca$row$coord,ncol=1) 
     ncp <- ncol(res.mca$row$coord)
     res.mca$call$X <- X
-    res.mca$call$ind.sup = ind.sup
-    res.mca$call$quali = (1:ncol(X))
+    res.mca$call$ind.sup <- ind.sup
+    res.mca$call$quali <- (1:ncol(X))
     if (!is.null(quali.sup) | !is.null(quanti.sup)) res.mca$call$quali <- res.mca$call$quali[-c(quali.sup, quanti.sup)]
-    res.mca$call$quali.sup = quali.sup
-    res.mca$call$quanti.sup = quanti.sup
-    res.mca$call$row.w = row.w
-    if (!is.null(excl)) res.mca$call$excl = excl
+    res.mca$call$quali.sup <- quali.sup
+    res.mca$call$quanti.sup <- quanti.sup
+    res.mca$call$row.w <- row.w
+    if (!is.null(excl)) res.mca$call$excl <- excl
 	res.mca$call$call <- match.call()
     if (length(act)>1) res.mca$eig <- res.mca$eig[1:min(length(ind.act)-1,sum(sapply(Xact,nlevels))-length(act)),,drop=FALSE]
     else res.mca$eig <- res.mca$eig[1:(nlevels(Xact)-1),,drop=FALSE]
@@ -229,7 +229,7 @@ if (!is.null(quanti.sup)){
         names(res.mca)[indice] <- "ind.sup"
         names(res.mca$ind.sup) <- c("coord", "cos2")
         indice <- indice + 1
-        Xact = X[ind.act,act ,drop=FALSE]
+        Xact <- X[ind.act,act ,drop=FALSE]
     }
     if (!is.null(quali.sup)) {
         names(res.mca)[indice] <- "quali.sup"
@@ -240,7 +240,7 @@ if (!is.null(quanti.sup)){
         }
     }
 
-    if (!is.null(ind.sup)) Z = Z[ind.act, ]
+    if (!is.null(ind.sup)) Z <- Z[ind.act, ]
     Nj <- colSums(Z * row.w)
     N <- sum(Nj)/(ncol(X) - length(quali.sup) - length(quanti.sup))
     if (N>1) coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
@@ -263,21 +263,21 @@ if (!is.null(quanti.sup)){
       res.mca$var$eta2 <- eta2
     } else {
 	  eta2 <- matrix(1,1,ncp)
-	  colnames(eta2) = paste("Dim",1:ncp)
-	  rownames(eta2) = colnames(X[,act,drop=FALSE])
+	  colnames(eta2) <- paste("Dim",1:ncp)
+	  rownames(eta2) <- colnames(X[,act,drop=FALSE])
       res.mca$var$eta2 <- eta2
 	}
 	
     if (!is.null(quali.sup)) {
-        if (!is.null(ind.sup)) Zqs = Zqs[ind.act, ]
+        if (!is.null(ind.sup)) Zqs <- Zqs[ind.act, ]
         Nj <- colSums(Zqs * row.w)
         if (N>1) coef <- sqrt(Nj * ((N - 1)/(N - Nj)))
 		else coef <- sqrt(Nj)
         res.mca$quali.sup$v.test <- as.matrix(res.mca$quali.sup$coord*coef)
 
-        eta2 = matrix(NA, length(quali.sup), ncp)
-        colnames(eta2) = paste("Dim", 1:ncp)
-        rownames(eta2) = attributes(X)$names[quali.sup]
+        eta2 <- matrix(NA, length(quali.sup), ncp)
+        colnames(eta2) <- paste("Dim", 1:ncp)
+        rownames(eta2) <- attributes(X)$names[quali.sup]
 		 if (ncp>1) eta2 <- t(sapply(as.data.frame(X[rownames(Xact), quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w))
 		 else {
 		   eta2 <- as.matrix(sapply(as.data.frame(X[rownames(Xact), quali.sup,drop=FALSE]),fct.eta2,res.mca$ind$coord,weights=row.w),ncol=ncp)

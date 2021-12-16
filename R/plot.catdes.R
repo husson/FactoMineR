@@ -139,11 +139,11 @@ if (!barplot){
   if(!is.null(x$quanti)) rows <- names(x$quanti)  
   else  rows <- names(x$category)   
   if(is.null(rows)){stop("Invalid value of x")}
-  nb_cluster = length(rows)
+  nb_cluster <- length(rows)
   #If sort is a string, then we convert it to an integer
   if (!is.null(sort)){
     if(is.character(sort)){
-        sort=which(rows==sort)
+        sort <- which(rows==sort)
         if (length(sort)==0) stop("Invalid value of sort")
     } else if (!is.double(sort) || sort!=round(sort) || sort>nb_cluster || sort<1){stop("Invalid value of sort")}
   }
@@ -156,48 +156,48 @@ if (!barplot){
   
   #Names of the clusters
   #The table that will contain all the p-values
-  pval = c()
+  pval <- c()
   
   ##Columns of the table obtained with the union of the results in the catdes
   #Quantitative
   if(is.null(sort)){
     if (show=="quanti" || show=="all"){
-      quanti = c()
+      quanti <- c()
       for (q in x$quanti){
-        quanti = union(quanti,rownames(q))
-        pval=c(pval,q[,'p.value'])
+        quanti <- union(quanti,rownames(q))
+        pval <- c(pval,q[,'p.value'])
       }
     }
     #Categorical
     if (show=="quali" || show=="all"){
-      quali=c()
+      quali <- c()
       for (q in x$category){
-        quali = union(quali,rownames(q))
-        pval=c(pval,q[,'p.value'])
+        quali <- union(quali,rownames(q))
+        pval <- c(pval,q[,'p.value'])
       }
     }
     #All columns
     if (show=="all"){
-      columns = c(quanti,quali)
+      columns <- c(quanti,quali)
     }
     else if (show=="quali"){
-      columns = quali
+      columns <- quali
     }
     else if (show=="quanti"){
-      columns=quanti
+      columns <- quanti
     }
   } else{
-    quanti_all = c()
-    pval = c() #all the p-values
+    quanti_all <- c()
+    pval <- c() #all the p-values
     for (q in x$quanti){
-      quanti_all = union(quanti_all,rownames(q))
-      pval=c(pval,q[,'p.value'])
+      quanti_all <- union(quanti_all,rownames(q))
+      pval <- c(pval,q[,'p.value'])
     }
     #Categorical
-    quali_all=c()
+    quali_all <- c()
     for (q in x$category){
-      quali_all = union(quali_all,rownames(q))
-      pval=c(pval,q[,'p.value'])
+      quali_all <- union(quali_all,rownames(q))
+      pval <- c(pval,q[,'p.value'])
     }
     k <- sort
     if ((show=="quanti" || show=="all") && !(is.null(x$quanti))){
@@ -222,9 +222,9 @@ if (!barplot){
      quali_all <- merge(x=quali_all,y=pvals_k_quali,by="names",all.x=TRUE)[,c("names","pvals.y")]
     colnames(quali_all) <- c("names","pvals")
     }
-    if (show=="all") columns=rbind(quali_all,quanti_all)
-    if (show=="quali") columns=rbind(quali_all)
-    if (show=="quanti") columns=rbind(quanti_all)
+    if (show=="all") columns <- rbind(quali_all,quanti_all)
+    if (show=="quali") columns <- rbind(quali_all)
+    if (show=="quanti") columns <- rbind(quanti_all)
     columns <- columns[order(columns$pvals),]
     columns <- columns$names
   }
@@ -234,25 +234,25 @@ if (!barplot){
   dim2 <- length(columns)
   plot.new()
   for (i in 1:dim1){ 
-    ybottom=1 - i * (1/(dim1 + 1))
-    xright=1/(dim2 + 1)
-    ytop =1 - (i + 1) * (1/(dim1 + 1))
-    xleft=0
+    ybottom <- 1 - i * (1/(dim1 + 1))
+    xright <- 1/(dim2 + 1)
+    ytop <- 1 - (i + 1) * (1/(dim1 + 1))
+    xleft <- 0
       center <- c(mean(c(xleft,xright)),mean(c(ytop,ybottom)))
       text(center[1],center[2],rows[i],cex=0.5*cex.names,font=2)
       for(j in 1:(dim2)){
-        xleft=j * (1/(dim2 + 1))
-        ybottom=1 - i * (1/(dim1 + 1))
-        xright=(j + 1) * (1/(dim2 + 1))
-        ytop =1 - (i + 1) * (1/(dim1 + 1))
+        xleft <- j * (1/(dim2 + 1))
+        ybottom <- 1 - i * (1/(dim1 + 1))
+        xright <- (j + 1) * (1/(dim2 + 1))
+        ytop <- 1 - (i + 1) * (1/(dim1 + 1))
         rect(xleft, ybottom = ybottom, xright, ytop)
     }
   }
   for (j in 1:(dim2)){ 
-    xleft=j * (1/(dim2 + 1))
-    ybottom =1
-    xright=(j + 1) * (1/(dim2 + 1))
-    ytop =1 - (1/(dim1 + 1))
+    xleft <- j * (1/(dim2 + 1))
+    ybottom <- 1
+    xright <- (j + 1) * (1/(dim2 + 1))
+    ytop <- 1 - (1/(dim1 + 1))
     center <- c(mean(c(xleft,xright)),mean(c(ytop,ybottom)))
     text(center[1],1 - (1/(dim1 + 1)),columns[j],cex=0.4*cex.names,srt=45,adj=c(0,0))
   }
@@ -264,8 +264,8 @@ if (!barplot){
   #Completing the grid
   #For each cluster
   for (i in 1:dim1){
-    quanti =x$quanti
-    quali = x$category
+    quanti <- x$quanti
+    quali <- x$category
     #Quantitative
     if (show=="quanti" || show=="all"){
       for (name_row in rownames(quanti[[i]])){
@@ -273,10 +273,10 @@ if (!barplot){
         p <- quanti[[i]][name_row,"p.value"]
         if (p<level){
           col <- pmin(1,pmax(0,0.9*(p-min)/(min-max)+1))
-          xleft=j * (1/(dim2 + 1))
-          ybottom=1 - i * (1/(dim1 + 1))
-          xright=(j + 1) * (1/(dim2 + 1))
-          ytop =1 - (i + 1) * (1/(dim1 + 1))
+          xleft <- j * (1/(dim2 + 1))
+          ybottom <- 1 - i * (1/(dim1 + 1))
+          xright <- (j + 1) * (1/(dim2 + 1))
+          ytop <- 1 - (i + 1) * (1/(dim1 + 1))
           if(quanti[[i]][name_row,"v.test"]>=0){
             rect(xleft, ybottom = ybottom, xright, ytop, col = rgb(col.upper.rgb,alpha=col), border = NULL)
           } else {
@@ -293,10 +293,10 @@ if (!barplot){
         p <- quali[[i]][name_row,"p.value"]
         if (p<level){
           col <- pmin(1,pmax(0,0.9*(p-min)/(min-max)+1))
-          xleft=j * (1/(dim2 + 1))
-          ybottom=1 - i * (1/(dim1 + 1))
-          xright=(j + 1) * (1/(dim2 + 1))
-          ytop =1 - (i + 1) * (1/(dim1 + 1))
+          xleft <- j * (1/(dim2 + 1))
+          ybottom <- 1 - i * (1/(dim1 + 1))
+          xright <- (j + 1) * (1/(dim2 + 1))
+          ytop <- 1 - (i + 1) * (1/(dim1 + 1))
           if(quali[[i]][name_row,"v.test"]>=0){
             rect(xleft, ybottom = ybottom, xright, ytop, col = rgb(col.upper.rgb,alpha=col), border = NULL)
           } else {
@@ -307,43 +307,43 @@ if (!barplot){
     }
   }
 } else {    ### begin program for barplot=TRUE
-  lengthX=max(length(x$quanti),length(x$category))		# measure the length of x
-  long=rep(0,lengthX)
+  lengthX <- max(length(x$quanti),length(x$category))		# measure the length of x
+  long <- rep(0,lengthX)
                                         #print(x$category)
-  list.catdes=list(long)
-  minimum=0
-  maximum=0
-  count=0
+  list.catdes <- list(long)
+  minimum <- 0
+  maximum <- 0
+  count <- 0
   for (i in 1:lengthX){
     if (!is.null(x$quanti[[i]])){
-      quanti=as.data.frame(x$quanti[[i]])
-      quanti.catdes=as.vector(quanti[,1])
-      names(quanti.catdes)=rownames(quanti)
-    } else quanti.catdes=NULL
+      quanti <- as.data.frame(x$quanti[[i]])
+      quanti.catdes <- as.vector(quanti[,1])
+      names(quanti.catdes) <- rownames(quanti)
+    } else quanti.catdes <- NULL
     if (!is.null(x$category[[i]])){
-      category=as.data.frame(x$category[[i]])
-      category.catdes=as.vector(category[,5])
-      names(category.catdes)=rownames(category)
-    } else category.catdes=NULL
+      category <- as.data.frame(x$category[[i]])
+      category.catdes <- as.vector(category[,5])
+      names(category.catdes) <- rownames(category)
+    } else category.catdes <- NULL
                                         #print(category.catdes)
-    if (show=="all") catdes.aux=c(quanti.catdes,category.catdes)
-    if (show=="quanti") catdes.aux=quanti.catdes					# different options
-    if (show=="quali") catdes.aux=category.catdes
+    if (show=="all") catdes.aux <- c(quanti.catdes,category.catdes)
+    if (show=="quanti") catdes.aux <- quanti.catdes					# different options
+    if (show=="quali") catdes.aux <- category.catdes
     if (!is.null(catdes.aux)) {
-      count=count+1								#count is a counter of the catdes clusters which are non null.   
-      long[i]=length(catdes.aux)
-      minimum=min(catdes.aux,minimum)			# find the longest catdes clusters and the smallest.
-      maximum=max(catdes.aux,maximum)
-    } else long[i]=0
-    list.catdes[[i]]=catdes.aux								# list the catdes clusters
+      count <- count+1								#count is a counter of the catdes clusters which are non null.   
+      long[i] <- length(catdes.aux)
+      minimum <- min(catdes.aux,minimum)			# find the longest catdes clusters and the smallest.
+      maximum <- max(catdes.aux,maximum)
+    } else long[i] <- 0
+    list.catdes[[i]] <- catdes.aux								# list the catdes clusters
   }
   if(count!=0){
     if (count<=4){ 
-      numc=count									# design of the graphic window
-      numr=1
+      numc <- count									# design of the graphic window
+      numr <- 1
     } else{
-      numc=4
-      numr=count%/%4+1
+      numc <- 4
+      numr <- count%/%4+1
     }
     plot.new()
     par(las = 3)
@@ -351,7 +351,7 @@ if (!barplot){
     for(i in 1:lengthX){
       catdes.aux <- list.catdes[[i]]
       if(!is.null(catdes.aux)){
-        catdes.aux=sort(catdes.aux,decreasing=FALSE)					#plot the catdes for every cluster in the graphic window
+        catdes.aux <- sort(catdes.aux,decreasing=FALSE)					#plot the catdes for every cluster in the graphic window
         coul <- rep(col.upper,length(catdes.aux))
         coul[catdes.aux<0] <- col.lower
 		if (is.null(x$category)) titre <- names(x$quanti)[i]

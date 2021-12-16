@@ -37,7 +37,7 @@ predict.FAMD <- function(object, newdata, ...){
 	QualiAct <- t(t(QualiAct)- prop)
 	QualiAct <- t(t(QualiAct)/sqrt(prop))
 
-	tab.newdata=cbind(QuantiAct,QualiAct)
+	tab.newdata <- cbind(QuantiAct,QualiAct)
     marge.col <- object$call$marge.col
 	
     coord <- crossprod(t(as.matrix(tab.newdata)),object$svd$V)

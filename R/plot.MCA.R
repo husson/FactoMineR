@@ -13,14 +13,14 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
   argument <- list(...)
   if (!is.null(argument[["cex"]]) & is.null(ggoptions["size"]))  ggoptions["size"] <- 4*argument$cex
   ggoptions_default <- list(size = 4, point.shape = 19, line.lty = 2, line.lwd = 0.5, line.color = "black", segment.lty = 1, segment.lwd = 0.5, circle.lty = 1, circle.lwd = 0.5, circle.color = "black", low.col.quanti = "blue", high.col.quanti = "red3")
-  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] = ggoptions[names(ggoptions)]
+  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] <- ggoptions[names(ggoptions)]
   old.palette <- palette()
   if (is.null(palette)) palette <- c("black", "red", "green3", "blue", "magenta", "darkgoldenrod","darkgray", "orange", "cyan", "violet", "lightpink", "lavender", "yellow", "darkgreen","turquoise", "lightgrey", "lightblue", "darkkhaki","darkmagenta","lightgreen", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
   palette(palette)   # that is necessary
-  if (autoLab=="yes") autoLab=TRUE
-  if (autoLab=="no") autoLab=FALSE
+  if (autoLab=="yes") autoLab <- TRUE
+  if (autoLab=="no") autoLab <- FALSE
   invisible <- match.arg(invisible,c("none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"),several.ok=TRUE)
-  if ("none"%in%invisible) invisible = NULL
+  if ("none"%in%invisible) invisible <- NULL
   
   res.mca <- x
   if (!inherits(res.mca, "MCA")) stop("non convenient data")
@@ -159,17 +159,17 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
     }
     
     if (habillage == "quali") {
-      aux = 1
-      col.var = NULL
+      aux <- 1
+      col.var <- NULL
       for (j in res.mca$call$quali) {
         col.var <- c(col.var,rep(aux,nlevels(res.mca$call$X[,j])))
-        aux = aux + 1
+        aux <- aux + 1
       }
       if (!is.null(res.mca$call$quali.sup)){
-        col.quali.sup = NULL
+        col.quali.sup <- NULL
         for (j in res.mca$call$quali.sup) {
           col.quali.sup <- c(col.quali.sup,rep(aux,nlevels(res.mca$call$X[,j])))
-          aux = aux + 1
+          aux <- aux + 1
         }
       }
     }
@@ -186,7 +186,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
       if (!is.null(res.mca$call$quali.sup) & length(col.quali.sup)==1) col.quali.sup <- rep(col.quali.sup,nrow(coord.quali.sup))
     }
     
-    titre = title
+    titre <- title
     if (is.null(title)) titre <- "MCA factor map"
     if (is.na(test.invisible[1])|is.na(test.invisible[2])|is.na(test.invisible[4])|is.na(test.invisible[5])) {
       if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new(width=min(14,max(8,8*diff(xlim)/diff(ylim))),height=8)
@@ -224,7 +224,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
           else{coll2 <- col.var[1:nrow(coord.var)]}
         }
         if (!is.null(selectMod)) {
-          if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selection2)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selection2)])),alpha=255*(1-unselect),maxColorValue=255) 
+          if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selection2)] <- rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selection2)])),alpha=255*(1-unselect),maxColorValue=255) 
           else coll2[!((1:length(coll2))%in%selection2)] <- unselect
           labe2[!((1:length(labe2))%in%selection2)] <- ""
         }
@@ -241,14 +241,14 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
         coll2 <- col.quali.sup
 #        if((graph.type == "ggplot") & !(habillage %in% c("quali"))) coll2 <- rep(col.quali.sup, nrow(coord.quali.sup))
         if ((!is.null(selectMod))&!is.null(selection3)) {
-          if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selection3)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selection3)])),alpha=255*(1-unselect),maxColorValue=255) 
+          if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selection3)] <- rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selection3)])),alpha=255*(1-unselect),maxColorValue=255) 
           else coll2[!((1:length(coll2))%in%selection3)] <- unselect
           labe2[!((1:length(labe2))%in%selection3)] <- ""
         }
         if (length(selectMod)==1) {
           if (grepl("contrib",selectMod)){
-            if (is.numeric(unselect)) coll2[1:length(coll2)] = rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
-            else coll2[1:length(coll2)] = unselect
+            if (is.numeric(unselect)) coll2[1:length(coll2)] <- rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
+            else coll2[1:length(coll2)] <- unselect
             labe2[1:length(coll2)] <- ""
           }}
         if (graph.type == "ggplot") df_quali.sup <- data.frame(labe2,coord.quali.sup,coll2,rep(17,nrow(coord.quali.sup)),rep(1,nrow(coord.quali.sup)))
@@ -265,14 +265,14 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
         if (length(col.ind)==1) coll2 <- rep(col.ind.sup,nrow(coord.ind.sup))
         else coll2 <- col.ind.sup
         if ((!is.null(select))&!is.null(selectionS)) {
-          if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll2[!((1:length(coll2))%in%selectionS)] = unselect
+          if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] <- rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
+          else coll2[!((1:length(coll2))%in%selectionS)] <- unselect
           labe2[!((1:length(labe2))%in%selectionS)] <- ""
         }
         if (!is.null(select)){
           if (grepl("contrib",select)){
-            if (is.numeric(unselect)) coll2[1:length(coll2)] = rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
-            else coll2[1:length(coll2)] = unselect
+            if (is.numeric(unselect)) coll2[1:length(coll2)] <- rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
+            else coll2[1:length(coll2)] <- unselect
             labe2[1:length(coll2)] <- ""
           }}
         
@@ -303,7 +303,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
     if(graph.type == "classic"){
       if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
       if (any(labe!="")){
-        if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+        if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
         if (autoLab ==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],shadotext=shadowtext,...)
         if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)
       }
@@ -316,8 +316,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
         geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
         geom_vline(xintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
         theme_light() + theme + labs(title = titre, x = lab.x, y= lab.y)
-      if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
-      if(class(habillage) %in% c("numeric","integer")) habillage = colnames(res.mca$call$X)[habillage]
+      if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
+      if(class(habillage) %in% c("numeric","integer")) habillage <- colnames(res.mca$call$X)[habillage]
       transparency_ind <- 1
       if (!is.null(select)) transparency_ind <- ifelse(rownames(df_ind2) %in% labe, 1, 1-unselect)
       if (!(habillage %in% c("contrib","cos2"))){
@@ -448,7 +448,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
             if (is.integer(select)) selection <- select
           }  
         }
-        res.mca$quanti.sup$coord = res.mca$quanti.sup$coord[selection,,drop=FALSE]
+        res.mca$quanti.sup$coord <- res.mca$quanti.sup$coord[selection,,drop=FALSE]
       }
       if(graph.type=="classic"){
       for (v in 1:nrow(res.mca$quanti.sup$coord)) {
@@ -467,7 +467,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
       }
       }
       if(graph.type=="ggplot"){
-        if (autoLab=="auto") autoLab = (length(which(rownames(res.mca$quanti.sup$coord)!=""))<50)
+        if (autoLab=="auto") autoLab <- (length(which(rownames(res.mca$quanti.sup$coord)!=""))<50)
         df_quanti.sup <- data.frame(rownames(res.mca$quanti.sup$coord),res.mca$quanti.sup$coord[,axes[1]],res.mca$quanti.sup$coord[,axes[2]])
         circle <- annotate("path",
                            x=0+1*cos(seq(0,2*pi,length.out=100)),
@@ -572,16 +572,16 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
     
     if(graph.type== "classic"){
     if (any(labe!="")){
-      if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+      if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
       if (autoLab ==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],...)
       if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)
     }
     points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
     }
   if(graph.type == "ggplot"){
-    if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+    if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
     df_var <- data.frame(labe,coo,coll,ipch,fonte)
-    df_var[,5][which(df_var[,5] == 20)] = 19
+    df_var[,5][which(df_var[,5] == 20)] <- 19
       gg_graph <- ggplot() +
         coord_fixed(ratio = 1) +
         xlab(lab.x) + ylab(lab.y) +

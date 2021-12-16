@@ -40,14 +40,14 @@ coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.con
       tab <- data.frame(x = x, y = y)
       if (nrow(tab)>1) mat.cov <- cov(tab)
 	  else mat.cov <- matrix(0,4,ncol=2)
-      if (bary) mat.cov = mat.cov/nrow(tab)
+      if (bary) mat.cov <- mat.cov/nrow(tab)
       elli.tmp <- ellipse::ellipse(mat.cov, centre = center, level = level.conf, npoints = npoint)
       res <- rbind(res, elli.tmp)
 #      label <- c(label, rep(lev[f], npoint))
     }
     label <- factor(rep(lev,each=npoint),levels=lev)
     result <- data.frame(facteur = label, res)
-    colnames(result)[1]="facteur"
+    colnames(result)[1] <- "facteur"
     colnames(result) <- colnames(coord.simul)[c(1, axes + 1)]
     return(list(res = result, call = npoint))
 }

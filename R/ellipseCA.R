@@ -2,51 +2,51 @@ ellipseCA <- function(x, ellipse=c("col","row"), method="multinomial", nbsample=
                       axes=c(1,2), xlim=NULL, ylim=NULL, col.row="blue", col.col="red",
                       col.row.ell=col.row, col.col.ell=col.col, graph.type = c("ggplot","classic"), ggoptions = NULL, ...){
   
-  X = x$call$X
+  X <- x$call$X
   argument <- list(...)
   if (!is.null(argument[["cex"]]) & is.null(ggoptions["size"]))  ggoptions["size"] <- 4*argument$cex
   ggoptions_default <- list(size = 4, point.shape = 19, line.lty = 2, line.lwd = 0.5, line.color = "black", segment.lty = 1, segment.lwd = 0.5, circle.lty = 1, circle.lwd = 0.5, circle.color = "black", low.col.quanti = "blue", high.col.quanti = "red3")
-  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] = ggoptions[names(ggoptions)]
-  concCol=concRow=X
+  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] <- ggoptions[names(ggoptions)]
+  concCol<-concRow<-X
   graph.type <- match.arg(graph.type[1],c("ggplot","classic"))
   if (method=="multinomial"){
-    proba = unlist(c(X))
-    N=sum(proba)
-    proba = proba/N
-    aa=rmultinom(nbsample, size = N, prob = proba)
+    proba <- unlist(c(X))
+    N<-sum(proba)
+    proba <- proba/N
+    aa<-rmultinom(nbsample, size = N, prob = proba)
     for (i in 1:nbsample) {
-      aux = matrix(aa[,i,drop=FALSE],nrow=nrow(X))
-      dimnames(aux)=dimnames(X)
-      if ("col"%in%ellipse) concCol = cbind.data.frame(concCol,aux)
-      if ("row"%in%ellipse) concRow = rbind.data.frame(concRow,aux)
+      aux <- matrix(aa[,i,drop=FALSE],nrow=nrow(X))
+      dimnames(aux)<-dimnames(X)
+      if ("col"%in%ellipse) concCol <- cbind.data.frame(concCol,aux)
+      if ("row"%in%ellipse) concRow <- rbind.data.frame(concRow,aux)
     }
   }
   if (method=="boot"){   ## botstrap  of the values by rows
-    aux = X
-    ni = apply(X,1,sum)
+    aux <- X
+    ni <- apply(X,1,sum)
     for (i in 1:nbsample) {
-      for (ri in 1:nrow(X)) aux[ri,]=summary(cut(sample(1:ni[ri],ni[ri],replace=TRUE),c(0,cumsum(t(X[ri,])))+0.1/ni[ri]*(0:ncol(X))),maxsum=Inf)
-      if ("col"%in%ellipse) concCol = cbind.data.frame(concCol,aux)
-      if ("row"%in%ellipse) concRow = rbind.data.frame(concRow,aux)
+      for (ri in 1:nrow(X)) aux[ri,] <- summary(cut(sample(1:ni[ri],ni[ri],replace=TRUE),c(0,cumsum(t(X[ri,])))+0.1/ni[ri]*(0:ncol(X))),maxsum=Inf)
+      if ("col"%in%ellipse) concCol <- cbind.data.frame(concCol,aux)
+      if ("row"%in%ellipse) concRow <- rbind.data.frame(concRow,aux)
     } 
   }
-  if (length(col.row)==1) col.row=rep(col.row,nrow(X))
-  if (length(col.col)==1) col.col=rep(col.col,ncol(X))
-  if (length(col.col.ell)==1) col.col.ell=rep(col.col.ell,ncol(X))
-  if (length(col.row.ell)==1) col.row.ell=rep(col.row.ell,ncol(X))
+  if (length(col.row)==1) col.row <- rep(col.row,nrow(X))
+  if (length(col.col)==1) col.col <- rep(col.col,ncol(X))
+  if (length(col.col.ell)==1) col.col.ell <- rep(col.col.ell,ncol(X))
+  if (length(col.row.ell)==1) col.row.ell <- rep(col.row.ell,ncol(X))
   if ("col"%in%ellipse){
-    colCA = CA(concCol,col.sup=(ncol(X)+1):ncol(concCol),graph=FALSE)
-    aux3 = colCA$col.sup$coord[,axes]
-    rownames(aux3)=paste("r",1:nrow(aux3),sep="")
-    aux1=cbind.data.frame(paste("col",1:ncol(X),sep=""),aux3)
+    colCA <- CA(concCol,col.sup=(ncol(X)+1):ncol(concCol),graph=FALSE)
+    aux3 <- colCA$col.sup$coord[,axes]
+    rownames(aux3) <- paste("r",1:nrow(aux3),sep="")
+    aux1 <- cbind.data.frame(paste("col",1:ncol(X),sep=""),aux3)
 	aux1[,1] <- as.factor(aux1[,1])
-    ellCol=coord.ellipse(aux1,level.conf = 0.95)$res
+    ellCol <- coord.ellipse(aux1,level.conf = 0.95)$res
   }
   if ("row"%in%ellipse){
-    rowCA = CA(concRow,row.sup=(nrow(X)+1):nrow(concRow),graph=FALSE)
-    aux2=cbind.data.frame(paste("row",1:nrow(X),sep=""),rowCA$row.sup$coord[,axes])
+    rowCA <- CA(concRow,row.sup=(nrow(X)+1):nrow(concRow),graph=FALSE)
+    aux2 <- cbind.data.frame(paste("row",1:nrow(X),sep=""),rowCA$row.sup$coord[,axes])
 	aux2[,1] <- as.factor(aux2[,1])
-    ellRow=coord.ellipse(aux2,level.conf = 0.95)$res
+    ellRow <- coord.ellipse(aux2,level.conf = 0.95)$res
   }
   nullxlimylim <- (is.null(xlim) & is.null(ylim))
   if (is.null(xlim)){

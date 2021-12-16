@@ -22,12 +22,12 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
 	X <- as.data.frame(X)
     is.quali <- which(!unlist(lapply(X,is.numeric)))
     X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
-    for (i in is.quali) X[,i]=as.factor(X[,i])
+    for (i in is.quali) X[,i] <- as.factor(X[,i])
 	X <- droplevels(X)
     Xtot <- X
-    if (any(!sapply(X, is.numeric))) {
-      auxi = NULL
-      for (j in (1:ncol(X))[!((1:ncol(X))%in%quali.sup)]) if (!is.numeric(X[,j])) auxi = c(auxi,colnames(X)[j])
+    if (any(!unlist(lapply(X, is.numeric)))) {
+      auxi <- NULL
+      for (j in (1:ncol(X))[!((1:ncol(X))%in%quali.sup)]) if (!is.numeric(X[,j])) auxi <- c(auxi,colnames(X)[j])
       if (!is.null(auxi)) stop(paste("\nThe following variables are not quantitative: ", auxi))
     }
     if (!inherits(X, "data.frame")) stop("X is not a data.frame")
@@ -42,7 +42,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
  	  X <- X[,-which(apply(X,2,sum)==0),drop=FALSE]
 	}
 ### 3 lignes rajoutees
-    if (is.null(row.w)) row.w = rep(1,nrow(X))
+    if (is.null(row.w)) row.w <- rep(1,nrow(X))
 	row.w.init <- row.w
     if (length(row.w)!=nrow(X)) stop("length of vector row.w should be the number of active rows")
     total <- sum(X*row.w)
@@ -76,8 +76,8 @@ dist2.row <- rowSums(t(t(Tc^2)*marge.col))
     cos2.row <- coord.row^2/dist2.row
     colnames(coord.row) <- colnames(contrib.row) <- colnames(cos2.row) <- paste("Dim", 1:length(eig))
     rownames(coord.row) <- rownames(contrib.row) <- rownames(cos2.row) <- attributes(X)$row.names
-    inertia.row = marge.row*dist2.row
-    inertia.col = marge.col*dist2.col
+    inertia.row <- marge.row*dist2.row
+    inertia.col <- marge.col*dist2.col
     names(inertia.col) <- attributes(coord.col)$row.names
     names(inertia.row) <- attributes(coord.row)$row.names
     
@@ -176,11 +176,11 @@ dist2.col <- colSums((X.col.sup-marge.row)^2/marge.row)
 		else coef <- sqrt(Nj)
         res$quali.sup$v.test <- res$quali.sup$coord*coef
 
-		eta2 = matrix(NA, length(quali.sup), ncp)
+		eta2 <- matrix(NA, length(quali.sup), ncp)
         eta2 <- sapply(as.data.frame(Xtot2[, quali.sup, drop = FALSE]), fct.eta2, res$row$coord, weights = marge.row)
 		eta2 <- t(as.matrix(eta2,ncol=ncp))
-        colnames(eta2) = paste("Dim", 1:ncp)
-        rownames(eta2) = colnames(Xtot)[quali.sup]
+        colnames(eta2) <- paste("Dim", 1:ncp)
+        rownames(eta2) <- colnames(Xtot)[quali.sup]
 
         res$quali.sup$eta2 <- eta2
         res$call$quali.sup <- quali.sup

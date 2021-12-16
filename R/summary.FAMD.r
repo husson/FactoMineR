@@ -74,8 +74,8 @@ print3 <- function(obj,file="",ncp,width.row=0,nbelements=nbelements){
   width.row <- 0
   if (align.names==TRUE){
     aux <- match.arg(names(res),c("ind","ind.sup","freq","freq.sup","var","quanti.var","quanti.var.sup","quali.var","quali.var.sup","quanti.sup","quali.sup","group","row","row.sup","col","col.sup"),several.ok = TRUE)
-    width.row = max(nchar(rownames(res[aux[1]][[1]]$coord)))
-	for (k in 1:length(aux)) width.row = max(width.row,nchar(rownames(res[aux[k]][[1]]$coord)[1:min(nrow(res[aux[k]][[1]]$coord),nbelements)]))
+    width.row <- max(nchar(rownames(res[aux[1]][[1]]$coord)))
+	for (k in 1:length(aux)) width.row <- max(width.row,nchar(rownames(res[aux[k]][[1]]$coord)[1:min(nrow(res[aux[k]][[1]]$coord),nbelements)]))
   }
 
 if (nbind>0){

@@ -20,8 +20,8 @@ for (i in firstvar:lastvar){
 
 if (choix=="ind") {
   dev.new()
-  if (is.null(title)) title2 = paste("Biplot for",colnames(donnee)[var1],"and",colnames(donnee)[var2])
-  else title2 = title
+  if (is.null(title)) title2 <- paste("Biplot for",colnames(donnee)[var1],"and",colnames(donnee)[var2])
+  else title2 <- title
   plot(donnee[,var1],donnee[,var2],xlab=colnames(donnee)[var1],ylab=colnames(donnee)[var2],pch=20,main=title2,asp=asp)
   abline(h=0,lty=2)
   abline(v=0,lty=2)
@@ -35,7 +35,7 @@ if (choix=="var"){
   (x^2+y^2)/sqrt((x+y*cos(alpha/180*pi))^2+y^2*sin(alpha/180*pi)^2))
   x <- y<- seq(-1,1,0.01)
   res <- outer(x,y,zz,alpha=alph)
-  if (is.null(title)) title = paste("Prefmap-PLS graph between",colnames(donnee)[var1],"and",colnames(donnee)[var2])
+  if (is.null(title)) title <- paste("Prefmap-PLS graph between",colnames(donnee)[var1],"and",colnames(donnee)[var2])
   image(x,y,res,zlim=c(0,1),asp=1,xlab=colnames(donnee)[var1],ylab=colnames(donnee)[var2],col = rev(terrain.colors(100))[1:65],main=title,sub=paste("Correlation between",colnames(donnee)[var1],"and",colnames(donnee)[var2],":",signif(cor(donnee[,var1],donnee[,var2]),4)))
   lines(x,cos(alph/180*pi-acos(x)))
   lines(x,cos(alph/180*pi+acos(x)))

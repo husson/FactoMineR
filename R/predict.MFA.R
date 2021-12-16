@@ -5,10 +5,10 @@ predict.MFA <- function(object, newdata, ...){
         res <- sqrt(sum(V^2 * poids,na.rm=TRUE)/sum(poids[!is.na(V)]))
     }
 
-if (!is.null(object$quanti.var$coord)) ncp=ncol(object$quanti.var$coord)
-else ncp=ncol(object$quali.var$coord)
+if (!is.null(object$quanti.var$coord)) ncp <- ncol(object$quanti.var$coord)
+else ncp <- ncol(object$quali.var$coord)
 
-tab.supp=matrix(NA,nrow(newdata),0)
+tab.supp <- matrix(NA,nrow(newdata),0)
 for (g in 1:length(object$call$group)){
   if (object$call$nature.group[g]=="quanti"){
 #    tab.aux <- sweep(newdata[,(c(1,1+cumsum(object$call$group))[g]):cumsum(object$call$group)[g]],2,object$separate.analyses[[g]][["call"]]$centre,FUN="-")

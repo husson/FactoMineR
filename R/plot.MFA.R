@@ -1,4 +1,4 @@
-plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq"), ellipse = NULL, ellipse.par = NULL, 
+plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq"), ellipse = NULL, ellipse.par = NULL, 
                    lab.grpe = TRUE, lab.var = TRUE, lab.ind = TRUE, lab.par = FALSE, lab.col = TRUE, ncp=2,
                    habillage = "group", col.hab = NULL, invisible = c("none","ind", "ind.sup", "quanti","quanti.sup","quali","quali.sup","row", "row.sup","col", "col.sup"), partial = NULL, 
                    lim.cos2.var = 0., chrono = FALSE, xlim = NULL, ylim = NULL, 
@@ -11,21 +11,21 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
   if (!inherits(res.mfa, "MFA")) stop("non convenient data")
   if (is.numeric(unselect)) if ((unselect>1)|(unselect<0)) stop("unselect should be betwwen 0 and 1")
   autoLab <- match.arg(autoLab,c("auto","yes","no"))
-  if (autoLab=="yes") autoLab=TRUE
-  if (autoLab=="no") autoLab=FALSE
+  if (autoLab=="yes") autoLab <- TRUE
+  if (autoLab=="no") autoLab <- FALSE
   choix <- match.arg(choix,c("ind","var","group","axes","freq"))
   graph.type <- match.arg(graph.type[1],c("ggplot","classic"))
   ggoptions_default <- list(size = 4, point.shape = 19, line.lty = 2, line.lwd = 0.5, line.color = "black", segment.lty = 1, segment.lwd = 0.5, circle.lty = 1, circle.lwd = 0.5, circle.color = "black", low.col.quanti = "blue", high.col.quanti = "red3")
-  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] = ggoptions[names(ggoptions)]
+  if (!is.null(ggoptions[1])) ggoptions_default[names(ggoptions)] <- ggoptions[names(ggoptions)]
   invisible <- match.arg(invisible,c("none","ind", "ind.sup", "quanti","quanti.sup","quali","quali.sup","row", "row.sup","col", "col.sup"),several.ok=TRUE)
-  if ("none"%in%invisible) invisible = NULL
+  if ("none"%in%invisible) invisible <- NULL
   lab.x <- paste("Dim ",axes[1]," (",format(res.mfa$eig[axes[1],2],nsmall=2,digits=2),"%)",sep="")
   lab.y <- paste("Dim ",axes[2]," (",format(res.mfa$eig[axes[2],2],nsmall=2,digits=2),"%)",sep="")
   group <- res.mfa$call$group
   nbre.grpe <- length(group)
   type <- res.mfa$call$type
   type.act <- type
-  num.group.sup = NULL
+  num.group.sup <- NULL
   old.palette <- palette()
   if (is.null(palette)) palette <- c("black", "red", "green3", "blue", "magenta", "darkgoldenrod","darkgray", "orange", "cyan", "violet", "lightpink", "lavender", "yellow", "darkgreen","turquoise", "lightgrey", "lightblue", "darkkhaki","darkmagenta","lightgreen", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon")
   palette(palette)
@@ -80,8 +80,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if (is.null(col.hab) | length(col.hab) < length(group)) {
         if (is.null(res.mfa$call$num.group.sup)) col.hab <- 2:(length(group) + 1)
         else {
-          col.hab[which(!(1:length(group))%in%(res.mfa$call$num.group.sup))] <- 2:(1+length(group)-length(res.mfa$call$num.group.sup))
-          col.hab[res.mfa$call$num.group.sup] <- length(group)-length(res.mfa$call$num.group.sup)+1+(1:length(res.mfa$call$num.group.sup))
+          col.hab[which(!seq_len(length(group))%in%(res.mfa$call$num.group.sup))] <- 2:(1+length(group)-length(res.mfa$call$num.group.sup))
+          col.hab[res.mfa$call$num.group.sup] <- length(group)-length(res.mfa$call$num.group.sup)+1+seq_len(length(res.mfa$call$num.group.sup))
         }
       }
       i <- 1
@@ -91,22 +91,22 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       for (j in 2:nrow(res.mfa$partial.axes$coord)) {
         auxil <- strsplit(rownames(res.mfa$partial.axes$coord)[j], ".", fixed = TRUE)[[1]]
         if (auxil2 != auxil[length(auxil)]) {
-          i = i + 1
-          auxil2 = auxil[length(auxil)]
+          i <- i + 1
+          auxil2 <- auxil[length(auxil)]
         }
         couleur.axes <- c(couleur.axes, col.hab[i])
       }
     } else {
       couleur.axes <- NULL
-      for (i in 1:length(group)) couleur.axes <- c(couleur.axes, rep("black", ncol(res.mfa$partial.axes$coord)))
+      for (i in seq_len(length(group))) couleur.axes <- c(couleur.axes, rep("black", ncol(res.mfa$partial.axes$coord)))
     }
     posi <- coll <- NULL
-    col.legend = unique(couleur.axes)
+    col.legend <- unique(couleur.axes)
     if (!is.null(select)){
       coord.axes <- coord.axes[selection,,drop=FALSE]
       couleur.axes <- couleur.axes[selection]
     }
-    for (v in 1:nrow(coord.axes)) {
+    for (v in seq_len(nrow(coord.axes))) {
       if(graph.type == "classic"){
         arrows(0, 0, coord.axes[v, 1], coord.axes[v, 2], length = 0.1, angle = 15, code = 2, col = couleur.axes[v], ...)
       }
@@ -119,7 +119,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       }
       labe <- rownames(coord.axes)
     }
-    if (autoLab=="auto") autoLab = (length(labe)<50)
+    if (autoLab=="auto") autoLab <- (length(labe)<50)
     if(graph.type == "classic"){
       if (autoLab==FALSE) text(coord.axes[, 1], y = coord.axes[, 2], labels = labe, pos = posi, col = couleur.axes,...)
       if (autoLab==TRUE) autoLab(coord.axes[, 1], y = coord.axes[, 2], labels = labe, col=couleur.axes, shadotext=shadowtext,...)
@@ -140,7 +140,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       df_axes <- data.frame(labe,coord.axes)
       group2 <- strsplit(as.character(df_axes[,1]),".",fixed=TRUE)
       group <- NULL
-      for (i in seq(1:length(group2))){group <- c(group, group2[[i]][2])}
+      for (i in seq_len(length(group2))){group <- c(group, group2[[i]][2])}
       if(habillage == "group"){
       df_axes <- data.frame(df_axes, couleur.axes, group)
       if(!is.null(select)) df_axes <- df_axes[order(df_axes[,4]),]
@@ -217,12 +217,12 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     }
     ## Fin ajout 2015/04/23
     
-    if (length(col.hab)==1) col.hab=rep(col.hab,length(group))
+    if (habillage == "group" & is.null(col.hab)) col.hab <- (2:(length(group) + 1))
+    if (length(col.hab)==1) col.hab <- rep(col.hab,length(group))
     if (is.null(col.hab)) {
-      col.hab = rep("darkred", nrow(coord.actif))
-      if (!is.null(res.mfa$group$coord.sup))  col.hab = c(col.hab, rep("darkolivegreen", nrow(coord.illu)))
+      col.hab <- rep("darkred", nrow(coord.actif))
+      if (!is.null(res.mfa$group$coord.sup))  col.hab <- c(col.hab, rep("darkolivegreen", nrow(coord.illu)))
     }
-    if (habillage == "group") col.hab <- (2:(length(group) + 1))
     
     if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
     coo <- labe <- coll <- ipch <- fonte <- NULL
@@ -237,13 +237,13 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     coo <- rbind(coo,coord.actif)
     if (lab.grpe){ labe <- c(labe,rownames(coord.actif))
     } else  labe <- c(labe,rep("",nrow(coord.actif)))
-    coll <- c(coll,col.hab[1:nrow(coord.actif)])
+    coll <- c(coll,col.hab[seq_len(nrow(coord.actif))])
     ipch <- c(ipch,rep(17,nrow(coord.actif)))
     fonte <- c(fonte,rep(1,nrow(coord.actif)))
     if (!is.null(selection)){
-      if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
-      else coll[!((1:length(coll))%in%selection)] = unselect
-      labe[!((1:length(coll))%in%selection)] <- ""
+      if (is.numeric(unselect)) coll[!(seq_len(length(coll))%in%selection)] <- rgb(t(col2rgb(coll[!(seq_len(length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
+      else coll[!(seq_len(length(coll))%in%selection)] <- unselect
+      labe[!(seq_len(length(coll))%in%selection)] <- ""
     }
     
     if (!is.null(res.mfa$group$coord.sup)) {
@@ -260,29 +260,29 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       #	    fonte <- c(fonte,rep(3,nrow(coord.illu)))
       if (length(select)==1){
         if (grepl("contrib",select)){
-          if (is.numeric(unselect)) coll2[1:length(coll2)] = rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll2[1:length(coll2)] = unselect
-          labe2[1:length(coll2)] <- ""
+          if (is.numeric(unselect)) coll2[seq_len(length(coll2))] <- rgb(t(col2rgb(coll2[seq_len(length(coll2))])),alpha=255*(1-unselect),maxColorValue=255) 
+          else coll2[seq_len(length(coll2))] <- unselect
+          labe2[seq_len(length(coll2))] <- ""
         }}
       if (!is.null(selectionS)){
-        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
-        else coll2[!((1:length(coll2))%in%selectionS)] = unselect
-        labe2[!((1:length(coll2))%in%selectionS)] <- ""
+        if (is.numeric(unselect)) coll2[!(seq_len(length(coll2))%in%selectionS)] <- rgb(t(col2rgb(coll2[!(seq_len(length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
+        else coll2[!(seq_len(length(coll2))%in%selectionS)] <- unselect
+        labe2[!(seq_len(length(coll2))%in%selectionS)] <- ""
       }
-      coll=c(coll,coll2)
-      labe=c(labe,labe2)
-      fonte=c(fonte,fonte2)
-      ipch=c(ipch,ipch2)
+      coll <- c(coll,coll2)
+      labe <- c(labe,labe2)
+      fonte <- c(fonte,fonte2)
+      ipch <- c(ipch,ipch2)
     }
     if(graph.type=="classic"){
       if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
-      if (autoLab=="auto") autoLab = (length(labe)<50)
+      if (autoLab=="auto") autoLab <- (length(labe)<50)
       if (autoLab ==TRUE) autoLab(coo[, 1], y = coo[, 2], labels = labe, col = coll,  font=fonte,shadotext=shadowtext,...)
       if (autoLab ==FALSE) text(coo[, 1], y = coo[, 2], labels = labe, col = coll,  font=fonte,pos=3,...)
       if (!shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
     }
     if(graph.type=="ggplot"){
-      if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+      if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
       df_group <- data.frame(labe,coo,coll,ipch,fonte)
       gg_graph <- ggplot() +
         coord_fixed(ratio = 1) +
@@ -311,8 +311,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     if (habillage == "group") {
       if (is.null(col.hab) | length(col.hab) < length(group[type == "c"])){
         if (!is.null(res.mfa$call$num.group.sup)){
-          col.hab[which(!(1:length(group))%in%(res.mfa$call$num.group.sup))] <- 2:(1+length(group)-length(res.mfa$call$num.group.sup))
-          col.hab[res.mfa$call$num.group.sup] <- length(group)-length(res.mfa$call$num.group.sup)+1+(1:length(res.mfa$call$num.group.sup))
+          col.hab[which(!seq_len(length(group))%in%(res.mfa$call$num.group.sup))] <- 2:(1+length(group)-length(res.mfa$call$num.group.sup))
+          col.hab[res.mfa$call$num.group.sup] <- length(group)-length(res.mfa$call$num.group.sup)+1+seq_len(length(res.mfa$call$num.group.sup))
           col <- c(1+rep(which(res.mfa$call$nature.group[-res.mfa$call$num.group.sup]=="quanti"),times=group[which(res.mfa$call$nature.group=="quanti")]),length(group)-length(res.mfa$call$num.group.sup)+1+rep(which((res.mfa$call$nature.group[res.mfa$call$num.group.sup])=="quanti.sup"),times=group[which(res.mfa$call$nature.group=="quanti.sup")]))
         } else {
           col.hab <- 2:(length(group)+1)
@@ -370,7 +370,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     
     labe <- labe2 <- coll <- coll2 <- NULL
     if (!is.null(res.mfa["quanti.var"]$quanti.var)){
-      coll <- col[1:nrow(res.mfa["quanti.var"]$quanti.var$coord)]
+      coll <- col[seq_len(nrow(res.mfa["quanti.var"]$quanti.var$coord))]
       if (lab.var) labe <- rownames(res.mfa["quanti.var"]$quanti.var$coord)
       else  labe <- rep("",nrow(res.mfa["quanti.var"]$quanti.var$coord))
     }
@@ -383,17 +383,17 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     if (!is.null(select)){
       if (!is.null(res.mfa["quanti.var"]$quanti.var)&is.na(test.invisible[1])){	
         if(graph.type=="classic"){
-          if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll[!((1:length(coll))%in%selection)] = unselect
+          if (is.numeric(unselect)) coll[!(seq_len(length(coll))%in%selection)] <- rgb(t(col2rgb(coll[!(seq_len(length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255) 
+          else coll[!(seq_len(length(coll))%in%selection)] <- unselect
         }
-        labe[!((1:length(coll))%in%selection)] <- ""
+        labe[!(seq_len(length(coll))%in%selection)] <- ""
       }
       if (!is.null(res.mfa$quanti.var.sup)&is.na(test.invisible[2])){
         if(graph.type=="classic"){
-          if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll2[!((1:length(coll2))%in%selectionS)] = unselect
+          if (is.numeric(unselect)) coll2[!(seq_len(length(coll2))%in%selectionS)] <- rgb(t(col2rgb(coll2[!(seq_len(length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
+          else coll2[!(seq_len(length(coll2))%in%selectionS)] <- unselect
         }
-        labe2[!((1:length(coll2))%in%selectionS)] <- ""
+        labe2[!(seq_len(length(coll2))%in%selectionS)] <- ""
       }
     }
     col <- c(coll,coll2)
@@ -409,7 +409,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       #            if ("quanti.sup"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c"], 
       #                text.col = col.hab[which(!((1:length(group))%in%res.mfa$call$num.group.sup))[type.act == "c"]], cex = 0.8*par("cex"))
       if ("quanti.sup"%in%res.mfa$call$nature.var) {
-        L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c"], text.col = col.hab[which(!((1:length(group))%in%res.mfa$call$num.group.sup))[type.act == "c"]], cex = 0.8*par("cex"))
+        L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c"], text.col = col.hab[which(!(seq_len(length(group))%in%res.mfa$call$num.group.sup))[type.act == "c"]], cex = 0.8*par("cex"))
       } else {
         #		    legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
         L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
@@ -428,7 +428,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     nrow.coord.var <- 0
     coo <- posi <- NULL
     if ((!is.null(res.mfa["quanti.var"]$quanti.var))&(!is.na(test.invisible[1]))){
-      col[1:nrow(res.mfa$quanti.var$cor[,axes,drop=FALSE])] <- "transparent"
+      col[seq_len(nrow(res.mfa$quanti.var$cor[,axes,drop=FALSE]))] <- "transparent"
     }
     if (!is.null(res.mfa["quanti.var"]$quanti.var)){
       ### modif 2016-02-16
@@ -436,7 +436,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       coo <- coord.var
       if (length(which(apply(res.mfa$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var))>0) col[which(apply(res.mfa$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var)] <- "transparent"
       if(graph.type=="classic"){
-        for (v in 1:nrow(coord.var)) {
+        for (v in seq_len(nrow(coord.var))) {
           arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col[v])
           if (lab.var) {
             if (abs(coord.var[v,1])>abs(coord.var[v,2])){
@@ -452,14 +452,14 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       }
     }
     if ((!is.null(res.mfa$quanti.var.sup$coord))&(!is.na(test.invisible[2]))){
-      col[nrow(coo)+(1:nrow(res.mfa$quanti.var.sup$cor[,axes,drop=FALSE]))] <- "transparent"
+      col[nrow(coo)+seq_len(nrow(res.mfa$quanti.var.sup$cor[,axes,drop=FALSE]))] <- "transparent"
     }
     if (!is.null(res.mfa$quanti.var.sup$coord)){
       coord.quanti <- res.mfa$quanti.var.sup$cor[ ,axes,drop=FALSE]
       coo <- rbind(coo,coord.quanti)
       if (length(which(apply(res.mfa$quanti.var.sup$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var))>0) col[nrow(coo)-nrow(coord.quanti)+which(apply(res.mfa$quanti.var.sup$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var)]<-"transparent"
       if(graph.type=="classic"){  
-        for (q in 1:nrow(coord.quanti)) {
+        for (q in seq_len(nrow(coord.quanti))) {
           arrows(0, 0, coord.quanti[q, 1], coord.quanti[q, 2], length = 0.1, angle = 15, code = 2, lty = 2, col=col[nrow(coo)-nrow(coord.quanti)+q],...)
           if (lab.var) {
             if (abs(coord.quanti[q,1])>abs(coord.quanti[q,2])){
@@ -475,13 +475,13 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       }
     }
     if(graph.type=="classic"){
-      if (autoLab=="auto") autoLab = (length(labe)-sum(col=="transparent")<50)
+      if (autoLab=="auto") autoLab <- (length(labe)-sum(col=="transparent")<50)
       if (autoLab==FALSE) text(coo[, 1], y = coo[, 2], labels = labe, pos = posi, col = col,...)
       if (autoLab==TRUE) autoLab(coo[which(col!="transparent"), 1], y = coo[which(col!="transparent"), 2], labels = labe[which(col!="transparent")], col=col[which(col!="transparent")], shadotext=shadowtext,...)
       par(mar = c(5, 4, 4, 2) + 0.1)
     }
     if(graph.type=="ggplot"){
-      if (autoLab=="auto") autoLab = (length(labe)<50)
+      if (autoLab=="auto") autoLab <- (length(labe)<50)
       circle <- annotate("path",
                          x=0+1*cos(seq(0,2*pi,length.out=100)),
                          y=0+1*sin(seq(0,2*pi,length.out=100)),
@@ -532,8 +532,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
   if (choix=="freq"){
     if (is.null(res.mfa$freq)&is.null(res.mfa$freq.sup)) stop("You have no frequencies groups")
 	if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
-    col.row = 1
-    col.row.sup = "grey60"
+    col.row <- 1
+    col.row.sup <- "grey60"
     coord.col <- res.mfa$freq$coord[, axes, drop = FALSE]
     coord.row <- res.mfa$ind$coord[, axes]
     coord.row.sup <- coord.col.sup <- NULL
@@ -561,8 +561,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       xlim <- c(xmin, xmax) * 1.2
     }
     else {
-      xmin = xlim[1]
-      xmax = xlim[2]
+      xmin <- xlim[1]
+      xmax <- xlim[2]
     }
     if (is.null(ylim)) {
       ymin <- ymax <- 0
@@ -577,16 +577,16 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       ylim <- c(ymin, ymax) * 1.2
     }
     else {
-      ymin = ylim[1]
-      ymax = ylim[2]
+      ymin <- ylim[1]
+      ymax <- ylim[2]
     }
     if(graph.type=="ggplot") nudge_y  <- (xlim[2] - xlim[1])*0.03
     col <- NULL    
     if (habillage == "group") {
       if (is.null(col.hab) | length(col.hab) < length(group[type == "f"])){
         if (!is.null(res.mfa$call$num.group.sup)){
-          col.hab[which(!(1:length(group))%in%(res.mfa$call$num.group.sup))] <- 2:(1+length(group)-length(res.mfa$call$num.group.sup))
-          col.hab[res.mfa$call$num.group.sup] <- length(group)-length(res.mfa$call$num.group.sup)+1+(1:length(res.mfa$call$num.group.sup))
+          col.hab[which(!seq_len(length(group))%in%(res.mfa$call$num.group.sup))] <- 2:(1+length(group)-length(res.mfa$call$num.group.sup))
+          col.hab[res.mfa$call$num.group.sup] <- length(group)-length(res.mfa$call$num.group.sup)+1+seq_len(length(res.mfa$call$num.group.sup))
 		  if (!is.null(res.mfa$call$nature.group=="contingency")) col.col <- rep(col.hab[res.mfa$call$nature.group=="contingency"],times=group[res.mfa$call$nature.group=="contingency"])
 		  if (!is.null(res.mfa$call$nature.group=="contingency.sup")) col.col.sup <- rep(col.hab[res.mfa$call$nature.group=="contingency.sup"],times=group[res.mfa$call$nature.group=="contingency.sup"])
  	    } else {
@@ -598,8 +598,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if (is.null(col.hab) | length(col.hab) < sum(group[type == "f"])) {
  	    col.hab <- rep(1, sum(group[type == "f"]))
 		col <- col.hab
-		col.col = "blue"
-        col.col.sup = "darkblue"
+		col.col <- "blue"
+        col.col.sup <- "darkblue"
       } else col.col <- col.hab
     }
 
@@ -684,9 +684,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       ipch <- c(ipch,rep(20,nrow(coord.row)))
       fonte <- c(fonte,rep(1,nrow(coord.row)))
       if (!is.null(selection)){
-        if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255)
-        else coll[!((1:length(coll))%in%selection)] = unselect
-        labe[!((1:length(coll))%in%selection)] <- ""
+        if (is.numeric(unselect)) coll[!(seq_len(length(coll))%in%selection)] <- rgb(t(col2rgb(coll[!(seq_len(length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255)
+        else coll[!(seq_len(length(coll))%in%selection)] <- unselect
+        labe[!(seq_len(length(coll))%in%selection)] <- ""
       }
     }
     if (is.na(test.invisible[2])) {
@@ -698,9 +698,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       ipch <- c(ipch,rep(17,nrow(coord.col)))
       fonte <- c(fonte,rep(1,nrow(coord.col)))
       if (!is.null(selectionC)){
-        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionC)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionC)])),alpha=255*(1-unselect),maxColorValue=255)
-        else coll2[!((1:length(coll2))%in%selectionC)] = unselect
-        labe2[!((1:length(coll2))%in%selectionC)] <- ""
+        if (is.numeric(unselect)) coll2[!(seq_len(length(coll2))%in%selectionC)] <- rgb(t(col2rgb(coll2[!(seq_len(length(coll2))%in%selectionC)])),alpha=255*(1-unselect),maxColorValue=255)
+        else coll2[!(seq_len(length(coll2))%in%selectionC)] <- unselect
+        labe2[!(seq_len(length(coll2))%in%selectionC)] <- ""
       }
       coll <- c(coll,coll2)
       labe <- c(labe,labe2)
@@ -714,9 +714,9 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       ipch <- c(ipch,rep(17,nrow(coord.col.sup)))
       fonte <- c(fonte,rep(1,nrow(coord.col.sup)))
       if (!is.null(selectionCS)){
-        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionCS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionCS)])),alpha=255*(1-unselect),maxColorValue=255)
-        else coll2[!((1:length(coll2))%in%selectionCS)] = unselect
-        labe2[!((1:length(coll2))%in%selectionCS)] <- ""
+        if (is.numeric(unselect)) coll2[!(seq_len(length(coll2))%in%selectionCS)] <- rgb(t(col2rgb(coll2[!(seq_len(length(coll2))%in%selectionCS)])),alpha=255*(1-unselect),maxColorValue=255)
+        else coll2[!(seq_len(length(coll2))%in%selectionCS)] <- unselect
+        labe2[!(seq_len(length(coll2))%in%selectionCS)] <- ""
       }
       coll <- c(coll,coll2)
       labe <- c(labe,labe2)
@@ -729,15 +729,15 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       ipch <- c(ipch,rep(17,nrow(coord.row.sup)))
       fonte <- c(fonte,rep(1,nrow(coord.row.sup)))
       if (!is.null(selectionS)){
-        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255)
-        else coll2[!((1:length(coll2))%in%selectionS)] = unselect
-        labe2[!((1:length(coll2))%in%selectionS)] <- ""
+        if (is.numeric(unselect)) coll2[!(seq_len(length(coll2))%in%selectionS)] <- rgb(t(col2rgb(coll2[!(seq_len(length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255)
+        else coll2[!(seq_len(length(coll2))%in%selectionS)] <- unselect
+        labe2[!(seq_len(length(coll2))%in%selectionS)] <- ""
       }
       if (length(select)==1){
         if (grepl("contrib",select)){
-          if (is.numeric(unselect)) coll2[1:length(coll2)] = rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll2[1:length(coll2)] = unselect
-          labe2[1:length(coll2)] <- ""
+          if (is.numeric(unselect)) coll2[seq_len(length(coll2))] <- rgb(t(col2rgb(coll2[seq_len(length(coll2))])),alpha=255*(1-unselect),maxColorValue=255) 
+          else coll2[seq_len(length(coll2))] <- unselect
+          labe2[seq_len(length(coll2))] <- ""
         }}
       coll <- c(coll,coll2)
       labe <- c(labe,labe2)
@@ -745,7 +745,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     if(graph.type=="classic"){
       if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
       if (any(labe!="")){
-        if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+        if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
         if (autoLab ==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],shadotext=shadowtext,...)
         if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)
       }
@@ -759,7 +759,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if(graph.type == "classic") do.call(graphics::legend, L)	
     }
     if(graph.type == "ggplot"){
-      if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+      if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
       df_freq <- data.frame(labe,coo,coll,ipch,fonte)
 #	  df_freq[,4] <- as.factor(df_freq[,4])
       if(habillage == "group"){
@@ -828,13 +828,13 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     if (!is.null(partial)) {
       if (length(partial) == 1) {
         if (partial == "all") {
-          group.ind.actif <- 1:nrow(coord.ind)
-          if (!is.null(res.mfa$ind.sup))  group.ind.sup <- 1:nrow(coord.ind.sup)
-          if (!is.null(res.mfa["quali.var"]$quali.var)) group.quali <- 1:nrow(coord_quali)
-          if (!is.null(res.mfa["quali.var.sup"]$quali.var.sup)) group.quali.sup <- 1:nrow(coord_quali_sup)
+          group.ind.actif <- seq_len(nrow(coord.ind))
+          if (!is.null(res.mfa$ind.sup))  group.ind.sup <- seq_len(nrow(coord.ind.sup))
+          if (!is.null(res.mfa["quali.var"]$quali.var)) group.quali <- seq_len(nrow(coord_quali))
+          if (!is.null(res.mfa["quali.var.sup"]$quali.var.sup)) group.quali.sup <- seq_len(nrow(coord_quali_sup))
         }
         else {
-          for (i in 1:length(partial)) {
+          for (i in seq_len(length(partial))) {
             if (partial[i] %in% rownames(coord.ind)) 
               group.ind.actif <- c(group.ind.actif, match(partial[i], 
                                                           rownames(coord.ind)))
@@ -851,7 +851,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         }
       }
       else {
-        for (i in 1:length(partial)) {
+        for (i in seq_len(length(partial))) {
           if (partial[i] %in% rownames(coord.ind)) 
             group.ind.actif <- c(group.ind.actif, match(partial[i], 
                                                         rownames(coord.ind)))
@@ -1027,13 +1027,13 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if (!is.null(ellipse.par)) col.ellipse.par <- rep(col.hab[1:nb.ind.actif], each = nbre.grpe)
     }
     if ((habillage != "none") & (habillage != "ind") & (habillage != "group")) {
-      group.act <- (1:length(group))
+      group.act <- seq_len(length(group))
       if (!is.null(num.group.sup))  group.act <- group.act[-num.group.sup]
       nbre.modalite <- nbre.modalite.sup <- NULL
       liste.quali <- liste.quali.sup <- NULL
       for (i in group.act) {
         if (type[i] == "n") {
-          for (k in 1:ncol(res.mfa$separate.analyses[[i]]$call$X)) nbre.modalite <- c(nbre.modalite, nlevels(res.mfa$separate.analyses[[i]]$call$X[, k]))
+          for (k in seq_len(ncol(res.mfa$separate.analyses[[i]]$call$X))) nbre.modalite <- c(nbre.modalite, nlevels(res.mfa$separate.analyses[[i]]$call$X[, k]))
           if (i == 1) liste.quali <- c(liste.quali, colnames(res.mfa$call$X[1:group[1]]))
           else liste.quali <- c(liste.quali, colnames(res.mfa$call$X[(sum(group[1:(i - 1)]) + 1):sum(group[1:i])]))
         }
@@ -1043,12 +1043,12 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
           if (type[i] == "n") {
             if (i == 1) liste.quali.sup <- c(liste.quali.sup, colnames(res.mfa$call$X[1:group[1]]))
             else liste.quali.sup <- c(liste.quali.sup, colnames(res.mfa$call$X[(sum(group[1:(i - 1)]) + 1):sum(group[1:i])]))
-            for (k in 1:ncol(res.mfa$separate.analyses[[i]]$call$X)) nbre.modalite.sup <- c(nbre.modalite.sup, nlevels(res.mfa$separate.analyses[[i]]$call$X[, k]))
+            for (k in seq_len(ncol(res.mfa$separate.analyses[[i]]$call$X))) nbre.modalite.sup <- c(nbre.modalite.sup, nlevels(res.mfa$separate.analyses[[i]]$call$X[, k]))
           }
         }
       }
       if (is.double(habillage)) nom.quali <- colnames(res.mfa$call$X)[habillage]
-      else nom.quali = habillage
+      else nom.quali <- habillage
       if (!(nom.quali %in% c(liste.quali,liste.quali.sup))) stop("The variable ", habillage, " is not qualitative")
       modalite <- levels(as.factor(res.mfa$call$X[, nom.quali]))
       col.ind <- as.numeric(as.factor(res.mfa$call$X[, nom.quali]))
@@ -1067,7 +1067,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         indice.inf <- sum(nbre.modalite[0:(match(nom.quali, liste.quali) - 1)]) + 1
         indice.sup <- indice.inf + length(modalite) - 1
         if (length(group[type == "n"]) != 0) {
-          for (i in 1:length(liste.quali)) {
+          for (i in seq_len(length(liste.quali))) {
             if (liste.quali[i] == nom.quali) col.quali[indice.inf:indice.sup] <- col.hab
           }
         }
@@ -1078,7 +1078,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
         indice.inf.sup <- sum(nbre.modalite.sup[0:(match(nom.quali, liste.quali.sup) - 1)]) + 1
         indice.sup.sup <- indice.inf.sup + length(modalite) - 1
         if (length(group[type == "n"]) != 0) {
-          for (i in 1:length(liste.quali.sup)) {
+          for (i in seq_len(length(liste.quali.sup))) {
             if (liste.quali.sup[i] == nom.quali) col.quali.sup[indice.inf.sup:indice.sup.sup] <- col.hab
           }
         }
@@ -1096,7 +1096,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     coo <- labe <- coll <- ipch <- fonte <- NULL
     if(graph.type=="ggplot"){
       text_ind <- text_ind.sup <- text_quali <- text_quali.sup <- NULL
-      if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+      if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
     }
     if(graph.type=="ggplot"){
       gg_graph <- ggplot() +
@@ -1118,16 +1118,16 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       ipch <- c(ipch,rep(20,nrow(coord.ind)))
       fonte <- c(fonte,rep(1,nrow(coord.ind)))
       if (!is.null(selection)){
-        if (is.numeric(unselect)) coll[!((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[!((1:length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255)
-        else coll[!((1:length(coll))%in%selection)] = unselect
-		coll[((1:length(coll))%in%selection)] = rgb(t(col2rgb(coll[((1:length(coll))%in%selection)])),maxColorValue=255)
-        labe[!((1:length(coll))%in%selection)] <- ""
+        if (is.numeric(unselect)) coll[!(seq_len(length(coll))%in%selection)] <- rgb(t(col2rgb(coll[!(seq_len(length(coll))%in%selection)])),alpha=255*(1-unselect),maxColorValue=255)
+        else coll[!(seq_len(length(coll))%in%selection)] <- unselect
+		coll[(seq_len(length(coll))%in%selection)] <- rgb(t(col2rgb(coll[(seq_len(length(coll))%in%selection)])),maxColorValue=255)
+        labe[!(seq_len(length(coll))%in%selection)] <- ""
       }
 	  transparency_ind <- col2rgb(coll,alpha=TRUE)[4,]/255
 	  coll_bis <- rgb(t(col2rgb(coll)),maxColorValue=255)
       if(graph.type == "ggplot"){
         df_ind <- cbind.data.frame(labe, coord.ind, coll, ipch, fonte,coll_bis)
-          df_ind[,5][which(df_ind[,5] == 20)] = 19
+          df_ind[,5][which(df_ind[,5] == 20)] <- 19
           if(habillage %in% c("none","ind","group")){
             gg_graph <- gg_graph +
               geom_point(aes(x=df_ind[,2], y=df_ind[,3]), colour= df_ind[,7],alpha = transparency_ind, shape = df_ind[,5],size = ggoptions_default$size/3)
@@ -1135,7 +1135,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
             else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), size = ggoptions_default$size, colour = df_ind[,7], hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25, fontface = df_ind[,6])}
           } else{
             transparency_ind <- ifelse(rownames(df_ind) %in% df_ind[,1], 1, 1-unselect)
-            if(class(habillage) %in% c("numeric","integer")) habillage = colnames(res.mfa$call$X)[habillage]
+            if(class(habillage) %in% c("numeric","integer")) habillage <- colnames(res.mfa$call$X)[habillage]
             if(habillage %in% colnames(res.mfa$call$X)){
               gg_graph <- gg_graph +
                 geom_point(aes(x=df_ind[,2], y=df_ind[,3], color = res.mfa$call$X[rownames(df_ind),habillage]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
@@ -1199,15 +1199,15 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       ipch <- c(ipch,ipch2)
       fonte <- c(fonte,fonte2)
       if (!is.null(selectionS)){
-        if (is.numeric(unselect)) coll2[!((1:length(coll2))%in%selectionS)] = rgb(t(col2rgb(coll2[!((1:length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
-        else coll2[!((1:length(coll2))%in%selectionS)] = unselect
-        labe2[!((1:length(coll2))%in%selectionS)] <- ""
+        if (is.numeric(unselect)) coll2[!(seq_len(length(coll2))%in%selectionS)] <- rgb(t(col2rgb(coll2[!(seq_len(length(coll2))%in%selectionS)])),alpha=255*(1-unselect),maxColorValue=255) 
+        else coll2[!(seq_len(length(coll2))%in%selectionS)] <- unselect
+        labe2[!(seq_len(length(coll2))%in%selectionS)] <- ""
       }
       if (length(select)==1){
         if (grepl("contrib",select)){
-          if (is.numeric(unselect)) coll2[1:length(coll2)] = rgb(t(col2rgb(coll2[1:length(coll2)])),alpha=255*(1-unselect),maxColorValue=255) 
-          else coll2[1:length(coll2)] = unselect
-          labe2[1:length(coll2)] <- ""
+          if (is.numeric(unselect)) coll2[seq_len(length(coll2))] <- rgb(t(col2rgb(coll2[seq_len(length(coll2))])),alpha=255*(1-unselect),maxColorValue=255) 
+          else coll2[seq_len(length(coll2))] <- unselect
+          labe2[seq_len(length(coll2))] <- ""
         }}
 	if (graph.type=="ggplot"){
 	    transparency_ind <- col2rgb(coll2,alpha=TRUE)[4,]/255
@@ -1254,7 +1254,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       if (lab.var){ labe3 <- rownames(coord_quali)
       } else  labe3 <- rep("",nrow(coord_quali))
       labe <- c(labe,labe3)
-	  coll3 <- col.quali[1:nrow(coord_quali)]
+	  coll3 <- col.quali[seq_len(nrow(coord_quali))]
 	  ipch3 <- rep(15,nrow(coord_quali))
 	  fonte3 <- rep(2,nrow(coord_quali))
       coll <- c(coll,coll3)
@@ -1262,8 +1262,8 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       fonte <- c(fonte,fonte3)
 
       if(graph.type == "ggplot"){
-	    coll_bis <- rgb(t(col2rgb(col.quali[1:nrow(coord_quali)])),maxColorValue=255)
-        df_quali <- data.frame(labe3, coord_quali, col.quali[1:nrow(coord_quali)], rep(15,nrow(coord_quali)), rep(2,nrow(coord_quali)),coll_bis)
+	    coll_bis <- rgb(t(col2rgb(col.quali[seq_len(nrow(coord_quali))])),maxColorValue=255)
+        df_quali <- data.frame(labe3, coord_quali, col.quali[seq_len(nrow(coord_quali))], rep(15,nrow(coord_quali)), rep(2,nrow(coord_quali)),coll_bis)
         gg_graph <- gg_graph + geom_point(aes(x=df_quali[,2], y=df_quali[,3]), color= df_quali[,7], shape = df_quali[,5],size=ggoptions_default$size/3)
         if(autoLab) text_quali <- ggrepel::geom_text_repel(aes(x=df_quali[,2], y=df_quali[,3], label=df_quali[,1]), size = ggoptions_default$size, color = df_quali[,7], fontface = df_quali[,6])
         else{text_quali <- geom_text(aes(x=df_quali[,2], y=df_quali[,3], label=df_quali[,1]), size = ggoptions_default$size, color = df_quali[,7], hjust = (-sign(df_quali[,2])+1)/2, vjust = -sign(df_quali[,3])*0.75+0.25, fontface = df_quali[,6])}
@@ -1303,7 +1303,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
       coo <- rbind(coo,coord_quali_sup)
       if (lab.var){ labe4 <- rownames(coord_quali_sup)
       } else  labe4 <- rep("",nrow(coord_quali_sup))
-	  coll4 <- col.quali.sup[1:nrow(coord_quali_sup)]
+	  coll4 <- col.quali.sup[seq_len(nrow(coord_quali_sup))]
 	  ipch4 <- rep(22,nrow(coord_quali_sup))
 	  fonte4 <- rep(4,nrow(coord_quali_sup))
       labe <- c(labe,labe4)
@@ -1354,7 +1354,7 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
 	} else {
       if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
       if (any(labe!="")){
-        if (autoLab=="auto") autoLab = (length(which(labe!=""))<50)
+        if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
         if (autoLab ==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],shadotext=shadowtext,...)
         if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)		
       }
@@ -1362,14 +1362,14 @@ plot.MFA=function (x, axes = c(1, 2), choix = c("ind","var","group","axes","freq
     }
     if ((!is.null(partial)) & (habillage == "group")) {
       L <- list(x="topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, 
-                                                                    length(rownames(res.mfa$group$Lg)))], lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, 
-                                                                    length(rownames(res.mfa$group$Lg)))]), text.col = col.hab, col = col.hab, cex = par("cex")*0.8)
+                                                                    length(rownames(res.mfa$group$Lg)))], lty = seq_len(length(rownames(res.mfa$group$Lg)[-c(num.group.sup, 
+                                                                    length(rownames(res.mfa$group$Lg)))])), text.col = col.hab, col = col.hab, cex = par("cex")*0.8)
         L <- modifyList(L, legend)
         if(graph.type == "classic") do.call(graphics::legend, L)
     }
     if ((!is.null(partial)) & (habillage != "group")) {
         L <- list(x="topleft", legend = rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))], 
-                  lty = 1:length(rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))]), cex = par("cex")*0.8)
+                  lty = seq_len(length(rownames(res.mfa$group$Lg)[-c(num.group.sup, length(rownames(res.mfa$group$Lg)))])), cex = par("cex")*0.8)
         L <- modifyList(L, legend)
         if(graph.type == "classic") do.call(graphics::legend, L)
       }

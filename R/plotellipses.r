@@ -113,8 +113,8 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
     }
   }
   autoLab <- match.arg(autoLab, c("auto", "yes", "no"))
-  if (autoLab == "yes")  autoLab = TRUE
-  if (autoLab == "no")  autoLab = FALSE
+  if (autoLab == "yes")  autoLab <- TRUE
+  if (autoLab == "no")  autoLab <- FALSE
   nomtot <- names(model$call$X)
   nbevartot <- ncol(model$call$X)
   eliminer <- NULL
@@ -281,7 +281,7 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
     # }
     if ((class(model)[1] == "PCA")||(class(model)[1] == "MCA")||(class(model)[1] == "MFA") || (class(model)[1] == "FAMD")) {
       res.pca <- PCA(aux, ncp = max(axes), quali.sup = 1, scale.unit = FALSE, graph = FALSE, axes = 1:max(axes))
-      res.pca$eig[axes, ] = model$eig[axes, ]
+      res.pca$eig[axes, ] <- model$eig[axes, ]
   res.pca$ind$cos2[,axes] <- model$ind$cos2[,axes]
 	  res.pca$ind$contrib[,axes] <- model$ind$contrib[,axes]
       coord.ell <- coord.ellipse(aux, bary = means, level.conf = level, axes = axes)
@@ -322,7 +322,7 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
       selecti <- as.vector(mapply(seq, (kept - 1) * nindiv + 1, (kept) * nindiv))
       nommod[selecti] <- substr(nommod[selecti], nchar(nomvar[selecti]) + 2, nchar(nommod[selecti]))
     }
-    modalite = factor(modalite2)
+    modalite <- factor(modalite2)
     don <- cbind.data.frame(don, var = nomvar, modalite = factor(modalite2))
     if (length(pch.means) < max(modalite2)) 
       pch.means <- rep(pch.means, length = max(modalite2))

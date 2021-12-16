@@ -3,8 +3,8 @@ plot.CaGalt<-function(x, axes = c(1, 2), choix = c("ind", "freq", "quali.var", "
 	if (!inherits(res.cagalt, "CaGalt")) stop("non convenient data")
 	if (is.numeric(unselect)) if ((unselect > 1) | (unselect < 0)) stop("unselect should be between 0 and 1")
 	autoLab <- match.arg(autoLab, c("auto", "yes", "no"))
-	if (autoLab == "yes") autoLab = TRUE
-	if (autoLab == "no") autoLab = FALSE
+	if (autoLab == "yes") autoLab <- TRUE
+	if (autoLab == "no") autoLab <- FALSE
 	choix <- match.arg(choix, c("ind", "freq", "quali.var", "quanti.var"))
 	lab.x <- paste("Dim ", axes[1], " (", format(res.cagalt$eig[axes[1], 2], nsmall = 2, digits = 2), "%)", sep = "")
 	lab.y <- paste("Dim ", axes[2], " (", format(res.cagalt$eig[axes[2], 2], nsmall = 2, digits = 2), "%)", sep = "")
@@ -42,13 +42,13 @@ plot.CaGalt<-function(x, axes = c(1, 2), choix = c("ind", "freq", "quali.var", "
 		ipch <- rep(20, nrow(coord.ind))
 		fonte <- rep(1, nrow(coord.ind))
 		if (!is.null(selection)) {
-			if (is.numeric(unselect)) coll[!((1:length(coll)) %in% selection)] = rgb(t(col2rgb(coll[!((1:length(coll)) %in% selection)])), alpha = 255 * (1 - unselect), maxColorValue = 255)
-			else coll[!((1:length(coll)) %in% selection)] = unselect
+			if (is.numeric(unselect)) coll[!((1:length(coll)) %in% selection)] <- rgb(t(col2rgb(coll[!((1:length(coll)) %in% selection)])), alpha = 255 * (1 - unselect), maxColorValue = 255)
+			else coll[!((1:length(coll)) %in% selection)] <- unselect
       			labe[!((1:length(coll)) %in% selection)] <- ""
  		}
 		if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
 		if (any(labe != "")) {
-			if (autoLab == "auto") autoLab = (length(which(labe != "")) < 50)
+			if (autoLab == "auto") autoLab <- (length(which(labe != "")) < 50)
 			if (autoLab == TRUE) autoLab(coo[labe != "", 1], y = coo[labe != "", 2], labels = labe[labe != ""], col = coll[labe != ""], font = fonte[labe != ""], shadotext = shadowtext, ...)
             		if (autoLab == FALSE) text(coo[labe != "", 1], y = coo[labe != "", 2], labels = labe[labe != ""], col = coll[labe != ""], font = fonte[labe != ""], pos = 3, ...)
 		}
@@ -89,13 +89,13 @@ plot.CaGalt<-function(x, axes = c(1, 2), choix = c("ind", "freq", "quali.var", "
 		ipch <- rep(15, nrow(coord.freq))
 		fonte <- rep(1, nrow(coord.freq))
 		if (!is.null(selection)) {
-			if (is.numeric(unselect)) coll[!((1:length(coll)) %in% selection)] = rgb(t(col2rgb(coll[!((1:length(coll)) %in% selection)])), alpha = 255 * (1 - unselect), maxColorValue = 255)
-			else coll[!((1:length(coll)) %in% selection)] = unselect
+			if (is.numeric(unselect)) coll[!((1:length(coll)) %in% selection)] <- rgb(t(col2rgb(coll[!((1:length(coll)) %in% selection)])), alpha = 255 * (1 - unselect), maxColorValue = 255)
+			else coll[!((1:length(coll)) %in% selection)] <- unselect
       			labe[!((1:length(coll)) %in% selection)] <- ""
  		}
 		if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
 		if (any(labe != "")) {
-			if (autoLab == "auto") autoLab = (length(which(labe != "")) < 50)
+			if (autoLab == "auto") autoLab <- (length(which(labe != "")) < 50)
 			if (autoLab == TRUE) autoLab(coo[labe != "", 1], y = coo[labe != "", 2], labels = labe[labe != ""], col = coll[labe != ""], font = fonte[labe != ""], shadotext = shadowtext, ...)
             		if (autoLab == FALSE) text(coo[labe != "", 1], y = coo[labe != "", 2], labels = labe[labe != ""], col = coll[labe != ""], font = fonte[labe != ""], pos = 3, ...)
 		}
@@ -103,7 +103,7 @@ plot.CaGalt<-function(x, axes = c(1, 2), choix = c("ind", "freq", "quali.var", "
 		if (conf.ellip) {
       			sel.freq<-which(res.cagalt$freq$contr[,axes[1]]>contr.ellipse*mean(res.cagalt$freq$contr[,1])|res.cagalt$freq$contr[,2]>contr.ellipse*mean(res.cagalt$freq$contr[,axes[2]]))
 			for(i in 1:length(sel.freq)){
-				coord.ellip=coord.ellipse(cbind.data.frame(res.cagalt$ellip$freq[which(res.cagalt$ellip$freq$FREQ%in%names(sel.freq))[i],ncol(res.cagalt$freq$contr)+1],res.cagalt$ellip$freq[which(res.cagalt$ellip$freq$FREQ%in%names(sel.freq)[i]),1:ncol(res.cagalt$freq$contr)]),bary=FALSE,axes=axes)
+				coord.ellip <- coord.ellipse(cbind.data.frame(res.cagalt$ellip$freq[which(res.cagalt$ellip$freq$FREQ%in%names(sel.freq))[i],ncol(res.cagalt$freq$contr)+1],res.cagalt$ellip$freq[which(res.cagalt$ellip$freq$FREQ%in%names(sel.freq)[i]),1:ncol(res.cagalt$freq$contr)]),bary=FALSE,axes=axes)
 				lines(coord.ellip$res[,2],coord.ellip$res[,3],lty=2,lwd=2,col="black")
 			}
 		}
@@ -146,8 +146,8 @@ plot.CaGalt<-function(x, axes = c(1, 2), choix = c("ind", "freq", "quali.var", "
             		if (label) labe <- rownames(coord.var)
             		else labe <- rep("", nrow(coord.var))
             		if (!is.null(selection)) {
-                		if (is.numeric(unselect)) coll[!((1:length(coll)) %in% selection)] = rgb(t(col2rgb(coll[!((1:length(coll)) %in% selection)])), alpha = 255 * (1 - unselect), maxColorValue = 255)
-                		else coll[!((1:length(coll)) %in% selection)] = unselect
+                		if (is.numeric(unselect)) coll[!((1:length(coll)) %in% selection)] <- rgb(t(col2rgb(coll[!((1:length(coll)) %in% selection)])), alpha = 255 * (1 - unselect), maxColorValue = 255)
+                		else coll[!((1:length(coll)) %in% selection)] <- unselect
                 		labe[!((1:length(coll)) %in% selection)] <- ""
             		}
             		for (v in 1:nrow(coord.var)) {
@@ -164,13 +164,13 @@ plot.CaGalt<-function(x, axes = c(1, 2), choix = c("ind", "freq", "quali.var", "
 			}
 		}
 		if (any(labe != "")) {
-			if (autoLab == "auto") autoLab = (length(which(labe != "")) < 50)
+			if (autoLab == "auto") autoLab <- (length(which(labe != "")) < 50)
             		if (autoLab == FALSE) text(coo[labe != "", 1], y = coo[labe != "", 2], labels = labe[labe != ""], pos = posi[labe != ""], col = coll[labe != ""], ...)
             		if (autoLab == TRUE) autoLab(coo[labe != "", 1], y = coo[labe != "", 2], labels = labe[labe != ""], col = coll[labe != ""], shadotext = shadowtext, ...)
 		}
 		if (conf.ellip) {
       			for(i in 1:nrow(res.cagalt$quanti.var$coord)){
-				coord.ellip=coord.ellipse(cbind.data.frame(res.cagalt$ellip$var[which(res.cagalt$ellip$var$VAR%in%rownames(res.cagalt$quanti.var$coord)[i]),ncol(res.cagalt$quanti.var$coord)+1],res.cagalt$ellip$var[which(res.cagalt$ellip$var$VAR%in%rownames(res.cagalt$quanti.var$coord)[i]),1:ncol(res.cagalt$quanti.var$coord)]),bary=FALSE,axes=axes)
+				coord.ellip <- coord.ellipse(cbind.data.frame(res.cagalt$ellip$var[which(res.cagalt$ellip$var$VAR%in%rownames(res.cagalt$quanti.var$coord)[i]),ncol(res.cagalt$quanti.var$coord)+1],res.cagalt$ellip$var[which(res.cagalt$ellip$var$VAR%in%rownames(res.cagalt$quanti.var$coord)[i]),1:ncol(res.cagalt$quanti.var$coord)]),bary=FALSE,axes=axes)
 				lines(coord.ellip$res[,2],coord.ellip$res[,3],lty=2,lwd=2,col="black")
 			}
 		}
@@ -195,7 +195,7 @@ plot.CaGalt<-function(x, axes = c(1, 2), choix = c("ind", "freq", "quali.var", "
 				}
 			}
 		}
-		titre = title
+		titre <- title
 		if (is.null(title)) titre <- "Categories factor map (CaGalt)"
 		if ((new.plot) & !nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new(width = min(14, max(8, 8 * (xlim[2] - xlim[1])/(ylim[2] - ylim[1]))), height = 8)
       		if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta", "darkgray", "darkgoldenrod", "darkgreen", "violet", "turquoise", "orange", "lightpink", "lavender", "yellow", "lightgreen", "lightgrey", "lightblue", "darkkhaki", "darkmagenta", "darkolivegreen", "lightcyan", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "lightgray", "lightsalmon", "lightyellow", "maroon"))
@@ -208,22 +208,22 @@ plot.CaGalt<-function(x, axes = c(1, 2), choix = c("ind", "freq", "quali.var", "
 		else labe <- rep("", nrow(coord.var))
 		coll <- rep(col.quali, nrow(coord.var))
 		if (!is.null(select)) {
-			if (is.numeric(unselect)) coll[!((1:length(coll)) %in% selection)] = rgb(t(col2rgb(coll[!((1:length(coll)) %in% selection)])), alpha = 255 * (1 - unselect), maxColorValue = 255)
-			else coll[!((1:length(coll)) %in% selection)] = unselect
+			if (is.numeric(unselect)) coll[!((1:length(coll)) %in% selection)] <- rgb(t(col2rgb(coll[!((1:length(coll)) %in% selection)])), alpha = 255 * (1 - unselect), maxColorValue = 255)
+			else coll[!((1:length(coll)) %in% selection)] <- unselect
 			labe[!((1:length(labe)) %in% selection)] <- ""
 		}
 		ipch <- rep(17, nrow(coord.var))
 		fonte <- rep(1, nrow(coord.var))
 		if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
 		if (any(labe != "")) {
-			if (autoLab == "auto") autoLab = (length(which(labe != "")) < 50)
+			if (autoLab == "auto") autoLab <- (length(which(labe != "")) < 50)
             		if (autoLab == TRUE) autoLab(coo[labe != "", 1], y = coo[labe != "", 2], labels = labe[labe != ""], col = coll[labe != ""], font = fonte[labe != ""], shadotext = shadowtext, ...)
             		if (autoLab == FALSE) text(coo[labe != "", 1], y = coo[labe != "", 2], labels = labe[labe != ""], col = coll[labe != ""], font = fonte[labe != ""], pos = 3, ...)
 		}
 		if (!shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
 		if (conf.ellip) {
       			for(i in 1:nrow(res.cagalt$quali.var$coord)){
-				coord.ellip=coord.ellipse(cbind.data.frame(res.cagalt$ellip$var[which(res.cagalt$ellip$var$VAR%in%rownames(res.cagalt$quali.var$coord)[i]),ncol(res.cagalt$quali.var$coord)+1],res.cagalt$ellip$var[which(res.cagalt$ellip$var$VAR%in%rownames(res.cagalt$quali.var$coord)[i]),1:ncol(res.cagalt$quali.var$coord)]),bary=FALSE,axes=axes)
+				coord.ellip <- coord.ellipse(cbind.data.frame(res.cagalt$ellip$var[which(res.cagalt$ellip$var$VAR%in%rownames(res.cagalt$quali.var$coord)[i]),ncol(res.cagalt$quali.var$coord)+1],res.cagalt$ellip$var[which(res.cagalt$ellip$var$VAR%in%rownames(res.cagalt$quali.var$coord)[i]),1:ncol(res.cagalt$quali.var$coord)]),bary=FALSE,axes=axes)
 				lines(coord.ellip$res[,2],coord.ellip$res[,3],lty=2,lwd=2,col="black")
 			}
 		}
