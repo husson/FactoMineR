@@ -303,7 +303,8 @@ if (kk<Inf){
   if (vec) data.clust <- as.data.frame(data.clust[, -2])
 if (description){
      if (!inherits(res.sauv, "CA")&!(vec)){
-	   desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w.init)
+	   if (!is.null(res.sauv$call$row.w.init)) desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w.init)
+	   else desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w)
 	 }
     else {
       if ((vec) | (is.null(res.sauv$call$quanti.sup)& is.null(res.sauv$call$quali.sup))) desc.var <- descfreq(data.clust[,-which(sapply(data.clust,is.factor))], data.clust[,ncol(data.clust)], proba = proba)
