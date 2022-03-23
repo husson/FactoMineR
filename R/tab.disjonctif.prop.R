@@ -7,6 +7,10 @@ tab.disjonctif.prop <- function (tab,seed=NULL,row.w=NULL)
 
 	if (is.null(row.w)) row.w <- rep(1/nrow(tab),nrow(tab))
     tab <- as.data.frame(tab)
+	isQuali <- which(!sapply(tab,is.numeric))
+	if (length(isQuali)==0) return(tab)
+# ajout car pb dans FavoInvestigate
+	for (k in isQuali) tab[,k] <- as.factor(tab[,k])
     modalite.disjonctif <- function(i) {
         moda <- tab[, i]
         nom <- names(tab)[i]
