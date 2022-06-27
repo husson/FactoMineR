@@ -45,6 +45,5 @@ dimdesc <- function (res, axes = 1:3, proba = 0.05)
 			result[[k]]$call <- NULL
         }
     }
-    class(result) <- c("dimdesc", "list")
     return(result)
 }
