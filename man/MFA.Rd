@@ -73,6 +73,7 @@ Becue-Bertaut, M. and Pages, J. (2008) Multiple factor analysis and clustering o
 
 
 \examples{
+\dontrun{
 data(wine)
 res <- MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
     ncp=5, name.group=c("orig","olf","vis","olfag","gust","ens"),
@@ -80,7 +81,6 @@ res <- MFA(wine, group=c(2,5,3,10,9,2), type=c("n",rep("s",5)),
 summary(res)
 barplot(res$eig[,1],main="Eigenvalues",names.arg=1:nrow(res$eig))
 
-\dontrun{
 #### Confidence ellipses around categories per variable
 plotellipses(res)
 plotellipses(res,keepvar="Label") ## for 1 variable

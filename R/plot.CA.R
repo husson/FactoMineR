@@ -326,7 +326,8 @@ plot.CA <- function (x, axes = c(1, 2),
         else{text <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1]), size = ggoptions_default$size, color = df_ind[,4], hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25, fontface = df_ind[,6])}
       }
       if(habillage != "none"){
-        if(class(habillage) == "numeric") habillage <- colnames(res.ca$call$Xtot)[habillage]
+        if (inherits(habillage, "numeric")) habillage <- colnames(res.ca$call$Xtot)[habillage]
+#		if(class(habillage) == "numeric") habillage <- colnames(res.ca$call$Xtot)[habillage]
         if (habillage %in% liste.quali){
         gg_graph <- gg_graph +
             geom_point(aes(x=df_row[,2], y=df_row[,3], color = (res.ca$call$Xtot)[rownames(df_row),habillage]), shape = df_row[,5]) + 

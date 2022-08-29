@@ -13,7 +13,8 @@ plot.HCPC <- function(x, axes=c(1,2), choice="3D.map", rect=TRUE, draw.tree=TRUE
     names.ind <- row.names(X)
     X$clust <- as.numeric(X$clust)
     nb.clust <- max(X$clust)
-    if(class(t.level)=="character"){
+#    if(class(t.level)=="character"){
+    if(inherits(t.level,"character")){
       if(t.level=="centers") t.level <- nb.clust
       if(t.level=="all") t.level <- nrow(merge)+1
     }

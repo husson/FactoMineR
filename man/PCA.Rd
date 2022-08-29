@@ -56,11 +56,13 @@ res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup=13)
 ## barplot(res.pca$eig[,1],main="Eigenvalues",names.arg=1:nrow(res.pca$eig))
 summary(res.pca)
 plot(res.pca,choix="ind",habillage=13)
+\dontrun{
+## To describe the dimensions
 dimdesc(res.pca, axes = 1:2)
+
 ## To draw ellipses around the categories of the 13th variable (which is categorical)
 plotellipses(res.pca,13)
 
-\dontrun{
 ## Graphical interface
 require(Factoshiny)
 res <- Factoshiny(decathlon)
