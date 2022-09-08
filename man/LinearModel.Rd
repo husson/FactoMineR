@@ -31,7 +31,7 @@ LinearModel(formula, data, na.action = na.omit, type = c("II","III", 2, 3),
 \details{
 The Anova function of the package car is used to calculate the F-tests.
 
-The t-tests are obtained using the contrasts "contr.sum" which means that ‘sum to zero contrasts’.
+The t-tests are obtained using the contrasts "contr.sum" which means that 'sum to zero contrasts'.
 
 A stepwise procedure (using both backword and forward selections) is performed to select a 
  model if selection="AIC" or selection="BIC".}
