@@ -2,17 +2,17 @@
 
 \alias{LinearModel}
 
-\title{Analysis of variance with the contrasts sum (the sum of the coefficients is 0)}
+\title{Linear Model with AIC or BIC selection, and with the contrasts 
+     sum (the sum of the coefficients is 0) if any categorical variables}
 
 \description{
-Analysis of variance with the contrasts sum (the sum of the coefficients is 0)
-\cr
+Linear Model with AIC or BIC selection, and with the contrasts sum (the sum of the coefficients is 0) if any categorical variables \cr
 Test for all the coefficients\cr
 Handle missing values
 }
 
 \usage{
-LinearModel(formula, data, na.action = na.omit, type = c("II","III", 2, 3), 
+LinearModel(formula, data, na.action = na.omit, type = c("III","II", 3, 2), 
        selection=c("none","aic","bic"), ...)
 }
 
@@ -20,7 +20,7 @@ LinearModel(formula, data, na.action = na.omit, type = c("II","III", 2, 3),
   \item{formula}{the formula for the model 'y~x1+x2+x1:x2'}
   \item{data}{a data-frame}
   \item{na.action}{(where relevant) information returned by model.frame on the special handling of NAs.}
-  \item{type}{type of test, "II", "III", 2, or 3. Roman numerals are equivalent to the 
+  \item{type}{type of test, "III", "II", 3 or 2. Roman numerals are equivalent to the 
         corresponding Arabic numerals.}
   \item{selection}{a string that defines the model selection according to
         "BIC" for Bayesian Information Criterion or "AIC" for Akaike Information Criterion; 
@@ -56,6 +56,8 @@ The outouts
 data(senso)
 res <- LinearModel(Score~ Product + Day , data=senso, selection="none")
 res
+## Perform means comparison
+meansComp(res,spec="Product")
 
 ## Example two-way anova with interaction
 data(senso)

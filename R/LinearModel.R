@@ -1,4 +1,4 @@
-LinearModel <- function (formula, data, na.action = na.omit, type = c("II","III", 2, 3), selection=c("none","aic","bic"), ...) 
+LinearModel <- function (formula, data, na.action = na.omit, type = c("III", "II", 3, 2), selection=c("none","aic","bic"), ...) 
 {
   old.contr <- options()$contrasts
   on.exit(options(contrasts = old.contr))
@@ -24,12 +24,16 @@ LinearModel <- function (formula, data, na.action = na.omit, type = c("II","III"
   arg <- list(...)
   arg <- c(arg, list(formula = formula, data = don, na.action = na.action))
   modele <- do.call(lm, arg)
+	  aic <- extractAIC(modele)[2]
+	  bic <- extractAIC(modele, k=log(nrow(data)))[2]
 #  modele <- do.call(aov, arg)
   if ((selection=="bic") | (selection=="aic")){
 	sumLmComp <- summary.lm(modele)
 	sumLmComp$call <- cl
 	sumLmComp$call[[1]]=as.name("lm")
 	sumLmComp$call <- sumLmComp$call[-length(sumLmComp$call)]
+	sumLmComp$aic <- aic
+	sumLmComp$bic <- bic
 #	cl[[1]] <- quote(lm)  # ne pas mettre car pb si variable quali
 #	if ("selection"%in%names(cl)) cl <- cl[-which(names(cl)%in%"selection")]
 	clComp <- cl
@@ -42,6 +46,8 @@ LinearModel <- function (formula, data, na.action = na.omit, type = c("II","III"
       arg <- list(...)
       arg <- c(arg, list(formula = as.formula(modSelect$call$formula), data = don, na.action = na.action))
 	  modele <- do.call(lm, arg)
+	  aic <- extractAIC(modele)[2]
+	  bic <- extractAIC(modele, k=log(nrow(data)))[2]
 	}
   }
   test.F <- car::Anova(modele, type = type)
@@ -55,6 +61,8 @@ LinearModel <- function (formula, data, na.action = na.omit, type = c("II","III"
   sumLm$call <- cl
   sumLm$call$selection <- "none"
   sumLm$call[[1]] <- as.name("lm")
+  sumLm$aic <- aic
+  sumLm$bic <- bic
   test.T <- sumLm$coef
   cov.mat <- vcov(modele)
   facteurs.old <- facteurs <- as.list(rownames(attr(modele$terms, "factors"))[-1])

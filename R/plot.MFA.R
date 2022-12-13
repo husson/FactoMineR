@@ -437,6 +437,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       if (length(which(apply(res.mfa$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var))>0) col[which(apply(res.mfa$quanti.var$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var)] <- "transparent"
       if(graph.type=="classic"){
         for (v in seq_len(nrow(coord.var))) {
+	     if (!(is.nan(coord.var[v,1])|is.infinite(coord.var[v,1]))){
           arrows(0, 0, coord.var[v, 1], coord.var[v, 2], length = 0.1, angle = 15, code = 2, col = col[v])
           if (lab.var) {
             if (abs(coord.var[v,1])>abs(coord.var[v,2])){
@@ -448,6 +449,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
               else posi<-c(posi,1)
             }
           }
+		 }
         }
       }
     }
@@ -460,6 +462,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       if (length(which(apply(res.mfa$quanti.var.sup$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var))>0) col[nrow(coo)-nrow(coord.quanti)+which(apply(res.mfa$quanti.var.sup$cos2[, axes,drop=FALSE],1,sum, na.rm = TRUE) < lim.cos2.var)]<-"transparent"
       if(graph.type=="classic"){  
         for (q in seq_len(nrow(coord.quanti))) {
+	     if (!(is.nan(coord.quanti[q,1])|is.infinite(coord.quanti[q,1]))){
           arrows(0, 0, coord.quanti[q, 1], coord.quanti[q, 2], length = 0.1, angle = 15, code = 2, lty = 2, col=col[nrow(coo)-nrow(coord.quanti)+q],...)
           if (lab.var) {
             if (abs(coord.quanti[q,1])>abs(coord.quanti[q,2])){
@@ -471,12 +474,17 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
               else posi<-c(posi,1)
             }
           }
+		 }
         }
       }
     }
     if(graph.type=="classic"){
       if (autoLab=="auto") autoLab <- (length(labe)-sum(col=="transparent")<50)
-      if (autoLab==FALSE) text(coo[, 1], y = coo[, 2], labels = labe, pos = posi, col = col,...)
+	  AGarder <- which(!(is.nan(coo[,1])|is.infinite(coo[,1])))
+	  coo <- coo[AGarder,]
+	  col <- col[AGarder]
+	  labe <- labe[AGarder]
+      if (autoLab==FALSE) text(coo[, 1], y = coo[, 2], labels = labe, pos = posi, col = col,...) ### pas mettre sur posi
       if (autoLab==TRUE) autoLab(coo[which(col!="transparent"), 1], y = coo[which(col!="transparent"), 2], labels = labe[which(col!="transparent")], col=col[which(col!="transparent")], shadotext=shadowtext,...)
       par(mar = c(5, 4, 4, 2) + 0.1)
     }
@@ -496,6 +504,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         df_var <- data.frame(df_var,col,transparency_var)
         df_var[,4] <- as.factor(df_var[,4])
         df_var <- df_var[which(df_var[,4] != "transparent"),]
+        df_var <- df_var[which(!(is.nan(df_var[,2])|is.infinite(df_var[,2]))),]   # suppress variable with standard deviation = 0
       gg_graph <- ggplot() + 
         coord_fixed(ratio = 1) + 
         geom_line(aes(x=x, y=y), data=data.frame(x=-1:1,y=0),lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) + 
@@ -512,6 +521,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       else{text <- geom_text(aes(x=df_var[,2], y=df_var[,3],label=df_var[,1], color = df_var[,4]), size = ggoptions_default$size, hjust = (-sign(df_var[,2])+1)/2, vjust = -sign(df_var[,3])*0.75+0.25,show.legend = FALSE)}
       }
       if(habillage=="none"){
+        df_var <- df_var[which(!(is.nan(df_var[,2])|is.infinite(df_var[,2]))),]
         gg_graph <- ggplot() + 
           #aes(x=df_var[,2], y=df_var[,3]) +
           coord_fixed(ratio = 1) + 

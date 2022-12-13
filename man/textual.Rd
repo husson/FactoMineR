@@ -14,20 +14,24 @@ textual(tab, num.text, contingence.by=1:ncol(tab),
 }
 
 \arguments{
-  \item{tab}{a data frame with one textual variable}
-  \item{num.text}{indice of the textual variable}
-  \item{contingence.by}{a list with the indices of the variables for which a contingence table is calculated by default a contingence
-  table is calculated for all the variables (except the textual one). A contingence table can also be calculated for couple of variables.
-  If \code{contingence.by} is equal to num.text, then the contingence table is calculated for each row of the data table}
-  \item{maj.in.min}{boolean, if TRUE majuscule are transformed in minuscule}
-  \item{sep.word}{a string with all the characters which correspond to separator of words}
+\item{tab}{a data frame with one textual variable}
+\item{num.text}{indice of the textual variable}
+\item{contingence.by}{a list with the indices of the variables for which a contingence 
+table is calculated by default a contingence table is calculated for all the variables 
+(except the textual one). A contingence table can also be calculated for couple of variables.
+If \code{contingence.by} is equal to num.text, then the contingence table is calculated 
+for each row of the data table}
+\item{maj.in.min}{boolean, if TRUE majuscule are transformed in minuscule}
+\item{sep.word}{a string with all the characters which correspond to separator of words}
 }
 
 \value{
 Returns a list including:
-  \item{cont.table}{the contingence table with in rows the categories of the categorical variables (or the couple of categories), and in column the words, 
-  and in each cell the number of occurence}
-  \item{nb.words}{a data.frame with all the words and for each word, the number of lists in which it is present, and the number of occurence}
+\item{cont.table}{the contingence table with in rows the categories of the categorical variables 
+(or the couple of categories), and in column the words, 
+and in each cell the number of occurence}
+\item{nb.words}{a data.frame with all the words and for each word, the number of lists in which 
+it is present, and the number of occurence}
 }
 
 \author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
