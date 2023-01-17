@@ -294,7 +294,9 @@ if (!is.null(tab.comp)){
       data.group.sup.indice <- (ncol(data)+1):(ncol(data)+ncol(data.group.sup))
       data.pca <- cbind.data.frame(data,data.group.sup)
     }
-    ncp.tmp <- min(nb.actif-1, ncol(data))
+# modif 2023-01-16
+#    ncp.tmp <- min(nb.actif-1, ncol(data))
+    ncp.tmp <- min(nb.actif-1, ncol(data)-sum((group[group.actif])[type=="n"]))
     ind.var <- 0
     ind.quali <- NULL
     for (g in 1:nbre.group) {
@@ -573,7 +575,7 @@ tmp <- tmp*row.w
             summary.n <- rbind(summary.n, statg)			
         }
     }
-   eig <- res.globale$eig
+   eig <- res.globale$eig[1:ncp.tmp,]
   ## CHANGED THIS!!!! ---------------
   # nom.ligne <- NULL
   # for (i in 1:nbre.ind) {
