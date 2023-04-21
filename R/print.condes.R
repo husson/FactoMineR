@@ -10,7 +10,7 @@ print.condes<-function(x, ...){
     print(x$quali)
   }
   if (!is.null(x$category)){
-  cat("\nLink between variable abd the categories of the categorical variables\n================================================================\n")
+  cat("\nLink between variable and the categories of the categorical variables\n================================================================\n")
     print(x$category)
   }
 }
