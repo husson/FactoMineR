@@ -35,7 +35,8 @@ tab.disjonctif <- function (tab){
       if (is.numeric(tab[,1])){
   	    return(tab)
 	  } else { 
-	    tabdisj <- .Call("disjoVar", as.integer(data.matrix(tab)),
+#	    tabdisj <- .Call("disjoVar", as.integer(data.matrix(tab)),
+	    tabdisj <-  .Call(C_disjoVar, as.integer(data.matrix(tab)),
                      as.integer(c(nrow(tab),nlevels(tab[,1]))))
 	    rownames(tabdisj) <- rownames(tab)
 	    colnames(tabdisj) <- levels(tab[,1])
@@ -49,7 +50,8 @@ tab.disjonctif <- function (tab){
 	  } else {
         nomMod <- lapply(tab, levels)
 	    nomMod[isQuanti] <- names(nomMod[isQuanti]) 
-        tabdisj <- .Call("disjoMat", as.integer(data.matrix(tab[,isQuali,drop=FALSE])),
+#        tabdisj <- .Call("disjoMat", as.integer(data.matrix(tab[,isQuali,drop=FALSE])),
+        tabdisj <-  .Call(C_disjoMat, as.integer(data.matrix(tab[,isQuali,drop=FALSE])),
                      as.integer(dim(tab[,isQuali,drop=FALSE])),
                      as.integer(unlist(lapply(tab[,isQuali,drop=FALSE], nlevels))))
 	  }

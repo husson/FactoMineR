@@ -18,8 +18,7 @@ AovSum(formula, data, na.action = na.omit, ...)
 \arguments{
   \item{formula}{the formula for the model 'y~x1+x2+x1:x2'}
   \item{data}{a data-frame}
-  \item{na.action}{(where relevant) information returned by model.frame 
-    on the special handling of NAs.}
+  \item{na.action}{(where relevant) information returned by model.frame on the special handling of NAs.}
   \item{\dots}{other arguments, cf the function \code{lm}}
 }
 

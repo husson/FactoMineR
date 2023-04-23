@@ -296,7 +296,7 @@ if (!is.null(tab.comp)){
     }
 # modif 2023-01-16
 #    ncp.tmp <- min(nb.actif-1, ncol(data))
-    ncp.tmp <- min(nb.actif-1, ncol(data)-sum((group[group.actif])[type=="n"]))
+    ncp.tmp <- min(nb.actif-1, ncol(data)-sum((group[group.actif])[type[group.actif]=="n"]))
     ind.var <- 0
     ind.quali <- NULL
     for (g in 1:nbre.group) {

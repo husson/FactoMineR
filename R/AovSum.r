@@ -12,6 +12,9 @@ AovSum <- function (formula, data, na.action = na.omit, ...)
     data <- eval(mf, parent.frame())
   }
   data <- as.data.frame(data)
+  data <- droplevels(data)
+  is.quali <- which(!unlist(lapply(data,is.numeric)))
+  data[,is.quali] <- lapply(data[,is.quali,drop=FALSE],as.factor)
   options(contrasts = c("contr.sum", "contr.sum"))
   don = data
   arg <- list(...)
