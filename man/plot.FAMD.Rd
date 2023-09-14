@@ -60,7 +60,7 @@ res <- FAMD(geomorphology)
 plot(res,choix="ind",habillage=4)
 }
 }
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{FAMD}}}
 

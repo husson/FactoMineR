@@ -45,7 +45,7 @@ To stop the interactive plot, click on the title (or in the top of the graph).\c
 Return the names of the points for which the partial points are drawn.
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{MFA}}, \code{\link{plot.MFA}}}
 

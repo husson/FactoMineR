@@ -19,7 +19,7 @@ meansComp(object, spec, graph=TRUE, ...)
 \item{\dots}{other arguments, cf the function \code{emmeans}.}
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{plot.meansComp}}}
 

@@ -44,7 +44,7 @@ The plots may be improved using the argument autolab, modifying the size of the 
 \references{
 Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
 }
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, Jeremy Mazet}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}, Jeremy Mazet}
 
 \seealso{ \code{\link{print.PCA}}, \code{\link{summary.PCA}}, \code{\link{plot.PCA}}, \code{\link{dimdesc}},\cr
 \href{https://www.youtube.com/watch?v=CTSbxU6KLbM&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=3}{Video showing how to perform PCA with FactoMineR}}

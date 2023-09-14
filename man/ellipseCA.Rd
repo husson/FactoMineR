@@ -49,7 +49,7 @@ Thus \code{nbsample} new datasets are drawn and projected as supplementary rows 
 Lebart, L., Morineau, A. and Piron, M. (1995) Statistique exploratoire multidimensionnelle, \emph{Dunod}.
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{plot.CA}}, \code{\link{CA}}}
 

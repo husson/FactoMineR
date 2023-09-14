@@ -18,7 +18,7 @@ Predict the projection of new rows with Factor Analysis of Mixed Data.
   \item{\dots}{Other options.}
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{FAMD}}}
 

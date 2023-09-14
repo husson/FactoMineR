@@ -37,7 +37,7 @@ graph.var(x, axes = c(1, 2),
 Returns the variables factor map.
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{PCA}}, \code{\link{MFA}}, \code{\link{MCA}}, \code{\link{DMFA}}, \code{\link{HMFA}}}
 

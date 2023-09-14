@@ -20,7 +20,7 @@ reconst(res, ncp=NULL)}
 Returns a data frame with the number of individuals and the number of variables used for the PCA, CA or MFA
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, Julie Josse\email{Julie.Josse@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}, Julie Josse\email{Julie.Josse@agrocampus-ouest.fr}}
 
 \seealso{ \code{\link{PCA}},\code{\link{CA}}, \code{\link{MFA}}}
 

@@ -34,7 +34,7 @@ HMFA(X,H,type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE,
 \references{Le Dien, S. & Pages, J. (2003) Hierarchical Multiple factor analysis: application to the comparison of sensory profiles, \emph{Food Quality and Preferences}, \bold{18 (6)}, 453-464.
 }
 
-\author{Sebastien Le, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Sebastien Le, Francois Husson \email{francois.husson@institut-agro.fr}}
 \seealso{ \code{\link{print.HMFA}}, \code{\link{plot.HMFA}}, \code{\link{dimdesc}}}
 
 \examples{ 

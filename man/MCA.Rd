@@ -51,7 +51,7 @@ The plots may be improved using the argument autolab, modifying the size of the 
 Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Julie Josse, Jeremy Mazet}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}, Julie Josse, Jeremy Mazet}
 
 \seealso{ \code{\link{plotellipses}}, \code{\link{summary.MCA}},\code{\link{print.MCA}}, \code{\link{plot.MCA}}, \code{\link{dimdesc}},\cr
 \href{https://www.youtube.com/watch?v=reG8Y9ZgcaQ&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=5}{Video showing how to perform MCA with FactoMineR}}

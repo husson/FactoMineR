@@ -41,7 +41,7 @@ Returns the individuals factor map.
 Pages J. (2004). Analyse factorielle de donnees mixtes. Revue Statistique Appliquee.  LII (4). pp. 93-111.
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{print.FAMD}}, \code{\link{summary.FAMD}}, \code{\link{plot.FAMD}},\cr
 \href{https://www.youtube.com/watch?v=FKB96VGUgUE&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=8}{Video showing how to perform FAMD with FactoMineR}}

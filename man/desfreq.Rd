@@ -21,7 +21,7 @@ descfreq(donnee, by.quali = NULL, proba = 0.05)}
 Returns a list with the characterization of each rows or each group of the \code{by.quali}. A test corresponding to the hypergeometric distribution is performed and the probability to observe a more extreme value than the one observed is calculated. For each row (or category), each of the columns characterising the row are sorted in ascending order of p-value.
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 
 \seealso{ \code{\link{catdes}}, \code{\link{condes}}, \code{\link{textual}}}

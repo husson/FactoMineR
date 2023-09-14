@@ -1,4 +1,4 @@
-catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
+catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.action="NA"){
 
     moy.p <- function(V, fac=NULL, poids, na.rm=TRUE) {
 		poids[is.na(V)] <- 0
@@ -59,7 +59,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
     for (i in 1:nb.quali){
 	  Table <- t(sweep(tab.disjonctif(donnee[,num.var]),1,row.w,FUN="*"))%*%tab.disjonctif(donnee[,quali[i]])
 ### Ajout 04/07/2023
-	  if (tolower(na.method)=="na.omit" & colnames(Table)[ncol(Table)]=="NA") Table <- Table[,-ncol(Table)]
+	  if (na.action=="na.omit" & colnames(Table)[ncol(Table)]=="NA") Table <- Table[,-ncol(Table)]
 ### Fin ajout 04/07/2023
 	marge.li <- apply(Table,1,sum) # row margin can be different if NA in the variable
     marge.col <- apply(Table,2,sum)
@@ -157,7 +157,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
 	  res$quanti <- result
 	}
   }
-  res$call <- list(num.var=num.var, proba=proba, row.w=row.w, X=donnee, na.method=na.method)
+  res$call <- list(num.var=num.var, proba=proba, row.w=row.w, X=donnee, na.action=na.action)
   options(old.warn)
 class(res) <- c("catdes", "list")
   return(res)

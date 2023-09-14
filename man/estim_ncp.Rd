@@ -25,7 +25,7 @@ Returns ncp the best number of dimensions to use (find the minimum or the first 
 mean error for each dimension tested
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, Julie Josse\email{Julie.Josse@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}, Julie Josse\email{Julie.Josse@agrocampus-ouest.fr}}
 
 \references{Josse, J. and Husson, F. (2012). Selecting the number of components in PCA using cross-validation approximations. Computational Statistics and Data Analysis, 56, 1869-1879.
 }

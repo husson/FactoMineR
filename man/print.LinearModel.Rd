@@ -23,7 +23,7 @@ for the complete model is first given, then all the results are given for the se
 (global F-test, the F-tests for main effects and interaction, the t-tests)
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{LinearModel}}}
 

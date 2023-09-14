@@ -84,7 +84,7 @@ high.col.quanti = "red3", #for quantitative variables, high color to be used\cr
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{PCA}}}
 

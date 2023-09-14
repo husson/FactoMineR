@@ -26,7 +26,7 @@ Predicted values based on LinearModel object.
 See the help of \code{\link{predict.lm}} function.
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{LinearModel}}}
 

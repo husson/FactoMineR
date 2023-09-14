@@ -35,7 +35,7 @@ variables and supplementary categorical variables.
 Returns the individuals factor map and the variables factor map, the partial variables representation and the groups factor map.
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{DMFA}}}
 

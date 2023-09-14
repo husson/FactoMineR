@@ -36,7 +36,7 @@ Draw the General Procrustes Analysis (GPA) map.
 Returns the General Procrustes Analysis map.
 }
 
-\author{Elisabeth Morand, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Elisabeth Morand, Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{GPA}}}
 

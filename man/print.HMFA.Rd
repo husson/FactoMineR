@@ -19,7 +19,7 @@ Print the Hierarchical Multiple Factor Analysis results.
   \item{\dots}{further arguments passed to or from other methods}
 }
 
-\author{Sebastien Le, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Sebastien Le, Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{HMFA}}, \code{\link{write.infile}}}
 

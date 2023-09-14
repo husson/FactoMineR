@@ -66,7 +66,7 @@ Escofier, B. and Pages, J. (1994) Multiple Factor Analysis (AFMULT package). \em
 Becue-Bertaut, M. and Pages, J. (2008) Multiple factor analysis and clustering of a mixture of quantitative, categorical and frequency data. \emph{Computational Statistice and Data Analysis}, 52, 3255-3268.
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}, J. Mazet}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}, J. Mazet}
 
 \seealso{ \code{\link{print.MFA}}, \code{\link{summary.MFA}}, \code{\link{plot.MFA}}, \code{\link{dimdesc}},\cr
 \href{https://www.youtube.com/watch?v=g5_hM93e8HM&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=6}{Video showing how to perform MFA with FactoMineR}}

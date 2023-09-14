@@ -19,7 +19,7 @@ Print the Multiple Correspondance Analysis (spMCA) results.
   \item{\dots}{further arguments passed to or from other methods}
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{MCA}}, \code{\link{write.infile}}}
 

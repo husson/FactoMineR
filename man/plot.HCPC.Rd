@@ -48,7 +48,7 @@
   Returns the chosen plot.
 }
 
-\author{Guillaume Le Ray, Quentin Molto, Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Guillaume Le Ray, Quentin Molto, Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{HCPC}}}
 
