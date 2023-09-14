@@ -29,7 +29,7 @@ Returns the objects
   \item{best}{the best model}
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{lm}}}
 

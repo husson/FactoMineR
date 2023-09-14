@@ -42,7 +42,7 @@ Returns a list including:
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{plot.DMFA}}, \code{\link{dimdesc}}}
 

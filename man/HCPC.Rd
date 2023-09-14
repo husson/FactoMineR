@@ -81,7 +81,7 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   by cluster (2D).
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}, Guillaume Le Ray, Quentin Molto}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}, Guillaume Le Ray, Quentin Molto}
 
 \seealso{ \code{\link{plot.HCPC}}, \code{\link{catdes}},\cr
 \href{https://www.youtube.com/watch?v=4XrgWmN9erg&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=7}{Video showing how to perform clustering with FactoMineR}}

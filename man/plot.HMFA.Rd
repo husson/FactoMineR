@@ -39,7 +39,7 @@
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Jeremy Mazet, Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{HMFA}}}
 

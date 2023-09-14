@@ -69,7 +69,7 @@ The \code{selectMod} argument can be used in order to select the categories that
 Returns the individuals factor map and the variables factor map.
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{MCA}}}
 

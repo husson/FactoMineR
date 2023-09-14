@@ -18,7 +18,7 @@ Predict the projection of new rows with Multiple Correspondence Analysis.
   \item{\dots}{Other options.}
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{MCA}}}
 

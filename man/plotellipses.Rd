@@ -64,7 +64,7 @@ Return a graph with the ellipses.
 If only one variable is chosen, the graph is different.
 }
 
-\author{Pierre-Andre Cornillon, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Pierre-Andre Cornillon, Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{MCA}}, \code{\link{PCA}}}
 

@@ -27,7 +27,7 @@ Returns a list including:
 \references{
 Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
 }
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{PCA}}, \code{\link{CA}}, \code{\link{MCA}}, \code{\link{MFA}}, \code{\link{HMFA}},\cr
 \href{https://www.youtube.com/watch?v=Uhw-1NilmAk&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=9}{Video showing how to use this function}}

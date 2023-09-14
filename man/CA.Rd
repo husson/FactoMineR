@@ -49,7 +49,7 @@ Husson, F., Le, S. and Pages, J. (2009). Analyse de donnees avec R, \emph{Presse
 Husson, F., Le, S. and Pages, J. (2010). Exploratory Multivariate Analysis by Example Using R, \emph{Chapman and Hall}.
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr},Jeremy Mazet}
+\author{Francois Husson \email{francois.husson@institut-agro.fr},Jeremy Mazet}
 
 \seealso{ \code{\link{print.CA}}, \code{\link{summary.CA}}, \code{\link{ellipseCA}}, \code{\link{plot.CA}}, \code{\link{dimdesc}},\cr
 \href{https://www.youtube.com/watch?v=Y-bXsUNX5hA&list=PLnZgp6epRBbTsZEFXi_p6W48HhNyqwxIu&index=4}{Video showing how to perform CA with FactoMineR}}

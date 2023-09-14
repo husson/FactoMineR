@@ -38,7 +38,7 @@ The degree of transparency of the color also indicates the significance of the d
 
 }
 
-\author{Guillaume Le Ray, Camille Chanial, Elise Dumas, Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Guillaume Le Ray, Camille Chanial, Elise Dumas, Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{catdes}}}
 

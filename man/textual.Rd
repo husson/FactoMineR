@@ -34,7 +34,7 @@ and in each cell the number of occurence}
 it is present, and the number of occurence}
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{CA}}, \code{\link{descfreq}}}
 

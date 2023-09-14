@@ -19,7 +19,7 @@ Print the Correspondance Analysis (CA) results.
   \item{\dots}{further arguments passed to or from other methods}
 }
 
-\author{Jeremy Mazet, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Jeremy Mazet, Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{CA}}, \code{\link{write.infile}}}
 

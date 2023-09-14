@@ -24,6 +24,6 @@ if you do not want the results for individuals}
   \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{PCA}}}

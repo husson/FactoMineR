@@ -17,7 +17,7 @@ Print the results of the function catdes.
   \item{\dots}{further arguments passed to or from other methods}
 }
 
-\author{Vincent Guyader, Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Vincent Guyader, Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{catdes}}}
 

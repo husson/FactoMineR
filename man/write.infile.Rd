@@ -23,7 +23,7 @@ of file.}
 \item{nb.dec}{number of decimal printed, by default 4}
 }
 
-\author{Francois Husson \email{Francois.Husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \examples{
 \dontrun{

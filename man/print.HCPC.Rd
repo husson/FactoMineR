@@ -19,7 +19,7 @@ Print the Hierarchical Clustering on Principal Components (HCPC) results.
   \item{\dots}{further arguments passed to or from other methods}
 }
 
-\author{Francois Husson \email{husson@agrocampus-ouest.fr}}
+\author{Francois Husson \email{francois.husson@institut-agro.fr}}
 
 \seealso{ \code{\link{HCPC}}, \code{\link{write.infile}}}
 
