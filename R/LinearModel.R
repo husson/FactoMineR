@@ -13,9 +13,9 @@ LinearModel <- function (formula, data, na.action = na.omit, type = c("III", "II
   }
   type <- type[1]
   data <- as.data.frame(data)
-  data <- droplevels(data)
   is.quali <- which(!unlist(lapply(data,is.numeric)))
   data[,is.quali] <- lapply(data[,is.quali,drop=FALSE],as.factor)
+  data <- droplevels(data)
   options(contrasts = c("contr.sum", "contr.sum"))
   don <- data
   if (is.null(selection)) selection <- "none"

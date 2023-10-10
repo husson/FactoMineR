@@ -2,7 +2,7 @@ Package: FactoMineR
 Version: 2.9
 Title: Multivariate Exploratory Data Analysis and Data Mining
 Author: Francois Husson, Julie Josse, Sebastien Le, Jeremy Mazet
-Maintainer: Francois Husson <francois.husson@institut-agro.fr>
+Maintainer: Francois Husson <francois.husson@agrocampus-ouest.fr>
 Depends: R (>= 4.0)
 Imports: car,cluster,DT,ellipse,emmeans,flashClust,graphics,grDevices,lattice,leaps,MASS,multcompView,scatterplot3d,stats,utils,ggplot2,ggrepel
 Suggests: missMDA,knitr,Factoshiny,markdown

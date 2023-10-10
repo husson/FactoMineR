@@ -12,7 +12,7 @@ plot.meansComp <- function(x,...){
 #if (graph.type==1){
   p <- ggplot2::ggplot(aux, ggplot2::aes(x=emmean, y=Effect,col=Letters),...) + 
     ggplot2::geom_errorbar(ggplot2::aes(xmin=lower.CL, xmax=upper.CL), width=.1) +
-    ggplot2::geom_line() + ggplot2::geom_point() + ggplot2::theme(legend.position="none") +
+    ggplot2::geom_point() + ggplot2::theme(legend.position="none") +
     ggplot2::geom_text(ggplot2::aes(x=upper.CL+stats::offset(.1), y = Effect,label=Letters,col=Letters),hjust=0) +
 	ggplot2::ylab(nameEffect) + ggplot2::xlab("Adjust mean")
 #}

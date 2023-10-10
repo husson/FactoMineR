@@ -5,18 +5,19 @@ print.MCA <- function (x, file = NULL, sep = ";", ...){
     cat("The analysis was performed on", nrow(res.mca$call$X),
         "individuals, described by", ncol(res.mca$call$X), "variables\n")
     cat("*The results are available in the following objects:\n\n")
-    res <- array("", c(22, 2), list(1:22, c("name", "description")))
+    res <- array("", c(23, 2), list(1:23, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues")
     res[2, ] <- c("$var", "results for the variables")
     res[3, ] <- c("$var$coord", "coord. of the categories")
     res[4, ] <- c("$var$cos2", "cos2 for the categories")
     res[5, ] <- c("$var$contrib", "contributions of the categories")
     res[6, ] <- c("$var$v.test", "v-test for the categories")
-    res[7, ] <- c("$ind", "results for the individuals")
-    res[8, ] <- c("$ind$coord", "coord. for the individuals")
-    res[9, ] <- c("$ind$cos2", "cos2 for the individuals")
-    res[10, ] <- c("$ind$contrib", "contributions of the individuals")
-    indice <- 11
+    res[7, ] <- c("$var$eta2", "coord. of variables")
+    res[8, ] <- c("$ind", "results for the individuals")
+    res[9, ] <- c("$ind$coord", "coord. for the individuals")
+    res[10, ] <- c("$ind$cos2", "cos2 for the individuals")
+    res[11, ] <- c("$ind$contrib", "contributions of the individuals")
+    indice <- 12
     if (!is.null(res.mca$ind.sup)){
       res[indice, ] <- c("$ind.sup", "results for the supplementary individuals")
       res[indice+1, ] <- c("$ind.sup$coord", "coord. for the supplementary individuals")
