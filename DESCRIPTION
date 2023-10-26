@@ -10,5 +10,5 @@ Description: Exploratory data analysis methods to summarize, visualize and descr
 License: GPL (>= 2)
 URL: http://factominer.free.fr
 BugReports: https://github.com/husson/FactoMineR
-Encoding: latin1
+Encoding: UTF-8
 VignetteBuilder: knitr

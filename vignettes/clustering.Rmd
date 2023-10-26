@@ -5,7 +5,7 @@
 
 ---
 title: "Clustering"
-author: "Fran\ccois Husson"
+author: "Francois Husson"
 output:
   pdf_document:
     fig_height: 6

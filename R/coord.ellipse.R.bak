@@ -21,8 +21,6 @@ coord.ellipse <- function (coord.simul, centre = NULL, axes = c(1, 2), level.con
     }
     #### End function ellipse
     
-#ajout 1 ligne 
-    coord.simul[, 1] <- as.factor(coord.simul[, 1])
     nbre.fact <- nlevels(coord.simul[, 1])
     res <- NULL
     label <- NULL
