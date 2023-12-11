@@ -125,7 +125,6 @@ MFA(poison, group=c(2,2,5,6), type=c("s","n","n","n"),
 data(mortality)
 res<-MFA(mortality,group=c(9,9),type=c("f","f"),
     name.group=c("1979","2006"))
-
 }
 }
 \keyword{dplot}

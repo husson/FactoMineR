@@ -23,8 +23,8 @@ MFA (base, group, type = rep("s",length(group)), excl = NULL,
   \item{base}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (variables)}
   \item{group}{a vector with the number of variables in each group}
   \item{type}{the type of variables in each group; four possibilities: "c" or "s" for quantitative variables
-  (the difference is that for "s" variables are scaled to unit variance), "n" for categorical variables and
-  "f" for frequencies (from a contingency tables); by default,
+  (the difference is that for "s" variables are scaled to unit variance), "n" for categorical variables
+  "m" for group of mixed variables  and "f" for frequencies (from a contingency tables); by default,
   all variables are quantitative and scaled to unit variance}
   \item{excl}{an argument that may possible to exclude categories of active variables of categorical variable groups. 
   NULL by default, it is a list with indexes of categories that are excluded per group}

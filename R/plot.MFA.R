@@ -309,19 +309,23 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
     else test.invisible <- rep(NA, 2)
     col <- NULL
     if (habillage == "group") {
-      if (is.null(col.hab) | length(col.hab) < length(group[type == "c"])){
+      if (is.null(col.hab) | length(col.hab) < length(group[type == "c"])+length(group[type == "m"])){
         if (!is.null(res.mfa$call$num.group.sup)){
           col.hab[which(!seq_len(length(group))%in%(res.mfa$call$num.group.sup))] <- 2:(1+length(group)-length(res.mfa$call$num.group.sup))
           col.hab[res.mfa$call$num.group.sup] <- length(group)-length(res.mfa$call$num.group.sup)+1+seq_len(length(res.mfa$call$num.group.sup))
-          col <- c(1+rep(which(res.mfa$call$nature.group[-res.mfa$call$num.group.sup]=="quanti"),times=group[which(res.mfa$call$nature.group=="quanti")]),length(group)-length(res.mfa$call$num.group.sup)+1+rep(which((res.mfa$call$nature.group[res.mfa$call$num.group.sup])=="quanti.sup"),times=group[which(res.mfa$call$nature.group=="quanti.sup")]))
+
+#          col <- c(1+rep(which(res.mfa$call$nature.group[-res.mfa$call$num.group.sup]=="quanti"),times=group[which(res.mfa$call$nature.group=="quanti")]),length(group)-length(res.mfa$call$num.group.sup)+1+rep(which((res.mfa$call$nature.group[res.mfa$call$num.group.sup])=="quanti.sup"),times=group[which(res.mfa$call$nature.group=="quanti.sup")]))
+          col <- c(1+rep(which(res.mfa$call$nature.group[-res.mfa$call$num.group.sup]=="quanti" | res.mfa$call$nature.group[-res.mfa$call$num.group.sup]=="mixed"),
+		  times=sapply(res.mfa$call$list.type.var[which(res.mfa$call$nature.group=="quanti" | res.mfa$call$nature.group=="mixed")],function(x) sum("quanti"==x))),
+		        rep(length(group)-length(res.mfa$call$num.group.sup)+1+rep(which(res.mfa$call$nature.group[res.mfa$call$num.group.sup]=="quanti.sup" | res.mfa$call$nature.group[res.mfa$call$num.group.sup] =="mixed.sup")),
+		  times=sapply(res.mfa$call$list.type.var[res.mfa$call$nature.group=="quanti.sup" | res.mfa$call$nature.group =="mixed.sup"],function(x) sum("quanti.sup"==x))))
         } else {
           col.hab <- 2:(length(group)+1)
-          col <- 1+rep(which(type=="c"),times=group[type=="c"])
+          col <- 1+rep(which(type=="c" | type=="m"),times=sapply(res.mfa$call$list.type.var[res.mfa$call$type=="c" | res.mfa$call$type=="m"],function(x) sum("quanti"==x)))
         }
-      }
-      
+      } 
     } else {
-      if (is.null(col.hab) | length(col.hab) < sum(group[type == "c"])) col <- rep(1, sum(group[type == "c"]))
+      if (is.null(col.hab) | length(col.hab) < sum(group[type == "c" | type=="m"])) col <- rep(1, sum(sapply(res.mfa$call$list.type.var, function(x) sum("quanti"==x))))
       else col <- col.hab
     }
     if (is.null(title))  title <- "Correlation circle"
@@ -401,7 +405,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
     #		if (habillage == "group" & is.na(test.invisible[1]) & is.na(test.invisible[2])) 
     #            legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),,drop=FALSE])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
     if (habillage == "group" & is.na(test.invisible[1]) & is.na(test.invisible[2])) {
-      L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),,drop=FALSE])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
+      L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg),,drop=FALSE])[type == "c" | type=="m"], text.col = col.hab[type == "c" | type=="m"], cex = 0.8*par("cex"))
       L <- modifyList(L, legend)
       if(graph.type=="classic") do.call(graphics::legend, L)
     }
@@ -409,10 +413,10 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       #            if ("quanti.sup"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c"], 
       #                text.col = col.hab[which(!((1:length(group))%in%res.mfa$call$num.group.sup))[type.act == "c"]], cex = 0.8*par("cex"))
       if ("quanti.sup"%in%res.mfa$call$nature.var) {
-        L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c"], text.col = col.hab[which(!(seq_len(length(group))%in%res.mfa$call$num.group.sup))[type.act == "c"]], cex = 0.8*par("cex"))
+        L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-c(num.group.sup, nrow(res.mfa$group$Lg)),,drop=FALSE])[type.act == "c" | type.act=="m"], text.col = col.hab[which(!(seq_len(length(group))%in%res.mfa$call$num.group.sup))[type.act == "c" | type.act=="m"]], cex = 0.8*par("cex"))
       } else {
         #		    legend("topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
-        L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c"], text.col = col.hab[type == "c"], cex = 0.8*par("cex"))
+        L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[-nrow(res.mfa$group$Lg), ])[type == "c" | type=="m"], text.col = col.hab[type == "c" | type=="m"], cex = 0.8*par("cex"))
       }
       L <- modifyList(L, legend)
       if(graph.type=="classic") do.call(graphics::legend, L)
@@ -420,8 +424,8 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
     if (habillage == "group" & !is.na(test.invisible[1]) & is.na(test.invisible[2])){
       #          if ("quanti"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
       #		  else legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
-      if ("quanti"%in%res.mfa$call$nature.var) L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
-      else L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
+      if (c("quanti","mixed")%in%res.mfa$call$nature.var) L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[which(type.sup == "c" | type.sup=="m")], text.col = col.hab[res.mfa$call$num.group.sup[which(type.sup == "c" | type.sup=="m")]], cex = 0.8*par("cex"))
+      else L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c" | type=="m"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c" | type.sup=="m"]], cex = 0.8*par("cex"))
       L <- modifyList(L, legend)
       if(graph.type=="classic") do.call(graphics::legend, L)
     }
@@ -521,6 +525,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       else{text <- geom_text(aes(x=df_var[,2], y=df_var[,3],label=df_var[,1], color = df_var[,4]), size = ggoptions_default$size, hjust = (-sign(df_var[,2])+1)/2, vjust = -sign(df_var[,3])*0.75+0.25,show.legend = FALSE)}
       }
       if(habillage=="none"){
+        df_var <- data.frame(df_var,col,transparency_var)
         df_var <- df_var[which(!(is.nan(df_var[,2])|is.infinite(df_var[,2]))),]
         gg_graph <- ggplot() + 
           #aes(x=df_var[,2], y=df_var[,3]) +
@@ -1014,8 +1019,10 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
     if (habillage == "none"){
       col.ind <- rep(1, nb.ind.actif*(nbre.grpe + 1))
       if (!is.null(res.mfa$ind.sup)) col.ind.sup <- rep(4, (nb.ind - nb.ind.actif)*(nbre.grpe + 1))
-      if (!is.null(res.mfa[["quali.var"]])) col.quali <- rep(2, (nbre.grpe + 1)*sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"]))
-      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- rep("darkred", (nbre.grpe + 1)*sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"]))
+#      if (!is.null(res.mfa[["quali.var"]])) col.quali <- rep(2, (nbre.grpe + 1)*sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"]))
+#      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- rep("darkred", (nbre.grpe + 1)*sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"]))
+      if (!is.null(res.mfa[["quali.var"]])) col.quali <- rep(2, (nbre.grpe + 1)*sum(res.mfa$call$group.mod[which(res.mfa$call$nature.group=="quali"|res.mfa$call$nature.group=="mixed")])-sum(sapply(res.mfa$call$list.type.var[which(res.mfa$call$nature.group=="quali"|res.mfa$call$nature.group=="mixed")], function(x) sum(x%in%"quanti"))))
+      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- rep("darkred", (nbre.grpe + 1)*sum(res.mfa$call$group.mod[which(res.mfa$call$nature.group=="quali.sup"|res.mfa$call$nature.group=="mixed.sup")])-sum(sapply(res.mfa$call$list.type.var[which(res.mfa$call$nature.group=="quali.sup"|res.mfa$call$nature.group=="mixed.sup")], function(x) sum(x%in%"quanti.sup"))))
       if (!is.null(ellipse)) col.ellipse <- rep(25, nb.ind.actif)
       if (!is.null(ellipse.par)) col.ellipse.par <- rep(2, nb.ind.actif*(nbre.grpe + 1))
 	}
@@ -1023,8 +1030,10 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       if (is.null(col.hab) | length(col.hab) != (nbre.grpe)) col.hab <- 2:(nbre.grpe + 1)
       col.ind <- c(rep(1, nb.ind.actif), rep(col.hab, nb.ind.actif))
       if (!is.null(res.mfa$ind.sup)) col.ind.sup <- c(rep(1, nb.ind - nb.ind.actif), rep(col.hab, nb.ind - nb.ind.actif))
-      if (!is.null(res.mfa[["quali.var"]])) col.quali <- c(rep(1, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"])), rep(col.hab, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"])))
-      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- c(rep(1, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"])), rep(col.hab, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"])))
+#      if (!is.null(res.mfa[["quali.var"]])) col.quali <- c(rep(1, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"])), rep(col.hab, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali"])))
+#      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- c(rep(1, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"])), rep(col.hab, sum(res.mfa$call$group.mod[res.mfa$call$nature.group=="quali.sup"])))
+      if (!is.null(res.mfa[["quali.var"]])) col.quali <- c(rep(1, sum(res.mfa$call$group.mod[which(res.mfa$call$nature.group=="quali"|res.mfa$call$nature.group=="mixed")])-sum(sapply(res.mfa$call$list.type.var[which(res.mfa$call$nature.group=="quali"|res.mfa$call$nature.group=="mixed")], function(x) sum(x%in%"quanti")))), rep(col.hab, sum(res.mfa$call$group.mod[which(res.mfa$call$nature.group=="quali"|res.mfa$call$nature.group=="mixed")])-sum(sapply(res.mfa$call$list.type.var[which(res.mfa$call$nature.group=="quali"|res.mfa$call$nature.group=="mixed")], function(x) sum(x%in%"quanti")))))
+      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- c(rep(1, sum(res.mfa$call$group.mod[which(res.mfa$call$nature.group=="quali.sup"|res.mfa$call$nature.group=="mixed.sup")])-sum(sapply(res.mfa$call$list.type.var[which(res.mfa$call$nature.group=="quali.sup"|res.mfa$call$nature.group=="mixed.sup")], function(x) sum(x%in%"quanti.sup")))), rep(col.hab, sum(res.mfa$call$group.mod[which(res.mfa$call$nature.group=="quali.sup"|res.mfa$call$nature.group=="mixed.sup")])-sum(sapply(res.mfa$call$list.type.var[which(res.mfa$call$nature.group=="quali.sup"|res.mfa$call$nature.group=="mixed.sup")], function(x) sum(x%in%"quanti.sup")))))
       if (!is.null(ellipse)) col.ellipse <- rep(1, nb.ind.actif)
       if (!is.null(ellipse.par)) col.ellipse.par <- rep(col.hab, nb.ind.actif)
     }
@@ -1032,7 +1041,9 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       if (is.null(col.hab) | length(col.hab) != nb.ind) col.hab <- 1:nb.ind
       col.ind <- c(col.hab[1:nb.ind.actif], rep(col.hab[1:nb.ind.actif], each = nbre.grpe))
       if (!is.null(res.mfa$ind.sup)) col.ind.sup <- c(col.hab[(nb.ind.actif + 1):nb.ind], rep(col.hab[(nb.ind.actif + 1):nb.ind], each = nbre.grpe))
-      if (length(group[type == "n"]) != 0) col.quali <- col.quali.sup <- rep("black", (1 + nbre.grpe) * sum(res.mfa$call$group.mod[type == "n"]))
+#      if (length(group[type == "n"]) != 0) col.quali <- col.quali.sup <- rep("black", (1 + nbre.grpe) * sum(res.mfa$call$group.mod[type == "n"]))
+      if (!is.null(res.mfa[["quali.var"]])) col.quali <- rep("black", (1 + nbre.grpe)*sum(res.mfa$call$group.mod[which(res.mfa$call$nature.group=="quali"|res.mfa$call$nature.group=="mixed")])-sum(sapply(res.mfa$call$list.type.var[which(res.mfa$call$nature.group=="quali"|res.mfa$call$nature.group=="mixed")], function(x) sum(x%in%"quanti"))))
+      if (!is.null(res.mfa$quali.var.sup)) col.quali.sup <- rep("black", (1 + nbre.grpe) * sum(res.mfa$call$group.mod[which(res.mfa$call$nature.group=="quali.sup"|res.mfa$call$nature.group=="mixed.sup")])-sum(sapply(res.mfa$call$list.type.var[which(res.mfa$call$nature.group=="quali.sup"|res.mfa$call$nature.group=="mixed.sup")], function(x) sum(x%in%"quanti.sup"))))
       if (!is.null(ellipse)) col.ellipse <- col.hab[1:nb.ind.actif]
       if (!is.null(ellipse.par)) col.ellipse.par <- rep(col.hab[1:nb.ind.actif], each = nbre.grpe)
     }
@@ -1047,6 +1058,10 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
           if (i == 1) liste.quali <- c(liste.quali, colnames(res.mfa$call$X[1:group[1]]))
           else liste.quali <- c(liste.quali, colnames(res.mfa$call$X[(sum(group[1:(i - 1)]) + 1):sum(group[1:i])]))
         }
+        if (type[i] == "m") {
+          for (k in which(!sapply(res.mfa$separate.analyses[[i]]$call$X,is.numeric))) nbre.modalite <- c(nbre.modalite, nlevels(res.mfa$separate.analyses[[i]]$call$X[, k]))
+          liste.quali <- c(liste.quali, colnames(res.mfa$call$X)[which(!sapply(res.mfa$separate.analyses[[i]]$call$X,is.numeric))])
+        }
       }
       if (!is.null(num.group.sup)) {
         for (i in num.group.sup) {
@@ -1054,6 +1069,10 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
             if (i == 1) liste.quali.sup <- c(liste.quali.sup, colnames(res.mfa$call$X[1:group[1]]))
             else liste.quali.sup <- c(liste.quali.sup, colnames(res.mfa$call$X[(sum(group[1:(i - 1)]) + 1):sum(group[1:i])]))
             for (k in seq_len(ncol(res.mfa$separate.analyses[[i]]$call$X))) nbre.modalite.sup <- c(nbre.modalite.sup, nlevels(res.mfa$separate.analyses[[i]]$call$X[, k]))
+          }
+          if (type[i] == "m") {
+            for (k in which(!sapply(res.mfa$separate.analyses[[i]]$call$X,is.numeric))) nbre.modalite.sup <- c(nbre.modalite.sup, nlevels(res.mfa$separate.analyses[[i]]$call$X[, k]))
+            liste.quali.sup <- c(liste.quali.sup, colnames(res.mfa$call$X)[which(!sapply(res.mfa$separate.analyses[[i]]$call$X,is.numeric))])
           }
         }
       }
@@ -1073,10 +1092,11 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       col.ellipse <- col.ind[1:nb.ind.actif]
       col.ellipse.par <- col.ind[-c(1:nb.ind.actif)]
       col.quali <- rep("black", sum(res.mfa$call$group.mod[type == "n"]))
+	  if (sum(type == "m")>0) col.quali <- c(col.quali,rep("black",sum(res.mfa$call$group.mod[type == "m"])- sum(sapply(res.mfa$call$list.type.var[type=="m"],function(x) sum("quanti"==x)))- sum(sapply(res.mfa$call$list.type.var[type=="m"],function(x) sum("quanti.sup"==x)))))
       if (nom.quali %in% liste.quali){
         indice.inf <- sum(nbre.modalite[0:(match(nom.quali, liste.quali) - 1)]) + 1
         indice.sup <- indice.inf + length(modalite) - 1
-        if (length(group[type == "n"]) != 0) {
+        if (length(group[type == "n"])+length(group[type == "m"]) > 0) {
           for (i in seq_len(length(liste.quali))) {
             if (liste.quali[i] == nom.quali) col.quali[indice.inf:indice.sup] <- col.hab
           }
@@ -1084,6 +1104,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       }
       col.quali <- c(col.quali, rep(col.quali, each = nbre.grpe))
       col.quali.sup <- rep("black", sum(res.mfa$call$group.mod[(type == "n")%in%num.group.sup]))
+      if (sum((type == "m")%in%num.group.sup)>0) col.quali.sup <- c(col.quali.sup,rep("black", sum(res.mfa$call$group.mod[(type == "m")%in%num.group.sup])- sum(sapply(res.mfa$call$list.type.var[(type=="m")%in%num.group.sup],function(x) sum("quanti.sup"==x)))))
       if (nom.quali %in% liste.quali.sup){
         indice.inf.sup <- sum(nbre.modalite.sup[0:(match(nom.quali, liste.quali.sup) - 1)]) + 1
         indice.sup.sup <- indice.inf.sup + length(modalite) - 1

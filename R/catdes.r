@@ -131,7 +131,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
         v.test <- (moy.mod[j]-moy)/et*sqrt(n.mod[j])/sqrt((sum(n.mod)-n.mod[j])/(sum(n.mod)-1))
         p.value <- pnorm(abs(v.test),lower.tail = FALSE)*2
         if(!is.na(v.test)){
-         if (p.value <= proba) {
+        if (p.value <= proba) {
           result[[j]] <- rbind(result[[j]],c(v.test,moy.mod[j],moy,sd.mod[j],et,p.value))
           nom[[j]] <- c(nom[[j]],colnames(donnee)[quanti[i]])
         }
