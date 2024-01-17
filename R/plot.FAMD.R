@@ -13,6 +13,8 @@ palette(palette)   # that is necessary
 
 if (choix=="ind" | choix=="quali") {
   class(x) <- c("MFA", "list")
+  x$call$list.type.var <- vector(mode = "list", length = 1)
+  x$call$list.type.var[[1]] <- x$call$nature.var
   if (!is.null(x$quali.sup)){
     x$quali.var.sup$coord <- x$quali.sup$coord
     x$quali.var.sup$cos2 <- x$quali.sup$cos2

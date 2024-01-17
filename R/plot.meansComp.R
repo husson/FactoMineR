@@ -2,10 +2,21 @@ utils::globalVariables(c("emmean","Effect","lower.CL","upper.CL","Letters"))
 plot.meansComp <- function(x,...){
   if (!inherits(x,"meansComp")) stop("x must be a compMean object")
   aux <- summary(x$adjMean)
-  rownames(aux) <- aux[,1]
-  nameEffect <- colnames(aux)[1]
+  if (ncol(aux)==6){
+    rownames(aux) <- aux[,1]
+  } else {
+   rownames(aux) <- paste(aux[,1],aux[,2],sep=":")
+   aux[,1] <- rownames(aux)
+ }
+#  rownames(aux) <- aux[,1]
+  if (ncol(aux)==6){
+    nameEffect <- colnames(aux)[1]
+  } else {
+    nameEffect <- paste(colnames(aux)[1],colnames(aux)[2],sep=":")
+  }
   colnames(aux)[1] <- "Effect"
-  aux <- aux[order(aux[,2]),]
+#  aux <- aux[order(aux[,2]),]
+  aux <- aux[order(aux[,ncol(aux)-4]),]
   aux[,1] <- ordered(aux[,1],levels=aux[,1])
   aux$Letters <- x$groupComp$Letters
 

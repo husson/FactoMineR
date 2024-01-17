@@ -28,10 +28,9 @@ data(mortality)
 res<-MFA(mortality,group=c(9,9),type=c("f","f"),
     name.group=c("1979","2006"))
 
-plot(res,choix="freq",invisible="ind",habillage="group")
-lines(res$freq$coord[1:9,1],mfa$freq$coord[1:9,2],col="red")
-lines(res$freq$coord[10:18,1],mfa$freq$coord[10:18,2],col="green")
-    
+plot(res,choix="freq",invisible="ind",graph.type = "classic")
+lines(res$freq$coord[1:9,1],res$freq$coord[1:9,2],col="red")
+lines(res$freq$coord[10:18,1],res$freq$coord[10:18,2],col="green")    
     }
 }
 
