@@ -26,12 +26,9 @@ meansComp(object, spec, graph=TRUE, ...)
 \examples{
   data(senso)
   res <- LinearModel(Score~ Product + Day , data=senso, selection="none")
-  meansComp(res,spec="Product")
+  meansComp(res,~Product)
   
 \dontrun{
-  ## or equivalently
-  meansComp(res, ~Product)
-
   ## and with the sidak correction
   meansComp(res,~Product,adjust="sidak")
 }}
