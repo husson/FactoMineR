@@ -36,6 +36,7 @@ cont.textuel <- function(exp, maj.in.min = TRUE, accent = TRUE, sep.word=NULL){
   return(res)
 }
 
+  tab <- as.data.frame(tab)
   if (is.null(rownames(tab))) rownames(tab) <- 1:nrow(tab)
   comp <- as.list(tab[,num.text])
   names(comp) <- rownames(tab)

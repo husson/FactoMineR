@@ -57,12 +57,13 @@ data(senso)
 res <- LinearModel(Score~ Product + Day , data=senso, selection="none")
 res
 ## Perform means comparison
-meansComp(res,spec="Product")
+meansComp(res,~Product)
 
 ## Example two-way anova with interaction
 data(senso)
 res2 <- LinearModel(Score~ Product + Day + Product : Day, data=senso, selection="none")
 res2
+meansComp(res,~Product:Day)
 
 ## Example two-way anova with selection
 data(senso)
