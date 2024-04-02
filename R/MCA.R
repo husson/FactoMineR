@@ -301,6 +301,9 @@ if (!is.null(quanti.sup)){
     }
 
 	if (!is.null(excl)){
+	  res.mca$excl$coord <- res.mca$var$coord[excl,]
+      res.mca$excl$cos2 <- res.mca$var$cos2[excl,]
+      res.mca$excl$v.test <- res.mca$var$v.test[excl,]
 	  res.mca$var$coord <- res.mca$var$coord[-excl,]
       res.mca$var$contrib <- res.mca$var$contrib[-excl,]
       res.mca$var$cos2 <- res.mca$var$cos2[-excl,]

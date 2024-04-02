@@ -2,7 +2,7 @@ utils::globalVariables(c("y","xfin","yfin","coul"))
 plot.CA <- function (x, axes = c(1, 2),
                      xlim = NULL, ylim = NULL, invisible = c("none","row", "col", "row.sup", "col.sup","quali.sup"), choix = c("CA","quanti.sup"), col.row = "blue",
                      col.col = "red", col.row.sup = "darkblue", col.col.sup = "darkred",col.quali.sup ="magenta",
-                     col.quanti.sup="blue",label = c("all","none","row", "row.sup", "col","col.sup", "quali.sup"), title = NULL, palette=NULL, 
+                     col.quanti.sup="blue",label = c("all","none","row", "row.sup", "col","col.sup", "quali.sup","quanti.sup"), title = NULL, palette=NULL, 
                      autoLab = c("auto","yes","no"),new.plot=FALSE, selectRow = NULL, selectCol = NULL,
                      unselect = 0.7,shadowtext = FALSE, habillage = "none", legend = list(bty = "y", x = "topleft"), graph.type = c("ggplot","classic"), ggoptions= NULL, ...) {
   
@@ -16,7 +16,7 @@ plot.CA <- function (x, axes = c(1, 2),
   palette(palette)   # that is necessary
   if (!inherits(res.ca, "CA")) stop("non convenient data")
   if (is.numeric(unselect)) if ((unselect>1)|(unselect<0)) stop("unselect should be betwwen 0 and 1")
-  label <- match.arg(label,c("all","none","row", "row.sup", "col","col.sup", "quali.sup"),several.ok=TRUE)
+  label <- match.arg(label,c("all","none","row", "row.sup", "col","col.sup", "quali.sup","quanti.sup"),several.ok=TRUE)
   choix <- match.arg(choix,c("CA","quanti.sup"))
   choix <- tolower(choix)
   autoLab <- match.arg(autoLab,c("auto","yes","no"))
@@ -43,6 +43,7 @@ plot.CA <- function (x, axes = c(1, 2),
     if("row.sup" %in% label) lab.row.sup<-TRUE
     if("col.sup" %in% label) lab.col.sup<-TRUE
     if("quali.sup" %in% label) lab.quali.sup<-TRUE
+    if("quanti.sup" %in% label) lab.quanti.sup<-TRUE
     
     coord.col <- res.ca$col$coord[, axes]
     coord.row <- res.ca$row$coord[, axes]
@@ -430,7 +431,7 @@ plot.CA <- function (x, axes = c(1, 2),
             if (res.ca$quanti.sup$coord[v,axes[2]]>=0) pos<-3
             else pos<-1
           }
-          if((!is.null(label)) && (label=="all" | "quanti.sup" %in% label)){
+          if((!is.null(label)) && ("all"%in%label | "quanti.sup" %in% label)){
             autoLab(res.ca$quanti.sup$coord[v, axes[1]], y = res.ca$quanti.sup$coord[v, axes[2]], labels = rownames(res.ca$quanti.sup$coord)[v], col = col.quanti.sup,...)
           }
         }
