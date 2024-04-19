@@ -208,7 +208,6 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           color.ind <- as.character(color.ind)
         }
       }
-      
       if(class(res.pca$call$X[,habillage[1]])[1] %in% c("numeric","double","integer")){
         if (graph.type == "classic") stop("The variable ", habillage[1], "is not qualitative")
         liste.quanti <- colnames(res.pca$call$X[which(!(colnames(res.pca$call$X) %in% colnames(res.pca$call$quali.sup$quali.sup)))])
@@ -391,7 +390,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
       }
       gg_graph <- gg_graph + theme
       if (is.na(test.invisible[1]) & isTRUE(lab.ind)) gg_graph <- gg_graph + text
-      
+     
       if ((!is.null(res.pca$ind.sup)) && (is.na(test.invisible[2]))){
         if(!is.null(select)) df_ind_sup[,1] <- ifelse(rownames(df_ind_sup) %in% rownames(df_ind_sup)[selectionS], rownames(df_ind_sup), "")
         if(nrow(res.pca$ind.sup$coord) > 1){
@@ -440,25 +439,23 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
             if (autoLab) text_quali.sup <- ggrepel::geom_text_repel(aes(x = df_quali.sup[,2], y = df_quali.sup[,3], label=df_quali.sup[,1]), color = col.quali, size = ggoptions_default$size, fontface = "italic")
             else{text_quali.sup <- geom_text(aes(x = df_quali.sup[,2], y = df_quali.sup[,3], label=df_quali.sup[,1]), color = col.quali, size = ggoptions_default$size, fontface = "italic",hjust = (-sign(df_quali.sup[,2])+1)/2, vjust = -sign(df_quali.sup[,3])*0.75+0.25)}
             gg_graph <- gg_graph + text_quali.sup
-          }
-          else{
+          } else{
             if ((habillage[1] %in% liste.quali) || (colnames(res.pca$call$X))[habillage[1]] %in% liste.quali) {
               gg_graph <- gg_graph +
                 geom_point(aes(x = res.pca$quali.sup$coord[levels(res.pca$call$X[,habillage[1]]),axes[1]], y = res.pca$quali.sup$coord[levels(res.pca$call$X[,habillage[1]]),axes[2]]), size = ggoptions_default$size/2.8, color = palette[1:length(levels(res.pca$call$X[,habillage[1]]))], shape = 0)
               if (autoLab) text_quali.sup <- ggrepel::geom_text_repel(aes(x = res.pca$quali.sup$coord[levels(res.pca$call$X[,habillage[1]]),axes[1]], y = res.pca$quali.sup$coord[levels(res.pca$call$X[,habillage[1]]),axes[2]], label=levels(res.pca$call$X[,habillage[1]])), color = palette[1:length(levels(res.pca$call$X[,habillage[1]]))], size = ggoptions_default$size, fontface = "italic")
-              else{text_quali.sup <- geom_text(aes(x = res.pca$quali.sup$coord[levels(res.pca$call$X[,habillage[1]]),axes[1]], y = res.pca$quali.sup$coord[levels(res.pca$call$X[,habillage[1]]),axes[2]], label=levels(res.pca$call$X[,habillage[1]])), color = palette[1:length(levels(res.pca$call$X[,habillage[1]]))], size = ggoptions_default$size, fontface = "italic",nudge_y=nudge_y,hjust = (-sign(df_quali.sup[,2])+1)/2, vjust = -sign(df_quali.sup[,3])*0.75+0.25)}
+              else{text_quali.sup <- geom_text(aes(x = res.pca$quali.sup$coord[levels(res.pca$call$X[,habillage[1]]),axes[1]], y = res.pca$quali.sup$coord[levels(res.pca$call$X[,habillage[1]]),axes[2]], label=levels(res.pca$call$X[,habillage[1]])), color = palette[1:length(levels(res.pca$call$X[,habillage[1]]))], size = ggoptions_default$size, fontface = "italic",nudge_y=nudge_y,hjust = (-sign(df_quali.sup[levels(res.pca$call$X[,habillage[1]]),2])+1)/2, vjust = -sign(df_quali.sup[levels(res.pca$call$X[,habillage[1]]),3])*0.75+0.25)}
               gg_graph <- gg_graph + text_quali.sup
             }
             if(length(liste.quali) > 1){
               gg_graph <- gg_graph +
                 geom_point(aes(x = res.pca$quali.sup$coord[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),axes[1]], y = res.pca$quali.sup$coord[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),axes[2]]), size = ggoptions_default$size/2.8, color = col.quali, shape = 0)
               if (autoLab) text_quali.sup <- ggrepel::geom_text_repel(aes(x = res.pca$quali.sup$coord[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),axes[1]], y = res.pca$quali.sup$coord[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),axes[2]], label = rownames(res.pca$quali.sup$coord)[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]])))]), color = col.quali, size = ggoptions_default$size, fontface = "italic")
-              else{text_quali.sup <- geom_text(aes(x = res.pca$quali.sup$coord[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),axes[1]], y = res.pca$quali.sup$coord[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),axes[2]], label = rownames(res.pca$quali.sup$coord)[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]])))]), color = col.quali, size = ggoptions_default$size, fontface = "italic",nudge_y=nudge_y,hjust = (-sign(df_quali.sup[,2])+1)/2, vjust = -sign(df_quali.sup[,3])*0.75+0.25)}
+              else{text_quali.sup <- geom_text(aes(x = res.pca$quali.sup$coord[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),axes[1]], y = res.pca$quali.sup$coord[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),axes[2]], label = rownames(res.pca$quali.sup$coord)[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]])))]), color = col.quali, size = ggoptions_default$size, fontface = "italic",nudge_y=nudge_y,hjust = (-sign(df_quali.sup[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),2])+1)/2, vjust = -sign(df_quali.sup[which(!(rownames(res.pca$quali.sup$coord) %in% levels(res.pca$call$X[,habillage[1]]))),3])*0.75+0.25)}
               gg_graph <- gg_graph + text_quali.sup
             }
           }
-        }
-        else{
+        } else{
           gg_graph <- gg_graph +
             geom_point(aes(x = df_quali.sup[,2], y = df_quali.sup[,3]), size = ggoptions_default$size/2.8, color = col.quali, shape = 0)          
         }

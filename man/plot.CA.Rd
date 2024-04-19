@@ -15,7 +15,7 @@ Draw the Correspondence Analysis (CA) graphs.
 	choix = c("CA","quanti.sup"), col.row="blue", col.col="red", 
 	col.row.sup="darkblue", col.col.sup="darkred", 
     col.quali.sup="magenta", col.quanti.sup="blue",
-	label = c("all","none","row","row.sup","col","col.sup","quali.sup"), 
+	label = c("all","none","row","row.sup","col","col.sup","quali.sup","quanti.sup"), 
     title = NULL, palette = NULL, autoLab = c("auto","yes","no"), 
 	new.plot=FALSE, selectRow = NULL, selectCol = NULL,
 	unselect = 0.7, shadowtext = FALSE, habillage = "none",
@@ -36,7 +36,7 @@ Draw the Correspondence Analysis (CA) graphs.
   \item{col.col.sup}{a color for supplementary columns points}
   \item{col.quali.sup}{a color for the supplementary categorical variables}
   \item{col.quanti.sup}{a color for the supplementary quantitative variables}
-  \item{label}{a list of character for the elements which are labelled (by default, all the elements are labelled ("row", "row.sup", "col", "col.sup","quali.sup")}
+  \item{label}{a list of character for the elements which are labelled (by default, all the elements are labelled ("row", "row.sup", "col", "col.sup","quali.sup","quanti.sup")}
   \item{title}{string corresponding to the title of the graph you draw (by default NULL and a title is chosen)}
   \item{palette}{the color palette used to draw the points. By default colors are chosen. If you want to define the colors : palette=palette(c("black","red","blue")); or you can use: palette=palette(rainbow(30)), or in black and white for example: palette=palette(gray(seq(0,.9,len=25)))}
   \item{autoLab}{if \code{autoLab="auto"}, \code{autoLab} is equal to "yes" if there are less than 50 elements and "no" otherwise; if "yes", the labels of the drawn elements are placed in a "good" way (can be time-consuming if many elements), and if "no" the elements are placed quickly but may overlap}
