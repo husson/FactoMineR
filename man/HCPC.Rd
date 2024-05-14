@@ -25,8 +25,8 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
   \item{iter.max}{An integer. The maximum number of iterations for the consolidation.}
   \item{min}{an integer. The least possible number of clusters suggested.}
   \item{max}{an integer. The higher possible number of clusters suggested; by default the minimum between 10 and the number of individuals divided by 2.}
-  \item{metric}{The metric used to built the tree. See \code{\link{agnes}} for details.}
-  \item{method}{The method used to built the tree. See \code{\link{agnes}} for details.}
+  \item{metric}{The metric used to built the tree. See \code{\link{agnes}} for details. Defaults to "euclidean".}
+  \item{method}{The method used to built the tree. See \code{\link{agnes}} for details. Defaults to "ward".}
   \item{order}{A boolean. If TRUE, clusters are ordered following their center
     coordinate on the first axis.}
   \item{graph.scale}{A character string. By default "inertia" and the height of the tree corresponds
