@@ -424,7 +424,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
     if (habillage == "group" & !is.na(test.invisible[1]) & is.na(test.invisible[2])){
       #          if ("quanti"%in%res.mfa$call$nature.var) legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
       #		  else legend("topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c"]], cex = 0.8*par("cex"))
-      if (c("quanti","mixed")%in%res.mfa$call$nature.var) L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[which(type.sup == "c" | type.sup=="m")], text.col = col.hab[res.mfa$call$num.group.sup[which(type.sup == "c" | type.sup=="m")]], cex = 0.8*par("cex"))
+      if (any(c("quanti","mixed")%in%res.mfa$call$nature.var)) L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[which(type.sup == "c" | type.sup=="m")], text.col = col.hab[res.mfa$call$num.group.sup[which(type.sup == "c" | type.sup=="m")]], cex = 0.8*par("cex"))
       else L <- list(x="topleft", legend = rownames(res.mfa$group$Lg[num.group.sup,,drop=FALSE])[type.sup == "c" | type=="m"], text.col = col.hab[res.mfa$call$num.group.sup[type.sup == "c" | type.sup=="m"]], cex = 0.8*par("cex"))
       L <- modifyList(L, legend)
       if(graph.type=="classic") do.call(graphics::legend, L)

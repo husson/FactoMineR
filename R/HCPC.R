@@ -105,6 +105,8 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
       }
     }
     if (inherits(res, "CA")) {
+      cluster.CA <- tolower(cluster.CA)
+	  if (cluster.CA=="cols") cluster.CA <- "columns"
 	  if (cluster.CA=="rows"){
 	    if (kk<nrow(res$row$coord)) {
 		  res <- as.data.frame(sweep(res$row$coord,2,sqrt(res$eig[1:ncol(res$row$coord),1]),FUN="*"))
@@ -305,13 +307,17 @@ if (description){
      if (!inherits(res.sauv, "CA")&!(vec)){
 	   if (!is.null(res.sauv$call$row.w.init)) desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w.init)
 	   else desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w)
-	 }
-    else {
-      if ((vec) | (is.null(res.sauv$call$quanti.sup)& is.null(res.sauv$call$quali.sup))) desc.var <- descfreq(data.clust[,-which(sapply(data.clust,is.factor))], data.clust[,ncol(data.clust)], proba = proba)
-	  else { 
-	   desc.var <- catdes(data.clust[,c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))], length(c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))), proba = proba,row.w=apply(data.clust[,-c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))],1,sum))
-       desc.var$frequency <- descfreq(data.clust[,-c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))], data.clust[,ncol(data.clust)], proba = proba)
-	   desc.var <- desc.var[c(length(desc.var),1:(length(desc.var)-1))]   # frequency will appear first
+	 } else {
+      if ((vec) | (is.null(res.sauv$call$quanti.sup)& is.null(res.sauv$call$quali.sup))){
+      	  desc.var <- descfreq(data.clust[,-which(sapply(data.clust,is.factor))], data.clust[,ncol(data.clust)], proba = proba)
+	  } else { 
+	   if (cluster.CA=="rows"){
+	     desc.var <- catdes(data.clust[,c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))], length(c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))), proba = proba,row.w=apply(data.clust[,-c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))],1,sum))
+         desc.var$frequency <- descfreq(data.clust[,-c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))], data.clust[,ncol(data.clust)], proba = proba)
+	     desc.var <- desc.var[c(length(desc.var),1:(length(desc.var)-1))]   # frequency will appear first
+	   } else {
+         desc.var <- descfreq(data.clust[,-ncol(data.clust)], data.clust[,ncol(data.clust)], proba = proba)
+	   }
 	  }
     }
     if (kk==Inf) desc.axe <- catdes(X, ncol(X), proba = proba, row.w = res$call$row.w.init)
