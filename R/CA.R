@@ -71,7 +71,7 @@ fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
     cos2.col <- coord.col^2/dist2.col
     colnames(coord.col) <- colnames(contrib.col) <- colnames(cos2.col) <- paste("Dim", 1:length(eig))
     rownames(coord.col) <- rownames(contrib.col) <- rownames(cos2.col) <- attributes(X)$names
-dist2.row <- rowSums(t(t(Tc^2)*marge.col))
+    dist2.row <- rowSums(t(t(Tc^2)*marge.col))
     contrib.row <- t(t(coord.row^2*marge.row)/eig)
     cos2.row <- coord.row^2/dist2.row
     colnames(coord.row) <- colnames(contrib.row) <- colnames(cos2.row) <- paste("Dim", 1:length(eig))
@@ -89,11 +89,17 @@ dist2.row <- rowSums(t(t(Tc^2)*marge.col))
   if (!is.null(row.sup)){
     X.row.sup <- as.data.frame(Xtot[row.sup,])
     if ((!is.null(col.sup))||(!is.null(quanti.sup))||(!is.null(quali.sup))) X.row.sup <- as.data.frame(X.row.sup[,-c(col.sup,quanti.sup,quali.sup)])
-    somme.row <- rowSums(X.row.sup)
-    X.row.sup <- X.row.sup/somme.row
-    coord.row.sup <- crossprod(t(as.matrix(X.row.sup)),V)
+	somme.row <- rowSums(X.row.sup)
+    if (is.null(excl)) {
+	  X.row.sup <- X.row.sup/somme.row
+	  coord.row.sup <- crossprod(t(as.matrix(X.row.sup)),V)
+	} else {
+	  X.row.sup <- t(t(X.row.sup/somme.row)/colSums(F))-1
+      coord.row.sup <- crossprod(t(as.matrix(X.row.sup)),V*marge.col)  ## difference with excl=NULL
+	}
 # modif
-    dist2.row <- rowSums(t((t(X.row.sup)-marge.col)^2/marge.col))
+    if (is.null(excl)) dist2.row <- rowSums(t((t(X.row.sup)-marge.col)^2/marge.col))
+	else dist2.row <- rowSums(t(t(X.row.sup^2)*marge.col))
 #dist2.row <- rowSums(sweep(sweep(X.row.sup,2,marge.col,FUN="-")^2,2,1/marge.col,FUN="*"))
     cos2.row.sup <- coord.row.sup^2/dist2.row
     coord.row.sup <- coord.row.sup[, 1:ncp,drop=FALSE]
