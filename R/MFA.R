@@ -37,26 +37,26 @@ if (!is.null(tab.comp)){
     nature.group <- NULL
     nbre.group <- length(group)
 for (i in 1:nbre.group){
-  if ((type[i] == "n")&&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"quali")
-  if ((type[i] == "n")&&(i%in%num.group.sup)) nature.group <- c(nature.group,"quali.sup")
-  if (((type[i] == "s")||(type[i] == "c"))&&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"quanti")
-  if (((type[i] == "s")||(type[i] == "c"))&&(i%in%num.group.sup)) nature.group <- c(nature.group,"quanti.sup")
-  if (((type[i] == "f")||(type[i] == "f2"))&&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"contingency")
-  if (((type[i] == "f")||(type[i] == "f2"))&&(i%in%num.group.sup)) nature.group <- c(nature.group,"contingency.sup")
-  if ((type[i] == "m")&&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"mixed")
-  if ((type[i] == "m")&&(i%in%num.group.sup)) nature.group <- c(nature.group,"mixed.sup")
+  if ((type[i] == "n")&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"quali")
+  if ((type[i] == "n")&(i%in%num.group.sup)) nature.group <- c(nature.group,"quali.sup")
+  if (((type[i] == "s")|(type[i] == "c"))&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"quanti")
+  if (((type[i] == "s")|(type[i] == "c"))&(i%in%num.group.sup)) nature.group <- c(nature.group,"quanti.sup")
+  if (((type[i] == "f")|(type[i] == "f2"))&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"contingency")
+  if (((type[i] == "f")|(type[i] == "f2"))&(i%in%num.group.sup)) nature.group <- c(nature.group,"contingency.sup")
+  if ((type[i] == "m")&(!(i%in%num.group.sup))) nature.group <- c(nature.group,"mixed")
+  if ((type[i] == "m")&(i%in%num.group.sup)) nature.group <- c(nature.group,"mixed.sup")
 }
 # nature.var <- rep(nature.group,times=group)
 
 list.type.var <- vector(mode = "list", length = nbre.group)
 for (i in 1:nbre.group){
-  if ((type[i] == "n")&&(!(i%in%num.group.sup))) list.type.var[[i]] <- rep("quali",group[i])
-  if ((type[i] == "n")&&(i%in%num.group.sup)) list.type.var[[i]] <- rep("quali.sup",group[i])
-  if (((type[i] == "s")||(type[i] == "c"))&&(!(i%in%num.group.sup))) list.type.var[[i]] <- rep("quanti",group[i])
-  if (((type[i] == "s")||(type[i] == "c"))&&(i%in%num.group.sup)) list.type.var[[i]] <- rep("quanti.sup",group[i])
-  if (((type[i] == "f")||(type[i] == "f2")||(type[i] == "f3"))&&(!(i%in%num.group.sup))) list.type.var[[i]] <- rep(type[i],group[i])
-  if (((type[i] == "f")||(type[i] == "f2")||(type[i] == "f3"))&&(i%in%num.group.sup)) list.type.var[[i]] <- rep(paste(type[i],"sup",sep="_"),group[i])
-  if ((type[i] == "m")&&(!(i%in%num.group.sup))){
+  if ((type[i] == "n")&(!(i%in%num.group.sup))) list.type.var[[i]] <- rep("quali",group[i])
+  if ((type[i] == "n")&(i%in%num.group.sup)) list.type.var[[i]] <- rep("quali.sup",group[i])
+  if (((type[i] == "s")|(type[i] == "c"))&(!(i%in%num.group.sup))) list.type.var[[i]] <- rep("quanti",group[i])
+  if (((type[i] == "s")|(type[i] == "c"))&(i%in%num.group.sup)) list.type.var[[i]] <- rep("quanti.sup",group[i])
+  if (((type[i] == "f")|(type[i] == "f2")|(type[i] == "f3"))&(!(i%in%num.group.sup))) list.type.var[[i]] <- rep(type[i],group[i])
+  if (((type[i] == "f")|(type[i] == "f2")|(type[i] == "f3"))&(i%in%num.group.sup)) list.type.var[[i]] <- rep(paste(type[i],"sup",sep="_"),group[i])
+  if ((type[i] == "m")&(!(i%in%num.group.sup))){
     if (i==1) list.type.var[[i]] <- ifelse(sapply(base[,1:group[1]],is.numeric),"quanti","quali")
 	else list.type.var[[i]] <- ifelse(sapply(base[,(sum(group[1:(i-1)])+1):sum(group[1:i])],is.numeric),"quanti","quali")
   }
@@ -76,7 +76,7 @@ for (i in 1:nbre.group){
     }
     nbre.var <- ncol(base)
     group.actif <- NULL
-    if ("n"%in%type || "m"%in%type){
+    if ("n"%in%type | "m"%in%type){
       niveau <- NULL
       for (j in 1:ncol(base)){
         if (!is.numeric(base[,j])) niveau <- c(niveau,levels(base[,j]))
@@ -125,13 +125,13 @@ for (i in 1:nbre.group){
     if (is.null(row.w)) row.w <- rep(1,nb.actif)
 
     if (any("f" %in% type)+any("f2" %in% type)+any("f3" %in% type)>1) stop("For the contingency tables, the type must the the same")
-    if (("f" %in% type)||("f2" %in% type)||("f3" %in% type)) {
+    if (("f" %in% type)|("f2" %in% type)|("f3" %in% type)) {
 		grfrec<-c(which(type=="f"),which(type=="f2"),which(type=="f3"))
 
 ## pour avoir individus actifs, que ind.sup soit NULL ou non
 ##		ind.actif <- !((1:nrow(base))%in%intersect(ind.sup,(1:nrow(base))))
 		for (i in grfrec){
-			if ((type[i]=="f2")||(type[i]=="f3")||(i%in%num.group.sup)){
+			if ((type[i]=="f2")|(type[i]=="f3")|(i%in%num.group.sup)){
 				if (i==1) base[,1:group[1]]<- base[,1:group[1]]/sum(base[1:nb.actif,1:group[1]])
 				else base[,(sum(group[1:(i-1)])+1):sum(group[1:i])]<-base[,(sum(group[1:(i-1)])+1):sum(group[1:i])]/sum(base[1:nb.actif,(sum(group[1:(i-1)])+1):sum(group[1:i])])
 			}
@@ -193,7 +193,7 @@ if (!is.null(tab.comp)){
         dimnames(aux.base) <- list(rownames(base),colnames(base)[(ind.grpe + 1):(ind.grpe + group[g])])
         if (type[g] == "s") res.separe[[g]] <- PCA(aux.base, ind.sup =ind.sup, scale.unit = TRUE, ncp = ncp, row.w=row.w, graph = FALSE, col.w = weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
         if (type[g] == "c") res.separe[[g]] <- PCA(aux.base, ind.sup =ind.sup, scale.unit = FALSE, ncp = ncp, row.w=row.w,graph = FALSE, col.w = weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
-        if (type[g]=="f"||type[g]=="f2"||type[g]=="f3")  res.separe[[g]] <- PCA(aux.base, ind.sup =ind.sup, scale.unit = FALSE, ncp = ncp, row.w=row.w,graph = FALSE, col.w = F.jt[[g]]*weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
+        if (type[g]=="f"|type[g]=="f2"|type[g]=="f3")  res.separe[[g]] <- PCA(aux.base, ind.sup =ind.sup, scale.unit = FALSE, ncp = ncp, row.w=row.w,graph = FALSE, col.w = F.jt[[g]]*weight.col.mfa[(ind.grpe + 1):(ind.grpe + group[g])])
         if (type[g] == "n") {
           for (v in (ind.grpe + 1):(ind.grpe + group[g])) {
             if (!is.factor(base[, v])) stop("factors are not defined in the qualitative groups")
@@ -238,7 +238,7 @@ if (!is.null(tab.comp)){
           data <- cbind.data.frame(data, aux.base)
           ponderation[(ind.grpe.mod + 1):(ind.grpe.mod + group.mod[g])] <- 1/res.separe[[g]]$eig[1,1]
         }
-        if (type[g] == "f"||type[g] == "f2") {
+        if (type[g] == "f"|type[g] == "f2") {
 			data <- cbind.data.frame(data, aux.base)
 			ponderation[(ind.grpe.mod+1):(ind.grpe.mod+group[g])]<-F.jt[[g]]/res.separe[[g]]$eig[1,1]
         }
@@ -325,7 +325,7 @@ if (!is.null(tab.comp)){
       colnames.data.group.sup <- NULL
       for (i in 1:nbre.group) {
         if (i%in%num.group.sup){
-          if ((type[i]=="c")||(type[i]=="f")) supp.quanti <- c(supp.quanti,(nb.of.var+1):(nb.of.var+group.mod[i]))
+          if ((type[i]=="c")|(type[i]=="f")) supp.quanti <- c(supp.quanti,(nb.of.var+1):(nb.of.var+group.mod[i]))
           if (type[i]=="n") supp.quali <- c(supp.quali,(1+nb.of.var):(nb.of.var+group.mod[i]))
           if (type[i]=="m"){
 		    supp.quanti <- c(supp.quanti,nb.of.var+(1:sum(sapply(base[, (sum(group[1:(i-1)])+1):(sum(group[1:i])),drop=FALSE],is.numeric))))
@@ -367,14 +367,14 @@ if (!is.null(tab.comp)){
     }
 row.w <- row.w[1:nb.actif]
 ###  Begin handle missing values
-if ((!is.null(tab.comp))&(any("n"%in%type) || any("m"%in%type))){
+if ((!is.null(tab.comp))&(any("n"%in%type) | any("m"%in%type))){
   data.pca <- data.pca[,-aux_quali_sup_indice]
   aux_quali_sup_indice <- NULL
 }
 ###  End handle missing values
  res.globale <- PCA(data.pca, scale.unit = FALSE, col.w = ponderation, row.w=row.w,ncp = ncp, ind.sup = ind.sup, quali.sup = aux_quali_sup_indice, quanti.sup = data.group.sup.indice, graph = FALSE)
 ###  Begin handle missing values
-if ((!is.null(tab.comp))&(any("n"%in%type) || any("m"%in%type))){
+if ((!is.null(tab.comp))&(any("n"%in%type) | any("m"%in%type))){
   if (!is.null(type.var%in%"quali")) {
     if (any(type.var%in%c("freq","quanti"))){
 	  res.globale$quali.var$coord <- res.globale$var$coord[-(1:sum(type.var%in%c("freq","quanti"))),]
@@ -386,8 +386,8 @@ if ((!is.null(tab.comp))&(any("n"%in%type) || any("m"%in%type))){
       res.globale$quali.var$contrib <- res.globale$var$contrib
 	}
   }
-  res.globale$call$quali.sup$barycentre <- sweep(crossprod(tab.comp[,unlist(ind.var.group[type%in%"n" || type%in%"m"])],as.matrix(data.pca)),1,apply(tab.comp[,unlist(ind.var.group[type%in%"n" || type%in%"m"])],2,sum),FUN="/")
-  res.globale$quali.sup$coord <- sweep(crossprod(tab.comp[,unlist(ind.var.group[type%in%"n" || type%in%"m"])],res.globale$ind$coord),1,apply(tab.comp[,unlist(ind.var.group[type%in%"n" || type%in%"m"])],2,sum),FUN="/")
+  res.globale$call$quali.sup$barycentre <- sweep(crossprod(tab.comp[,unlist(ind.var.group[type%in%"n" | type%in%"m"])],as.matrix(data.pca)),1,apply(tab.comp[,unlist(ind.var.group[type%in%"n" | type%in%"m"])],2,sum),FUN="/")
+  res.globale$quali.sup$coord <- sweep(crossprod(tab.comp[,unlist(ind.var.group[type%in%"n" | type%in%"m"])],res.globale$ind$coord),1,apply(tab.comp[,unlist(ind.var.group[type%in%"n" | type%in%"m"])],2,sum),FUN="/")
 }
 ###  End handle missing values
     ncp <- min(ncp, nrow(res.globale$eig))
@@ -558,7 +558,7 @@ if ((!is.null(tab.comp))&(any("n"%in%type) || any("m"%in%type))){
     summary.c <- as.data.frame(matrix(NA, 0, 6))
     colnames(summary.c) <- c("group", "variable", "moyenne", "ecart.type", "minimum", "maximum")
    for (g in 1:nbre.group) {
-        if ((type[g] == "c")||(type[g]=="f")) {
+        if ((type[g] == "c")|(type[g]=="f")) {
             statg <- as.data.frame(matrix(NA, ncol(res.separe[[g]]$call$X), 6))
             colnames(statg) <- c("group", "variable", "moyenne", "ecart.type", "minimum", "maximum")
             statg[, "group"] <- rep(g, nrow(statg))

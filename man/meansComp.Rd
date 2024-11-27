@@ -14,7 +14,7 @@ meansComp(object, spec, graph=TRUE, ...)
 
 \arguments{
 \item{object}{A fitted model object that is supported, such as the result of a call to LinearModel, lm or aov.}
-\item{spec}{A character vector specifying the names of the predictors over which means comparisons are desired. specs may also be a formula or a list (optionally named) of valid specs. Use of formulas is described in the Overview section below.}
+\item{spec}{spec may also be a formula or a list (optionally named) of valid specs. Use of formulas is described in the Overview section below.}
 \item{graph}{Boolean; plot the graph to compare the means.}
 \item{\dots}{other arguments, cf the function \code{emmeans}.}
 }
