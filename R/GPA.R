@@ -289,7 +289,8 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
                   yinit <- rnorm(nbcolonne)
                   yinit.lm <- lm(yinit ~ 0 + Pjstar1)
                   vectorth <- yinit - fitted.values(yinit.lm)
-                  Pbar[, k] <- vectorth/(t(vectorth) %*% vectorth)^0.5
+#                  Pbar[, k] <- vectorth/(t(vectorth) %*% vectorth)^0.5
+				  Pbar[, k] <- vectorth/drop((t(vectorth) %*% vectorth)^0.5)
                   if (sum(sign(Pbar[, k]/Qj[, (nbracinepos +
                     k)]), na.rm = TRUE) < 0) {
                     Pjstar1 <- cbind(Pjstar1, -Pbar[, k])
