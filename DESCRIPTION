@@ -1,7 +1,13 @@
 Package: FactoMineR
 Version: 2.12
 Title: Multivariate Exploratory Data Analysis and Data Mining
-Author: Francois Husson, Julie Josse, Sebastien Le, Jeremy Mazet
+Authors@R: c(person(given = "Francois", family = "Husson", role = c("aut", "cre"), email = "francois.husson@institut-agro.fr",
+             comment = c(ORCID = "0000-0002-7271-8877")),
+			 person(given = "Julie", family = "Josse", role = "aut"),
+             person(given = "Sebastien", family = "Le", role = "aut"),
+             person(given = "Jeremy", family = "Mazet", role = "aut")
+			 )
+Author: Francois Husson [aut, cre], Julie Josse [aut, cre], Sebastien Le [aut, cre], Jeremy Mazet [aut, cre]
 Maintainer: Francois Husson <francois.husson@institut-agro.fr>
 Depends: R (>= 4.0)
 Imports: car,cluster,DT,ellipse,emmeans,flashClust,graphics,grDevices,lattice,leaps,MASS,multcompView,scatterplot3d,stats,utils,ggplot2,ggrepel

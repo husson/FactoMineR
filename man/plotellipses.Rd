@@ -37,7 +37,7 @@ plotellipses(model, keepvar = "all", axes = c(1, 2), means=TRUE, level = 0.95,
 \item{cex}{cf. function \code{\link{par}} in the \pkg{graphics} package}
 \item{pch}{plotting character for coordinates, cf. function \code{\link{par}} in the \pkg{graphics} package}
 \item{pch.means}{plotting character for means, cf. function \code{\link{par}} in the \pkg{graphics} package}
-\item{type}{cf. function \code{\link{xyplot}} in the \pkg{lattice} package}
+\item{type}{cf. function \code{\link[lattice]{xyplot}}}
 \item{keepnames}{a boolean or numeric vector of
   indexes of variables or a character vector of names of variables. If keepnames is TRUE, names of levels are taken
   from the (modified) dataset extracted from modele, if FALSE trimming
