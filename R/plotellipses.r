@@ -1,5 +1,5 @@
 plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE, 
-                              level = 0.95, magnify = 2, cex = 1, pch = 20, pch.means = 15, 
+                              level = 0.95, magnify = 2, ellipselwd = 1, cex = 1, pch = 20, pch.means = 15, 
                               type = c("g", "p"), keepnames = TRUE, namescat = NULL, xlim = NULL, 
                               ylim = NULL, lwd = 1, label = "all",
 							  autoLab = c("auto","yes", "no"), graph.type=c("ggplot","classic"), ...) 
@@ -286,7 +286,7 @@ plotellipses <- function (model, keepvar = "all", axes = c(1, 2), means = TRUE,
 	  res.pca$ind$contrib[,axes] <- model$ind$contrib[,axes]
       coord.ell <- coord.ellipse(aux, bary = means, level.conf = level, axes = axes)
         L <- list(x=res.pca, habillage = 1, ellipse = coord.ell, 
-                  cex = cex, label = label, axes = axes, xlim = xlim, 
+                  cex = cex, label = label, axes = axes, xlim = xlim, ellipselwd = ellipselwd,
                   ylim = ylim, title = paste(if (means == TRUE){"Confidence ellipses around the categories of"} else {"Concentration ellipses for the categories of"}, 
                                              colnames(model$call$X)[var]), autoLab = autoLab, graph.type=graph.type)
       # if (means == TRUE) {

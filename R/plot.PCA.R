@@ -1,5 +1,5 @@
 plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
-                      ellipse = NULL, xlim = NULL, ylim = NULL, habillage = "none", 
+                      ellipse = NULL, ellipselwd = 1, xlim = NULL, ylim = NULL, habillage = "none", 
                       col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
                       col.quali = "magenta", col.quanti.sup = "blue", 
                       col.var = "black", label=c("all","none","ind", "ind.sup", "quali", "var", "quanti.sup"), 
@@ -477,10 +477,10 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
         else{
           if(graph.type=="ggplot"){
             if (habillage[1] != "none"){
-              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = palette[color.mod[e]])
+              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), size = ellipselwd, color = palette[color.mod[e]])
             }
             else {
-              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = palette[col.quali])
+              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), size = ellipselwd, color = palette[col.quali])
             }
           }
         }
