@@ -1,3 +1,4 @@
+utils::globalVariables(".data")
 plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
                       ellipse = NULL, xlim = NULL, ylim = NULL, habillage = "none", 
                       col.hab = NULL, col.ind = "black", col.ind.sup = "blue", 
@@ -467,29 +468,42 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
         if (autoLab ==TRUE) autoLab(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],shadotext=shadowtext,...)
         if (autoLab ==FALSE) text(coo[labe!="", 1], y = coo[labe!="", 2], labels = labe[labe!=""], col = coll[labe!=""],  font=fonte[labe!=""],pos=3,...)
       }}
+    # if (!is.null(ellipse)) {
+      # nbre.ellipse <- nlevels(coord.ellipse[, 1])
+       # for (e in 1:nbre.ellipse) {
+         # data.elli <- coord.ellipse[coord.ellipse[, 1] == levels(coord.ellipse[, 1])[e], -1]
+        # if(graph.type=="classic"){
+          # if ((habillage[1] != "none")&(habillage[1] != "ind")) lines(x=data.elli[, 1], y = data.elli[, 2], col = palette[color.mod[e]],...)
+          # else lines(x=data.elli[, 1], y = data.elli[, 2], col = palette[col.quali],...)}
+        # else{
+          # if(graph.type=="ggplot"){
+            # if (habillage[1] != "none"){
+              # gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = palette[color.mod[e]])
+            # }
+            # else {
+              # gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = palette[col.quali])
+            # }
+          # }
+        # }
+      # }	  
+    # }
+    
+##new
     if (!is.null(ellipse)) {
       nbre.ellipse <- nlevels(coord.ellipse[, 1])
-      for (e in 1:nbre.ellipse) {
-        data.elli <- coord.ellipse[ellipse$res[, 1] == levels(coord.ellipse[, 1])[e], -1]
-        if(graph.type=="classic"){
-          if ((habillage[1] != "none")&(habillage[1] != "ind")) lines(x=data.elli[, 1], y = data.elli[, 2], col = palette[color.mod[e]],...)
-          else lines(x=data.elli[, 1], y = data.elli[, 2], col = palette[col.quali],...)}
-        else{
-          if(graph.type=="ggplot"){
-            if (habillage[1] != "none"){
-              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = palette[color.mod[e]])
-            }
-            else {
-              gg_graph <- gg_graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = palette[col.quali])
-            }
-          }
-        }
-      }
+      if(graph.type=="classic"){
+       for (e in 1:nbre.ellipse) {
+         data.elli <- coord.ellipse[coord.ellipse[, 1] == levels(coord.ellipse[, 1])[e], -1]
+         if ((habillage[1] != "none")&(habillage[1] != "ind")) lines(x=data.elli[, 1], y = data.elli[, 2], col = palette[color.mod[e]],...)
+         else lines(x=data.elli[, 1], y = data.elli[, 2], col = palette[col.quali],...)
+	   }
+	  } else{
+         coord.ellipse$col <- if (habillage[1] != "none") rep(color.mod,times=table(coord.ellipse[,1])) else rep(col.quali,nrow(coord.ellipse))
+		 gg_graph <- gg_graph + geom_path(data=coord.ellipse, aes(x=.data[[names(coord.ellipse)[2]]],y=.data[[names(coord.ellipse)[3]]],group=.data[[names(coord.ellipse)[1]]]),colour=coord.ellipse[,4]	)
+      }  
     }
+## FIN new
     
-    
-    
-    #    if ((habillage != "none")&(habillage != "ind")) legend("topleft",legend= levels(res.pca$call$X[,habillage]),text.col= color.mod,cex=par("cex")*0.8)
     if ((habillage[1] != "none") & (habillage[1] != "ind") & (habillage[1] != "cos2") & (habillage[1] != "contrib") & (graph.type == "classic")) {
       L <- list(x="topleft", legend = levels(res.pca$call$X[, habillage[1]]), text.col = color.mod, cex = par("cex") * 0.8)
       L <- modifyList(L, legend)

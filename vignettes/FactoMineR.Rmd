@@ -38,7 +38,7 @@ that take into account different structure on the data such as:
 
 You can see more information about the package with the paper published in 
 the Journal of Statistical Software: 
-http://www.jstatsoft.org/article/view/v025i01/
+https://www.jstatsoft.org/article/view/v025i01/
 
 # MOOC
 

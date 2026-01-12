@@ -1415,19 +1415,47 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       gg_graph <- gg_graph + scale_color_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)])
     }
       
-    if (!is.null(coord.ellipse) & is.na(test.invisible[2])) {
+#    if (!is.null(coord.ellipse) & is.na(test.invisible[2])) {
+#      for (e in 1:nb.ind.actif) {
+#        debut <- ((nb.ind.actif - 1) * npoint.ellipse) + 1
+#        fin <- debut + npoint.ellipse - 1
+#        data.elli <- coord.ellipse[debut:fin, -1]
+#        if (graph.type == "classic") lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse[e])
+#      }
+#    }
+#    if (!is.null(coord.ellipse)) {
+#      for (e in 1:nlevels(coord.ellipse[, 1])) {
+#        data.elli <- coord.ellipse[(npoint.ellipse * 
+#                                      (e - 1) + 1):(npoint.ellipse * e), -1]
+#        if (graph.type == "classic") lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse[e])
+#      }
+#    }
+#    if (!is.null(coord.ellipse.par)) {
+#      for (i in group.ind.actif) {
+#        for (j in 1:nbre.grpe) {
+#          ind.e <- (i - 1) * nbre.grpe + j
+#          data.elli <- coord.ellipse.par[(npoint.ellipse.par * 
+#                                            (ind.e - 1) + 1):(npoint.ellipse.par * ind.e), -1]
+#          if (graph.type == "classic") lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse.par[ind.e], 
+#                                             lty = 2)
+#        }
+#      }
+#    }
+###New, non verifie car pas d'exemple
+    if (graph.type == "classic"){
+	 if (!is.null(coord.ellipse) & is.na(test.invisible[2])) {
       for (e in 1:nb.ind.actif) {
         debut <- ((nb.ind.actif - 1) * npoint.ellipse) + 1
         fin <- debut + npoint.ellipse - 1
         data.elli <- coord.ellipse[debut:fin, -1]
-        if (graph.type == "classic") lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse[e])
+        lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse[e])
       }
     }
     if (!is.null(coord.ellipse)) {
       for (e in 1:nlevels(coord.ellipse[, 1])) {
         data.elli <- coord.ellipse[(npoint.ellipse * 
                                       (e - 1) + 1):(npoint.ellipse * e), -1]
-        if (graph.type == "classic") lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse[e])
+        lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse[e])
       }
     }
     if (!is.null(coord.ellipse.par)) {
@@ -1436,12 +1464,21 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
           ind.e <- (i - 1) * nbre.grpe + j
           data.elli <- coord.ellipse.par[(npoint.ellipse.par * 
                                             (ind.e - 1) + 1):(npoint.ellipse.par * ind.e), -1]
-          if (graph.type == "classic") lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse.par[ind.e], 
+          lines(data.elli[, 1], y = data.elli[, 2], col = col.ellipse.par[ind.e], 
                                              lty = 2)
         }
       }
     }
-  }
+   } else {
+    if (!is.null(coord.ellipse)) {
+      coord.ellipse$col <- rep(col.ellipse,nrow(npoint.ellipse))
+	  gg_graph <- gg_graph + geom_path(data=coord.ellipse, aes(x=.data[[names(coord.ellipse)[2]]],y=.data[[names(coord.ellipse)[3]]],group=.data[[names(coord.ellipse)[1]]]),colour=coord.ellipse[,4])
+    }
+    if (!is.null(coord.ellipse.par)) {
+      coord.ellipse.par$col <- rep(col.ellipse.par,nrow(npoint.ellipse.par))
+	  gg_graph <- gg_graph + geom_path(data=coord.ellipse.par, aes(x=.data[[names(coord.ellipse.par)[2]]],y=.data[[names(coord.ellipse.par)[3]]],group=.data[[names(coord.ellipse.par)[1]]]),colour=coord.ellipse.par[,4],linetype = "dashed")
+    }
+   }  }
    palette(old.palette)
   if (graph.type == "ggplot") return(gg_graph)
 }

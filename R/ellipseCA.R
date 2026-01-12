@@ -75,27 +75,55 @@ ellipseCA <- function(x, ellipse=c("col","row"), method="multinomial", nbsample=
   if (nullxlimylim & diff(xlim)/diff(ylim)<1/2) xlim <- (xlim-mean(xlim))*diff(ylim)/diff(xlim)/2 + mean(xlim)
   graph <- plot(x,axes=axes,xlim=xlim,ylim=ylim,col.col=col.col,col.row=col.row, graph.type = graph.type, ggoptions = ggoptions, ...)
 
+#  if ("row"%in%ellipse){
+#    lev<-paste("row",1:nlevels(ellRow[, 1]),sep="")
+#    for (e in 1:nlevels(ellRow[, 1])) {
+#      data.elli <- ellRow[ellRow[, 1] == lev[e], -1]
+#      if(graph.type == "classic"){
+#        lines(x=data.elli[, 1], y = data.elli[, 2], col = col.row.ell[e])
+#      }
+#      if(graph.type == "ggplot"){
+#        graph <- graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = col.row.ell[e])
+#      }
+#    }   
+#  }
+#  if ("col"%in%ellipse){
+#    lev<-paste("col",1:nlevels(ellCol[, 1]),sep="")
+#    for (e in 1:nlevels(ellCol[, 1])) {
+#      data.elli <- ellCol[ellCol[, 1] == lev[e], -1]
+#      if(graph.type == "classic"){
+#        lines(x=data.elli[, 1], y = data.elli[, 2], col = col.col.ell[e])
+#      }
+#      if(graph.type == "ggplot"){
+#        graph <- graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = col.col.ell[e])
+#      }
+#    }   
+#  }
   if ("row"%in%ellipse){
     lev<-paste("row",1:nlevels(ellRow[, 1]),sep="")
-    for (e in 1:nlevels(ellRow[, 1])) {
-      data.elli <- ellRow[ellRow[, 1] == lev[e], -1]
-      if(graph.type == "classic"){
+    if(graph.type == "classic"){
+      for (e in 1:nlevels(ellRow[, 1])) {
+        data.elli <- ellRow[ellRow[, 1] == lev[e], -1]
         lines(x=data.elli[, 1], y = data.elli[, 2], col = col.row.ell[e])
       }
+	} else {
       if(graph.type == "ggplot"){
-        graph <- graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = col.row.ell[e])
+	    ellRow$colour <- rep(col.row.ell,times=table(ellRow[,1]))
+        graph <- graph + geom_path(aes_string(x=ellRow[,2],y=ellRow[,3]), color = ellRow$colour,group=ellRow[,1])
       }
     }   
   }
   if ("col"%in%ellipse){
     lev<-paste("col",1:nlevels(ellCol[, 1]),sep="")
-    for (e in 1:nlevels(ellCol[, 1])) {
-      data.elli <- ellCol[ellCol[, 1] == lev[e], -1]
-      if(graph.type == "classic"){
+    if(graph.type == "classic"){
+      for (e in 1:nlevels(ellCol[, 1])) {
+        data.elli <- ellCol[ellCol[, 1] == lev[e], -1]
         lines(x=data.elli[, 1], y = data.elli[, 2], col = col.col.ell[e])
       }
+	} else {
       if(graph.type == "ggplot"){
-        graph <- graph + geom_path(aes_string(x=data.elli[,1],y=data.elli[,2]), color = col.col.ell[e])
+	    ellCol$colour <- rep(col.col.ell,times=table(ellCol[,1]))
+        graph <- graph + geom_path(aes_string(x=ellCol[,2],y=ellCol[,3]), color = ellCol$colour,group=ellCol[,1])
       }
     }   
   }
