@@ -74,6 +74,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
         if (aux4 <= proba) {
           aux5 <- (1-2*as.integer(aux2>aux3))*qnorm(aux4/2)
           aux1 <- Table[j,k]/marge.col[k]
+#          tri[[j]] <- rbind(tri[[j]],c(aux1*100,aux2*100,aux3*100,aux4,aux5, Table[j, k]))
           tri[[j]] <- rbind(tri[[j]],c(aux1*100,aux2*100,aux3*100,aux4,aux5))
           nom[[j]] <- rbind(nom[[j]],c(levels(donnee[,quali[i]])[k],colnames(donnee)[quali[i]]))
         }
@@ -109,7 +110,8 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
          tri[[j]] <- matrix(tri[[j]],ncol=5)
          rownames(tri[[j]]) <- paste(nom[[j]][2],nom[[j]][1],sep="=")
        }
-       colnames(tri[[j]]) <-  c("Cla/Mod","Mod/Cla","Global","p.value","v.test")
+#       colnames(tri[[j]]) <-  c("Cla/Mod","Mod/Cla","Global","p.value","v.test")
+       colnames(tri[[j]]) <-  c("Cla/Mod","Mod/Cla","Global","p.value","v.test","n")
      }
    }
    if (indicateur.quali>0) res$category <- tri
@@ -127,12 +129,13 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
       sd.mod <- ec(donnee[,quanti[i]],fac=donnee[,num.var],poids=row.w)
       moy <- moy.p(donnee[,quanti[i]],poids=row.w)
       et <- ec(donnee[,quanti[i]],poids=row.w)
+      n   = table(is.na(donnee[, quanti[i]]),donnee[,num.var])[1,]
       for (j in 1:nb.modalite){
         v.test <- (moy.mod[j]-moy)/et*sqrt(n.mod[j])/sqrt((sum(n.mod)-n.mod[j])/(sum(n.mod)-1))
         p.value <- pnorm(abs(v.test),lower.tail = FALSE)*2
         if(!is.na(v.test)){
         if (p.value <= proba) {
-          result[[j]] <- rbind(result[[j]],c(v.test,moy.mod[j],moy,sd.mod[j],et,p.value))
+          result[[j]] <- rbind(result[[j]],c(v.test,moy.mod[j],moy,sd.mod[j],et,p.value,n[j]))
           nom[[j]] <- c(nom[[j]],colnames(donnee)[quanti[i]])
         }
        }
@@ -147,9 +150,11 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
         oo <- rev(order(result[[j]][,1]))
         result[[j]] <- result[[j]][oo,,drop=FALSE]
         nom[[j]] <- nom[[j]][oo]
-        result[[j]] <- matrix(result[[j]],ncol=6)
+#        result[[j]] <- matrix(result[[j]],ncol=6)
+        result[[j]] <- matrix(result[[j]],ncol=7)
         rownames(result[[j]]) <- nom[[j]]
-        colnames(result[[j]]) <- c("v.test","Mean in category","Overall mean","sd in category","Overall sd","p.value")
+#        colnames(result[[j]]) <- c("v.test","Mean in category","Overall mean","sd in category","Overall sd","p.value")
+        colnames(result[[j]]) <- c("v.test","Mean in category","Overall mean","sd in category","Overall sd","p.value","n")
       }
     }
     if (length(select1)>0) {

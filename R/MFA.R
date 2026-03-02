@@ -415,7 +415,6 @@ if ((!is.null(tab.comp))&(any("n"%in%type) | any("m"%in%type))){
     }
     coord.group <- t(t(contrib.group)*res.globale$eig[1:ncol(contrib.group),1])
     cos2.group <- coord.group^2/dist2.group
-	
     if (!is.null(num.group.sup)){
       coord.group.sup <- matrix(NA, length(num.group.sup), ncp)
       dimnames(coord.group.sup) <- list(name.group[num.group.sup], paste("Dim", c(1:ncp), sep = "."))
@@ -621,12 +620,12 @@ if ((!is.null(tab.comp))&(any("n"%in%type) | any("m"%in%type))){
             colnames(statg) <- c("group", "variable", "modalite", "effectif")
             statg[, "group"] <- rep(g, nrow(statg))
             nb.var <- sum(!sapply(res.separe[[g]]$call$X,is.numeric))
-            nb.mod <- unlist(sapply(res.separe[[g]]$call$X[,which(!sapply(res.separe[[g]]$call$X,is.numeric)),drop=FALSE],nlevels))
-            nom.mod <- unlist(sapply(res.separe[[g]]$call$X[,which(!sapply(res.separe[[g]]$call$X,is.numeric)),drop=FALSE],levels))
+            nb.mod <- unlist(lapply(res.separe[[g]]$call$X[,which(!sapply(res.separe[[g]]$call$X,is.numeric)),drop=FALSE],nlevels))
+            nom.mod <- unlist(lapply(res.separe[[g]]$call$X[,which(!sapply(res.separe[[g]]$call$X,is.numeric)),drop=FALSE],levels))
             if(!is.null(excl[[g]])){
 			  nb.mod <- nb.mod - length(excl[[g]])
 			  nom.mod <- nom.mod[-excl[[g]]]
-			}  
+			}
             statg[, "variable"] <- rep(colnames(res.separe[[g]]$call$X[,which(!sapply(res.separe[[g]]$call$X,is.numeric)),drop=FALSE]), nb.mod)
             statg[, "modalite"] <- nom.mod
             if(is.null(excl[[g]])) statg[, "effectif"] <- res.separe[[g]]$call$prop * nbre.ind 
