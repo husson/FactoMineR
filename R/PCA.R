@@ -33,14 +33,10 @@ fct.eta2 <- function(vec,x,weights) {
       }
 	}
 
-  X <- droplevels(X)
-  # if (!is.null(quali.sup) & is.numeric(quali.sup)) quali.sup <- colnames(X)[quali.sup]
-  # if (!is.null(quanti.sup) & is.numeric(quanti.sup)) quanti.sup <- colnames(X)[quanti.sup]
-  # if (!is.null(unused.var) & !is.numeric(unused.var)) unused.var<- which(colnames(X)%in%unused.var)
-  # if (!is.null(unused.var)) X <- X[,-unused.var]
-  if (!is.null(quali.sup) & !is.numeric(quali.sup)) quali.sup<- which(colnames(X)%in%quali.sup)
-  if (!is.null(quanti.sup) & !is.numeric(quanti.sup)) quanti.sup<- which(colnames(X)%in%quanti.sup)
-    if (any(is.na(X))) {
+    X <- droplevels(X)
+    if (!is.null(quali.sup) & !is.numeric(quali.sup)) quali.sup<- which(colnames(X)%in%quali.sup)
+    if (!is.null(quanti.sup) & !is.numeric(quanti.sup)) quanti.sup<- which(colnames(X)%in%quanti.sup)
+    if (any(is.na(X[,-quali.sup]))) {
         warning("Missing values are imputed by the mean of the variable: you should use the imputePCA function of the missMDA package")
         if (is.null(quali.sup)) 
           X[is.na(X)] <- matrix(colMeans(X,na.rm=TRUE),ncol=ncol(X),nrow=nrow(X),byrow=TRUE)[is.na(X)]
