@@ -26,8 +26,12 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 		inert.gain <- rev(hc$height)
 		if (!is.null(cla)) inert.gain <- c(inert.gain,cla$tot.withinss/sum(cla$size))
 		intra <- rev(cumsum(rev(inert.gain)))
-        quot <- intra[min:(max)]/intra[(min - 1):(max - 1)] 
-		nb.clust <- which.min(quot) + min -1
+## Ancien calcul pour niveau de coupure
+#        quot <- intra[min:(max)]/intra[(min - 1):(max - 1)] 
+#		nb.clust <- which.min(quot) + min -1
+### modif pour avoir ce qui est ecrit dans le livre, mais avec max au lieu de min
+quot <- inert.gain[min:max]/inert.gain[(min+1):(max+1)]
+nb.clust <- which.max(quot) + min
 # changement dans calcul annule. Mis dans la version 1.34  2016/04/12 (2 lignes changees)
 #        quot = inert.gain[(min-1):(max-1)]/inert.gain[min:max] 
 #		nb.clust = which.max(quot) + min - 1
