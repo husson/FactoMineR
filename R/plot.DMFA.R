@@ -29,7 +29,7 @@ plot.DMFA <- function (x, axes = c(1, 2), choix = "ind", label = "all",
             2], 4), " %)", sep = "")
 	  if(is.null(title)) titre <- "Qualitative representation"
 	  else titre <- title
-        if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
+#        if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
         if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
         plot(0, 0, main = titre, xlab = lab.x, ylab = lab.y, 
             xlim = xlim, ylim = ylim, col = "white", asp = 1, ...)
@@ -105,7 +105,7 @@ plot.DMFA <- function (x, axes = c(1, 2), choix = "ind", label = "all",
         }
     }
     if (choix == "group") {
-        if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
+#        if ((new.plot)&!nzchar(Sys.getenv("RSTUDIO_USER_IDENTITY"))) dev.new()
         if (is.null(palette)) palette(c("black", "red", "green3", "blue", "cyan", "magenta","darkgray", "darkgoldenrod", "darkgreen", "violet","turquoise", "orange", "lightpink", "lavender", "yellow","lightgreen", "lightgrey", "lightblue", "darkkhaki","darkmagenta", "darkolivegreen", "lightcyan", "darkorange","darkorchid", "darkred", "darksalmon", "darkseagreen","darkslateblue", "darkslategray", "darkslategrey","darkturquoise", "darkviolet", "lightgray", "lightsalmon","lightyellow", "maroon"))
         coord.gr <- res.dmfa$group$coord.n
         lev <- levels(res.dmfa$call$X[, 1])

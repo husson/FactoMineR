@@ -1,5 +1,5 @@
 Package: FactoMineR
-Version: 2.13
+Version: 2.14
 Title: Multivariate Exploratory Data Analysis and Data Mining
 Authors@R: c(person(given = "Francois", family = "Husson", role = c("aut", "cre"), email = "francois.husson@institut-agro.fr",
              comment = c(ORCID = "0000-0002-7271-8877")),

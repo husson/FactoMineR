@@ -19,7 +19,7 @@ for (i in firstvar:lastvar){
 }
 
 if (choix=="ind") {
-  dev.new()
+#  dev.new()
   if (is.null(title)) title2 <- paste("Biplot for",colnames(donnee)[var1],"and",colnames(donnee)[var2])
   else title2 <- title
   plot(donnee[,var1],donnee[,var2],xlab=colnames(donnee)[var1],ylab=colnames(donnee)[var2],pch=20,main=title2,asp=asp)
@@ -28,7 +28,7 @@ if (choix=="ind") {
   text(donnee[,var1],donnee[,var2],rownames(donnee), pos = 4, offset = 0.2)
 }
 if (choix=="var"){
-  dev.new()
+#  dev.new()
   alph <- acos(cor(donnee[,var1],donnee[,var2]))/pi*180
   zz <- function(x,y,alpha)
   ifelse((y<cos(alpha/180*pi+acos(x)))|(y>cos(alpha/180*pi-acos(x))),NA,

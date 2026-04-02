@@ -1,16 +1,39 @@
 CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL, quali.sup=NULL, graph = TRUE, axes=c(1,2), row.w=NULL, excl=NULL){
 
- # fct.eta2 <- function(vec,x,weights) {
-     # res <- summary(lm(x~vec,weights=weights,na.action=na.omit))$r.squared
- # }
-fct.eta2 <- function(vec,x,weights) {   ## pb avec les poids
-  VB <- function(xx) {
-	return(sum((colSums((tt*xx)*weights)^2)/ni))
+fct.eta2 <- function(group, Y, weights = NULL) {
+  prep_anova_weights <- function(group, weights = NULL) {
+    n <- length(group)
+    if (is.null(weights)) weights <- rep(1, n)
+    idx_ok <- which(!is.na(group))   # longueur n_ok <= n
+    if (length(idx_ok) < n) {
+      weights  <- weights[idx_ok]
+      group <- group[idx_ok]
+    }
+    weights_norm     <- weights / sum(weights)
+    somme_p_group <- tapply(weights, group, sum)
+    list(idx_ok= idx_ok,n_total= n,weights= weights,weights_norm= weights_norm,group=group,somme_p_group = somme_p_group)
   }
-  tt <- tab.disjonctif(vec)
-  ni <- colSums(tt*weights)
-  unlist(lapply(as.data.frame(x),VB))/colSums(x*x*weights)
+  
+  r2_from_prep <- function(y, prep) {
+    if (length(prep$idx_ok) < prep$n_total) y <- y[prep$idx_ok]
+    moy_glob <- sum(prep$weights_norm * y)
+    d   <- y - moy_glob
+    sct <- sum(prep$weights * d * d)
+    moy_g <- tapply(prep$weights * y, prep$group, sum) / prep$somme_p_group
+    dg  <- moy_g[prep$group] - moy_glob
+    sce <- sum(prep$weights * dg * dg)
+    sce / sct
+  }
+  Y <- as.data.frame(Y)
+  prep <- prep_anova_weights(group, weights)
+  unlist(lapply(Y, r2_from_prep, prep))
 }
+#fct.eta2 <- function(vec,x,weights) {
+#  fct <- function(vari,vec,weights){
+#	 summary(lm(vari~vec,weights=weights))$r.squared
+#  }
+#  unlist(lapply(as.data.frame(x),fct,vec,weights))
+#}
 
     if (is.table(X)) X <- matrix(as.vector(X),nrow(X),dimnames=dimnames(X))
     if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)

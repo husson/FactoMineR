@@ -99,10 +99,10 @@ res.pca$ind$dist <- res.pca$ind$dist[rownames(don)]
   res$Cov <- Cov
   class(res) <- c("DMFA", "list")
   if (graph) {
-    plot.DMFA(res, choix="ind",invisible="quali", label="none", axes=axes,new.plot=TRUE)
-    plot.DMFA(res, choix="var", axes=axes,new.plot=TRUE)
-    plot.DMFA(res, choix="group", axes=axes,new.plot=TRUE)
-    if (!is.null(quali.sup)) plot.DMFA(res, choix="quali", axes=axes,new.plot=TRUE)
+    plot.DMFA(res, choix="ind",invisible="quali", label="none", axes=axes)
+    plot.DMFA(res, choix="var", axes=axes)
+    plot.DMFA(res, choix="group", axes=axes)
+    if (!is.null(quali.sup)) plot.DMFA(res, choix="quali", axes=axes)
   }
   return(res)
 }
