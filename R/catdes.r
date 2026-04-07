@@ -129,7 +129,7 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
       sd.mod <- ec(donnee[,quanti[i]],fac=donnee[,num.var],poids=row.w)
       moy <- moy.p(donnee[,quanti[i]],poids=row.w)
       et <- ec(donnee[,quanti[i]],poids=row.w)
-      n   = table(is.na(donnee[, quanti[i]]),donnee[,num.var])[1,]
+      n   = table(is.na(donnee[, quanti[i],drop=FALSE]),donnee[,num.var])[1,]
       for (j in 1:nb.modalite){
         v.test <- (moy.mod[j]-moy)/et*sqrt(n.mod[j])/sqrt((sum(n.mod)-n.mod[j])/(sum(n.mod)-1))
         p.value <- pnorm(abs(v.test),lower.tail = FALSE)*2

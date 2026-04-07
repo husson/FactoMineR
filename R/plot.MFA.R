@@ -152,7 +152,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         geom_segment(aes(x=0,y=0,xend=df_axes[,2], yend=df_axes[,3],color = as.factor(as.character(df_axes[,4]))), arrow=arrow(length=unit(0.2,"cm")), lty = ggoptions_default$segment.lty, lwd = ggoptions_default$segment.lwd) + 
         xlab(lab.x) + ylab(lab.y) +
         ggtitle(title) +
-        labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "")) +
+        labs(color = if(legend["title"] %in% legend) legend["title"][[1]]) +
         theme_light()  +
         ggoptions_default$theme
       if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_axes[,2], y=df_axes[,3],label=df_axes[,1], color = as.factor(as.character(df_axes[,4]))), size = ggoptions_default$size, show.legend = FALSE)
@@ -517,7 +517,8 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         xlab(lab.x) + ylab(lab.y) +
         xlim(c(-1.3,1.3)) + ylim(c(-1.1,1.1)) +
         ggtitle(title) +
-        labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "")) +
+        labs(color = if(legend["title"] %in% legend) legend["title"][[1]]) +
+#        labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "")) +
         scale_color_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)]) +
         theme_light()  + 
         ggoptions_default$theme
@@ -785,7 +786,8 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         xlim(xlim) + ylim(ylim) +
         geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
         geom_vline(xintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
-        labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "")) +
+#        labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "")) +
+        labs(color = if(legend["title"] %in% legend) legend["title"][[1]]) +
         scale_color_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)]) +
         theme_light() +
         ggoptions_default$theme +

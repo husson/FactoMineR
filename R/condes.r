@@ -61,7 +61,7 @@ test.aov.w <- function(y,x,w=NULL){
           aux <- matrix(as.numeric(sapply(tab.quanti,unlist)),byrow=TRUE,ncol=2)
 		} else aux <- matrix(unlist(cor.calc(donnee[, quanti], donnee[, num.var],w=weights)),ncol=2)
 #
-        aux <- data.frame(aux, n = apply(donnee[,quanti], 2, function(x) sum(!is.na(x))))
+        aux <- data.frame(aux, n = apply(donnee[,quanti,drop=FALSE], 2, function(x) sum(!is.na(x))))
         rownames(aux) <- colnames(donnee)[quanti]
         resQ <- NULL
         if (NROW(aux) > 1) aux <- aux[rev(order(aux[, 1])), ]
