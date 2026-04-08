@@ -110,8 +110,8 @@ catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
          tri[[j]] <- matrix(tri[[j]],ncol=5)
          rownames(tri[[j]]) <- paste(nom[[j]][2],nom[[j]][1],sep="=")
        }
-#       colnames(tri[[j]]) <-  c("Cla/Mod","Mod/Cla","Global","p.value","v.test")
-       colnames(tri[[j]]) <-  c("Cla/Mod","Mod/Cla","Global","p.value","v.test","n")
+       colnames(tri[[j]]) <-  c("Cla/Mod","Mod/Cla","Global","p.value","v.test")
+#       colnames(tri[[j]]) <-  c("Cla/Mod","Mod/Cla","Global","p.value","v.test","n")
      }
    }
    if (indicateur.quali>0) res$category <- tri

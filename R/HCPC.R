@@ -136,7 +136,6 @@ nb.clust <- which.max(quot) + min
 ### Fin AJOUT K-means
 ##      res <- PCA(res, scale.unit = FALSE, ncp = Inf, graph = FALSE)
     }
-
     if(inherits(res,"CA")){
 	  aux <- res$eig
 	  if(cluster.CA=="rows") res <- PCA(res$row$coord, scale.unit = FALSE, ncp = Inf, graph = FALSE,row.w=res$call$marge.row*sum(res$call$X))

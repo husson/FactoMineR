@@ -95,7 +95,7 @@ plot(res.pca, habillage = 13, cex=0.8)
 \dontrun{
 plot(res.pca, habillage = "cos2")
 plot(res.pca, habillage = "100m")
-plot(res.pca, habillage = c("Competition","100m"))
+plot(res.pca, habillage = "Competition")
 }
 ## To automatically draw ellipses around the barycentres of the categorical variables
 plotellipses(res.pca)
