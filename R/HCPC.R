@@ -143,6 +143,7 @@ nb.clust <- which.max(quot) + min
 	  res$eig <- aux
     }
     if (is.null(max)) max <- min(10, round(nrow(res$ind$coord)/2))
+	max <- max(max+1,min)
     max <- min(max, nrow(res$ind$coord) - 1)
     if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "FAMD")) {
     	if (!is.null(res$call$ind.sup)) res$call$X <- res$call$X[-res$call$ind.sup, ]
