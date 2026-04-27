@@ -31,7 +31,7 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 #		nb.clust <- which.min(quot) + min -1
 ### modif pour avoir ce qui est ecrit dans le livre, mais avec max au lieu de min
 quot <- inert.gain[min:max]/inert.gain[(min+1):(max+1)]
-nb.clust <- which.max(quot) + min
+nb.clust <- which.max(quot) + min - 1
 # changement dans calcul annule. Mis dans la version 1.34  2016/04/12 (2 lignes changees)
 #        quot = inert.gain[(min-1):(max-1)]/inert.gain[min:max] 
 #		nb.clust = which.max(quot) + min - 1
@@ -206,6 +206,7 @@ nb.clust <- which.max(quot) + min
         }
     }
     else stop("The tree should be from 'hclust' or 'agnes' class.")
+	print(y)
     clust <- cutree(as.hclust(t$tree), h = y)
     nb.clust <- max(clust)
 	X <- as.data.frame(t$res$ind$coord)

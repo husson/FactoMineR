@@ -12,13 +12,28 @@ tryCatch.W.E <- function(expr){  ## function proposed by Maechler
          warning = W)
 }
 
-
    if (is.null(row.w)) row.w <- rep(1/nrow(X), nrow(X))
    if (is.null(col.w)) col.w <- rep(1, ncol(X))
    ncp <- min(ncp,nrow(X)-1,ncol(X))
    row.w <- row.w / sum(row.w)
-    X <- t(t(X)*sqrt(col.w))*sqrt(row.w)
-if (ncol(X)<nrow(X)){
+   X <- t(t(X)*sqrt(col.w))*sqrt(row.w)
+## add sumvp
+   sumvp <- sum(X^2)
+## fin add sumvp
+   if (ncp<0.5*min(length(row.w),length(col.w))){
+   svd.usuelle <- irlba(X,nu=ncp,nv=ncp)
+   U <- svd.usuelle$u
+   V <- svd.usuelle$v
+   if (ncp >1){
+	 mult <- sign(as.vector(crossprod(rep(1,nrow(V)),as.matrix(V))))
+	 mult[mult==0] <- 1
+     U <- t(t(U)*mult)
+     V <- t(t(V)*mult)
+   }
+   U <- U/sqrt(row.w)
+   V <- V/sqrt(col.w)
+  } else{
+     if (ncol(X)<nrow(X)){
 ##    svd.usuelle <- svd(X,nu=ncp,nv=ncp)
 ## lignes suivantes pour eviter qq pb de convergence de l'algo LINPACK de svd
 	svd.usuelle <- tryCatch.W.E(svd(X,nu=ncp,nv=ncp))$val
@@ -48,8 +63,8 @@ if (ncol(X)<nrow(X)){
     }
     U <- U/sqrt(row.w)
     V <- V/sqrt(col.w)
-}
-else{
+  }
+  else{
 	svd.usuelle <- tryCatch.W.E(svd(t(X),nu=ncp,nv=ncp))$val
     if (names(svd.usuelle)[[1]]=="message"){
 	  svd.usuelle <- tryCatch.W.E(svd(X,nu=ncp,nv=ncp))$val
@@ -72,8 +87,9 @@ else{
 	mult[mult==0] <- 1
     V <- t(t(V)*mult)/sqrt(col.w)
     U <- t(t(U)*mult)/sqrt(row.w)
-}
-    vs <- svd.usuelle$d[1:min(ncol(X),nrow(X)-1)]
+  }
+ }
+    vs <- svd.usuelle$d[1:min(ncol(X),nrow(X)-1,ncp)]
 	num <- which(vs[1:ncp]<1e-15)
     if (length(num)==1){
 	  U[,num] <- U[,num,drop=FALSE]*vs[num]
