@@ -50,8 +50,8 @@ HCPC(res, nb.clust=0, consol=TRUE, iter.max=10, min=3,
 \details{
   The function first built a hierarchical tree. Then the sum of the
   within-cluster inertia are calculated for each partition. The suggested
-  partition is the one with the higher relative loss of inertia
-  (i(clusters n+1)/i(cluster n)).
+  partition is the one that maximizes the Krzanowski-Lai index (1988). This index is
+  particularly adapted for Euclidean distance and Ward criterion.
   
   The absolute loss of inertia (i(cluster n)-i(cluster n+1)) is plotted
   with the tree.  

@@ -1,4 +1,4 @@
-	FAMD <- function(base, ncp = 5, graph = TRUE, sup.var=NULL, ind.sup = NULL, axes=c(1,2),row.w=NULL, tab.disj=NULL){
+FAMD <- function(base, ncp = 5, graph = TRUE, sup.var=NULL, ind.sup = NULL, axes=c(1,2),row.w=NULL, tab.disj=NULL){
 	
     moy.ptab <- function(V, poids) {
         as.vector(crossprod(poids/sum(poids),as.matrix(V)))
@@ -50,8 +50,14 @@ fct.eta2 <- function(group, Y, weights = NULL) {
     if (!is.null(sup.var) & !is.numeric(sup.var)) sup.var<- which(colnames(base)%in%sup.var)
 	base <- as.data.frame(base)
     is.quali <- which(!unlist(lapply(base,is.numeric)))
+    is.quanti <- which(unlist(lapply(base,is.numeric)))
     base[,is.quali] <- lapply(base[,is.quali,drop=FALSE],as.factor)
 	base <- droplevels(base)
+
+    if (any(is.na(base[,is.quanti]))){
+        warning("Missing values are imputed by the mean of the variable: you should use the imputeFAMD function of the missMDA package")
+        for (j in is.quanti) base[[j]][is.na(base[[j]])] <- mean(base[[j]], na.rm = TRUE)
+    }
 	row.w.init <- row.w
 	if (is.null(row.w)) { row.w.init <- row.w <- rep(1,nrow(base)-length(ind.sup)) }
 	row.w <- rep(0,nrow(base))

@@ -4,11 +4,14 @@ print.CA <- function (x, file = NULL, sep = ";", ...){
     cat("**Results of the Correspondence Analysis (CA)**\n")
     cat("The row variable has ",nrow(res.ca$call$X)," categories; the column variable has", ncol(res.ca$call$X), "categories\n")
 ##    IT <- res.ca$eig[length(res.ca$eig), 3] * sum(res.ca$call$X)
-    IT <- sum(res.ca$eig[, 1] )* sum(res.ca$call$X) 
-    df <- (nrow(res.ca$call$X) - 1) * (ncol(res.ca$call$X) - 1)
-    pc <- pchisq(IT, df = df,lower.tail = FALSE)
-    cat("The chi square of independence between the two variables is equal to", IT, 
-        "(p-value = ", pc, ").\n")
+    testX2 <- suppressWarnings(chisq.test(res.ca$call$X))
+    cat("The chi square of independence between the two variables is equal to", testX2$statistic, 
+        "(p-value = ", testX2$p.value,").\n")
+#    IT <- sum(res.ca$eig[, 1] )* sum(res.ca$call$X) 
+#    df <- (nrow(res.ca$call$X) - 1) * (ncol(res.ca$call$X) - 1)
+#    pc <- pchisq(IT, df = df,lower.tail = FALSE)
+#    cat("The chi square of independence between the two variables is equal to", IT, 
+#        "(p-value = ", pc, ").\n")
     cat("*The results are available in the following objects:\n\n")
     res <- array("", c(21, 2), list(1:21, c("name", "description")))
     res[1, ] <- c("$eig", "eigenvalues")

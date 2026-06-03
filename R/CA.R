@@ -45,7 +45,6 @@ fct.eta2 <- function(group, Y, weights = NULL) {
 	X <- as.data.frame(X)
     is.quali <- which(!unlist(lapply(X,is.numeric)))
     X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
-    for (i in is.quali) X[,i] <- as.factor(X[,i])
 	X <- droplevels(X)
     Xtot <- X
     if (any(!unlist(lapply(X, is.numeric)))) {
@@ -53,14 +52,14 @@ fct.eta2 <- function(group, Y, weights = NULL) {
       for (j in (1:ncol(X))[!((1:ncol(X))%in%quali.sup)]) if (!is.numeric(X[,j])) auxi <- c(auxi,colnames(X)[j])
       if (!is.null(auxi)) stop(paste("\nThe following variables are not quantitative: ", auxi))
     }
-    if (!inherits(X, "data.frame")) stop("X is not a data.frame")
-    if (!is.null(row.sup)) X <- as.data.frame(X[-row.sup,])
-    if ((!is.null(col.sup))||(!is.null(quanti.sup))||(!is.null(quali.sup))) X <- as.data.frame(X[,-c(col.sup,quanti.sup,quali.sup)])
-    if (any(apply(X,1,sum)==0)){
+    X <- as.matrix(X[setdiff(1:nrow(X),row.sup),setdiff(1:ncol(X),c(col.sup,quanti.sup,quali.sup))])
+#    if (any(apply(X,1,sum)==0)){
+    if (any(rowSums(X)==0)){
 	  warning(paste0("The rows ",paste(rownames(X)[which(apply(X,1,sum)==0)],collapse=", ")," sum at 0. They were suppressed from the analysis"))
  	  X <- X[-which(apply(X,1,sum)==0),,drop=FALSE]
 	}
-    if (any(apply(X,2,sum)==0)){
+#    if (any(apply(X,2,sum)==0)){
+    if (any(colSums(X)==0)){
 	  warning(paste0("The columns ",paste(colnames(X)[which(apply(X,2,sum)==0)],collapse=", ")," sum at 0. They were suppressed from the analysis"))
  	  X <- X[,-which(apply(X,2,sum)==0),drop=FALSE]
 	}
@@ -68,47 +67,51 @@ fct.eta2 <- function(group, Y, weights = NULL) {
     if (is.null(row.w)) row.w <- rep(1,nrow(X))
 	row.w.init <- row.w
     if (length(row.w)!=nrow(X)) stop("length of vector row.w should be the number of active rows")
-    total <- sum(X*row.w)
-    F <- as.matrix(X)*(row.w/total)
+	total <- sum(X*row.w)  
+    F <- X*(row.w/total)
     marge.col <- colSums(F)
     marge.row <- rowSums(F)
     ncp <- min(ncp, (nrow(X) - 1), (ncol(X) - 1))
-    Tc <- t(t(F/marge.row)/marge.col) - 1
+#    Tc <- t(t(F/marge.row)/marge.col) - 1
+    Tc <- F / outer(marge.row, marge.col) - 1
   if(!is.null(excl)) marge.col[excl] <- 1e-15
-    tmp <- svd.triplet(Tc, row.w = marge.row, col.w = marge.col,ncp=ncp)
+  tmp <- svd.triplet(Tc, row.w = marge.row, col.w = marge.col,ncp=ncp)
   if(!is.null(excl)) marge.col[excl] <- 0
     eig <- tmp$vs^2
     vp <- matrix(NA, length(eig), 3)
     rownames(vp) <- paste("dim", 1:length(eig))
     colnames(vp) <- c("eigenvalue", "percentage of variance", "cumulative percentage of variance")
     vp[, "eigenvalue"] <- eig
-    vp[, "percentage of variance"] <- (eig/sum(eig))*100
+#    vp[, "percentage of variance"] <- (eig/sum(t(t(Tc^2)*marge.col)*marge.row)) * 100
+    vp[, "percentage of variance"] <- 	(eig/drop(marge.row %*% (Tc^2 %*% marge.col))) * 100
     vp[, "cumulative percentage of variance"] <- cumsum(vp[, "percentage of variance"])
     V <- tmp$V
     U <- tmp$U
 	eig <- eig[1:ncol(U)]
 	coord.col <- t(t(V)*sqrt(eig))
     coord.row <- t(t(U)*sqrt(eig))
-	dist2.col <- colSums(Tc^2*marge.row)
-    contrib.col <- t(t(coord.col^2*marge.col)/eig)
-    cos2.col <- coord.col^2/dist2.col
+	dist2.col <- colSums(Tc*(Tc*marge.row))
+    contrib.col <- t(t(coord.col*(coord.col*marge.col))/eig)
+    cos2.col <- coord.col*(coord.col/dist2.col)
     colnames(coord.col) <- colnames(contrib.col) <- colnames(cos2.col) <- paste("Dim", 1:length(eig))
-    rownames(coord.col) <- rownames(contrib.col) <- rownames(cos2.col) <- attributes(X)$names
-    dist2.row <- rowSums(t(t(Tc^2)*marge.col))
-    contrib.row <- t(t(coord.row^2*marge.row)/eig)
-    cos2.row <- coord.row^2/dist2.row
+    rownames(coord.col) <- rownames(contrib.col) <- rownames(cos2.col) <- colnames(X)
+#    dist2.row <- rowSums(t(t(Tc^2)*marge.col))
+	dist2.row <- drop(Tc^2 %*% marge.col)
+    contrib.row <- t(t(coord.row*(coord.row*marge.row))/eig)
+#    contrib.row <- t(t(coord.row^2*marge.row)/eig)
+    cos2.row <- coord.row*(coord.row/dist2.row)
     colnames(coord.row) <- colnames(contrib.row) <- colnames(cos2.row) <- paste("Dim", 1:length(eig))
-    rownames(coord.row) <- rownames(contrib.row) <- rownames(cos2.row) <- attributes(X)$row.names
+    rownames(coord.row) <- rownames(contrib.row) <- rownames(cos2.row) <- rownames(X)
     inertia.row <- marge.row*dist2.row
     inertia.col <- marge.col*dist2.col
-    names(inertia.col) <- attributes(coord.col)$row.names
-    names(inertia.row) <- attributes(coord.row)$row.names
+    names(inertia.col) <- rownames(coord.col)
+    names(inertia.row) <- rownames(coord.row)
     
 #    res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,call=sys.calls()[[1]],Xtot=Xtot,N=sum(row.w*rowSums(X)))
     res.call <- list(X = X, marge.col = marge.col, marge.row = marge.row, ncp = ncp, row.w=row.w,excl=excl,call=match.call(),Xtot=Xtot,N=sum(row.w*rowSums(X)))
     res.col <- list(coord = as.matrix(coord.col[, 1:ncp]), contrib = as.matrix(contrib.col[, 1:ncp] * 100), cos2 = as.matrix(cos2.col[, 1:ncp]), inertia=inertia.col)
     res.row <- list(coord = coord.row[, 1:ncp], contrib = contrib.row[, 1:ncp] * 100, cos2 = cos2.row[, 1:ncp], inertia=inertia.row)
-    res <- list(eig = vp[1:min(nrow(X) - 1, ncol(X) - 1),,drop=FALSE], call = res.call, row = res.row, col = res.col, svd = tmp)
+    res <- list(eig = vp[1:min(nrow(vp),nrow(X) - 1, ncol(X) - 1),,drop=FALSE], call = res.call, row = res.row, col = res.col, svd = tmp)
   if (!is.null(row.sup)){
     X.row.sup <- as.data.frame(Xtot[row.sup,])
     if ((!is.null(col.sup))||(!is.null(quanti.sup))||(!is.null(quali.sup))) X.row.sup <- as.data.frame(X.row.sup[,-c(col.sup,quanti.sup,quali.sup)])
@@ -134,14 +137,16 @@ fct.eta2 <- function(group, Y, weights = NULL) {
     res$call$row.sup <- row.sup
 }
  if (!is.null(col.sup)){
-    X.col.sup <- as.data.frame(Xtot[,col.sup])
-    if (!is.null(row.sup)) X.col.sup <- as.data.frame(X.col.sup[-row.sup,])
+#    X.col.sup <- as.data.frame(Xtot[,col.sup])
+#    if (!is.null(row.sup)) X.col.sup <- as.data.frame(X.col.sup[-row.sup,])
+    X.col.sup <- as.matrix(Xtot[setdiff(1:nrow(Xtot),row.sup),col.sup])
 ## 1 ligne rajoutee
     X.col.sup <- X.col.sup*row.w
     colnames(X.col.sup) <- colnames(Xtot)[col.sup]
     somme.col <- colSums(X.col.sup)
-    X.col.sup <- t(t(X.col.sup)/somme.col)
-    coord.col.sup <- crossprod(as.matrix(X.col.sup),U)
+#    X.col.sup <- t(t(X.col.sup)/somme.col)
+	X.col.sup <- X.col.sup / rep(somme.col, each=nrow(X.col.sup))
+    coord.col.sup <- crossprod(X.col.sup,U)
 	
 dist2.col <- colSums((X.col.sup-marge.row)^2/marge.row)
     coord.col.sup <- as.matrix(coord.col.sup[,1:ncp,drop=FALSE])

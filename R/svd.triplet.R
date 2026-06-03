@@ -21,7 +21,7 @@ tryCatch.W.E <- function(expr){  ## function proposed by Maechler
    sumvp <- sum(X^2)
 ## fin add sumvp
    if (ncp<0.5*min(length(row.w),length(col.w))){
-   svd.usuelle <- irlba(X,nu=ncp,nv=ncp)
+   svd.usuelle <- irlba::irlba(X,nu=ncp,nv=ncp)
    U <- svd.usuelle$u
    V <- svd.usuelle$v
    if (ncp >1){

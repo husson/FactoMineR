@@ -16,6 +16,7 @@ importFrom(scatterplot3d,scatterplot3d)
 importFrom(cluster,agnes)
 importFrom(flashClust,hclust)
 importFrom(DT,datatable,formatStyle,styleInterval)
+importFrom(irlba,irlba)
 
 S3method(plot, CA)
 S3method(plot, CaGalt)

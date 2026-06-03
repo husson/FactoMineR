@@ -6,23 +6,46 @@ MFA <- function (base, group, type = rep("s",length(group)), excl = NULL, ind.su
     ec <- function(V, poids) {
         res <- sqrt(sum(V^2 * poids,na.rm=TRUE)/sum(poids[!is.na(V)]))
     }
-	funcLg <- function (x, y, ponderation.x, ponderation.y, wt = rep(1/nrow(x), nrow(x)), cor = FALSE) {
-      if (is.data.frame(x)) x <- as.matrix(x)
-      else if (!is.matrix(x)) stop("'x' must be a matrix or a data frame")
-      if (is.data.frame(y)) y <- as.matrix(y)
-      else if (!is.matrix(y)) stop("'y' must be a matrix or a data frame")
-      if (!all(is.finite(x))) stop("'x' must contain finite values only")
-      if (!all(is.finite(y))) stop("'y' must contain finite values only")
-      s <- sum(wt)
-	  wt <- wt/s
-      center <- colSums(wt * x)
-      x <- sqrt(wt) * t(t(sweep(x, 2, center, check.margin = FALSE))*sqrt(ponderation.x))
-      center <- colSums(wt * y)
-      y <- sqrt(wt) * t(t(sweep(y, 2, center, check.margin = FALSE))*sqrt(ponderation.y))
-	  Lg <- 0
-	  for (i in 1:ncol(x)) Lg <- Lg+sum(crossprod(x[,i],y)^2)
-	  Lg
-    }
+	# funcLg <- function (x, y, ponderation.x, ponderation.y, wt = rep(1/nrow(x), nrow(x)), cor = FALSE) {
+      # if (is.data.frame(x)) x <- as.matrix(x)
+      # else if (!is.matrix(x)) stop("'x' must be a matrix or a data frame")
+      # if (is.data.frame(y)) y <- as.matrix(y)
+      # else if (!is.matrix(y)) stop("'y' must be a matrix or a data frame")
+      # if (!all(is.finite(x))) stop("'x' must contain finite values only")
+      # if (!all(is.finite(y))) stop("'y' must contain finite values only")
+      # s <- sum(wt)
+	  # wt <- wt/s
+      # center <- colSums(wt * x)
+      # x <- sqrt(wt) * t(t(sweep(x, 2, center, check.margin = FALSE))*sqrt(ponderation.x))
+      # center <- colSums(wt * y)
+      # y <- sqrt(wt) * t(t(sweep(y, 2, center, check.margin = FALSE))*sqrt(ponderation.y))
+	  # Lg <- 0
+	  # for (i in 1:ncol(x)) Lg <- Lg+sum(crossprod(x[,i],y)^2)
+	  # Lg
+    # }
+	
+	
+	funcLg <- function(x, y, ponderation.x, ponderation.y, wt=rep(1/nrow(x), nrow(x)), cor=FALSE) {
+	  if (is.data.frame(x)) x <- as.matrix(x)
+	  else if (!is.matrix(x)) stop("'x' must be a matrix or a data frame")
+	  if (is.data.frame(y)) y <- as.matrix(y)
+	  else if (!is.matrix(y)) stop("'y' must be a matrix or a data frame")
+	  if (!all(is.finite(x))) stop("'x' must contain finite values only")
+	  if (!all(is.finite(y))) stop("'y' must contain finite values only")
+
+	  wt <- wt / sum(wt)
+	  swt <- sqrt(wt)
+
+	  x <- swt * sweep(x, 2, drop(crossprod(wt, x))) * rep(sqrt(ponderation.x), each=nrow(x))
+	  y <- swt * sweep(y, 2, drop(crossprod(wt, y))) * rep(sqrt(ponderation.y), each=nrow(y))
+
+	  ## Lg = sum des carres de tous les elements de t(x) %*% y
+	  ## = somme des carres de la matrice de covariance croisee
+	  M <- crossprod(x, y)   # p x q
+	  sum(M * M)
+}
+
+
 	if (!is.null(excl) & "m"%in%type) stop("Excluding categories is not allowed when some groups are mixed")
 if (!is.null(tab.comp)){
   if (!is.null(weight.col.mfa)) stop("Weightings on the variables are not allowed with the tab.comp argument")
@@ -347,7 +370,7 @@ if (!is.null(tab.comp)){
     }
 # modif 2023-01-16
 #    ncp.tmp <- min(nb.actif-1, ncol(data))
-    ncp.tmp <- min(nb.actif-1, ncol(data)-sum((group[group.actif])[type[group.actif]=="n"]))
+    ncp.tmp <- min(ncp,nb.actif-1, ncol(data)-sum((group[group.actif])[type[group.actif]=="n"]))
     ind.var <- 0
     ind.quali <- NULL
     for (g in 1:nbre.group) {
@@ -403,58 +426,104 @@ if ((!is.null(tab.comp))&(any("n"%in%type) | any("m"%in%type))){
 	call$nature.group <- nature.group
 	call$nature.var <- nature.var
 	call$list.type.var <- list.type.var
+    if (!is.null(num.group.sup)){
+      coord.group.sup <- matrix(NA, length(num.group.sup), ncp)
+      dimnames(coord.group.sup) <- list(name.group[num.group.sup], paste("Dim", c(1:ncp), sep = "."))
+      ind.gc <- 0
+      # for (gc in 1:length(num.group.sup)) {
+        # for (k in 1:ncp){
+          # coord.group.sup[gc,k] <- funcLg(res.globale$ind$coord[setdiff(1:nrow(data.group.sup),ind.sup),k,drop=FALSE],data.group.sup[setdiff(1:nrow(data.group.sup),ind.sup),(ind.gc+1):(ind.gc+group.mod[num.group.sup[gc]]),drop=FALSE],ponderation.x=1/res.globale$eig[k,1],ponderation.y=ponderation.group.sup[(ind.gc+1):(ind.gc+group.mod[num.group.sup[gc]])],wt=row.w/sum(row.w))
+        # }
+        # ind.gc <- ind.gc + group.mod[num.group.sup[gc]]
+      # }
+		idx.act <- setdiff(1:nrow(data.group.sup), ind.sup)
+		wt      <- row.w / sum(row.w)
+		coord.act <- res.globale$ind$coord[idx.act, 1:ncp, drop=FALSE]  # precalcul des coords actives
+		ind.gc <- 0  ## a initialiser avant la boucle si ce n'est pas deja fait
+		for (gc in 1:length(num.group.sup)) {
+		  cols.gc <- (ind.gc+1):(ind.gc + group.mod[num.group.sup[gc]])
+		  y.gc    <- data.group.sup[idx.act, cols.gc, drop=FALSE]
+		  py.gc   <- ponderation.group.sup[cols.gc]
+		  for (k in 1:ncp) {
+			coord.group.sup[gc, k] <- funcLg(x = coord.act[, k, drop=FALSE], y = y.gc, 
+			ponderation.x = 1 / res.globale$eig[k, 1], ponderation.y = py.gc, wt = wt)
+		  }
+		  ind.gc <- ind.gc + group.mod[num.group.sup[gc]]
+		}
+    }
+    Lg <- matrix(0, nbre.group+1, nbre.group+1)
+    ind.gl <- 0
+    # for (gl in c(group.actif,num.group.sup)) {
+        # ind.gc <- 0
+        # for (gc in c(group.actif,num.group.sup)) {
+            # if (gc>=gl){
+			  # if (is.null(num.group.sup)) {
+			    # Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=data[setdiff(1:nrow(data),ind.sup),ind.gl + (1:group.mod[gl]),drop=FALSE],y=data[setdiff(1:nrow(data),ind.sup),ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=ponderation[ind.gl + (1:group.mod[gl])],ponderation.y=ponderation[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
+			  # } else {
+			    # Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=cbind(data,data.group.sup)[setdiff(1:nrow(data),ind.sup),ind.gl + (1:group.mod[gl]),drop=FALSE],y=cbind(data,data.group.sup)[setdiff(1:nrow(data),ind.sup),ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=c(ponderation,ponderation.group.sup)[ind.gl + (1:group.mod[gl])],ponderation.y=c(ponderation,ponderation.group.sup)[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
+			  # }
+			# }
+            # ind.gc <- ind.gc + group.mod[gc]
+        # }
+        # ind.gl <- ind.gl + group.mod[gl]
+    # }	
+
+	wt        <- row.w / sum(row.w)
+	idx.act   <- setdiff(1:nrow(data), ind.sup)
+
+	if (is.null(num.group.sup)) {
+	  data.all  <- data
+	  pond.all  <- ponderation
+	} else {
+	  data.all  <- cbind(data, data.group.sup)
+	  pond.all  <- c(ponderation, ponderation.group.sup)
+	}
+	data.all  <- data.all[idx.act, , drop=FALSE]
+
+	## Precalcul des indices de colonnes par groupe
+	all.groups <- c(group.actif, num.group.sup)
+	ind.cols   <- vector("list", length(all.groups))
+	names(ind.cols) <- all.groups
+	ind.tmp <- 0
+	for (g in all.groups) {
+	  ind.cols[[as.character(g)]] <- ind.tmp + (1:group.mod[g])
+	  ind.tmp <- ind.tmp + group.mod[g]
+	}
+
+	## Boucle optimisee
+	for (gl in all.groups) {
+	  cols.l <- ind.cols[[as.character(gl)]]
+	  x      <- data.all[, cols.l, drop=FALSE]
+	  px     <- pond.all[cols.l]
+	  for (gc in all.groups) {
+		if (gc >= gl) {
+		  cols.c <- ind.cols[[as.character(gc)]]
+		  Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x = x, y = data.all[, cols.c, drop=FALSE],
+			ponderation.x = px, ponderation.y = pond.all[cols.c], wt = wt)
+		}
+	  }
+	}
+   Lg[nbre.group+1,] <- Lg[,nbre.group+1] <- apply(Lg[group.actif,],2,sum)/res.globale$eig[1,1]
+   Lg[nbre.group+1,nbre.group+1] <- sum(Lg[group.actif,nbre.group+1])/res.globale$eig[1,1]
+    RV <- sweep(Lg, 2, sqrt(diag(Lg)), "/")
+    RV <- sweep(RV, 1, sqrt(diag(Lg)), "/")
+    rownames(Lg) <- colnames(Lg) <- rownames(RV) <- colnames(RV) <- c(name.group,"MFA")
     contrib.group <- matrix(NA, length(group.actif), ncp)
     dimnames(contrib.group) <- list(name.group[group.actif], paste("Dim", c(1:ncp), sep = "."))
-    dist2.group <- vector(length = length(group.actif))
     ind.var <- ind.var.sup <- 0
     for (g in 1:length(group.actif)) {
       if (group.mod[group.actif[g]]!=1) contrib.group[g, ] <- apply(res.globale$var$contrib[(ind.var + 1):(ind.var + group.mod[group.actif[g]]), 1:ncp]/100, 2, sum)
       else contrib.group[g, ] <- res.globale$var$contrib[ind.var + 1, 1:ncp]/100
       ind.var <- ind.var + group.mod[group.actif[g]]
-      dist2.group[g] <- sum((res.separe[[group.actif[g]]]$eig[,1]/res.separe[[group.actif[g]]]$eig[1,1])^2)
+#      dist2.group[g] <- sum((res.separe[[group.actif[g]]]$eig[,1]/res.separe[[group.actif[g]]]$eig[1,1])^2)
     }
-    coord.group <- t(t(contrib.group)*res.globale$eig[1:ncol(contrib.group),1])
-    cos2.group <- coord.group^2/dist2.group
-    if (!is.null(num.group.sup)){
-      coord.group.sup <- matrix(NA, length(num.group.sup), ncp)
-      dimnames(coord.group.sup) <- list(name.group[num.group.sup], paste("Dim", c(1:ncp), sep = "."))
-      ind.gc <- 0
-      for (gc in 1:length(num.group.sup)) {
-        for (k in 1:ncp){
-          if (is.null(ind.sup)) coord.group.sup[gc,k] <- funcLg(res.globale$ind$coord[,k,drop=FALSE],data.group.sup[,(ind.gc+1):(ind.gc+group.mod[num.group.sup[gc]]),drop=FALSE],ponderation.x=1/res.globale$eig[k,1],ponderation.y=ponderation.group.sup[(ind.gc+1):(ind.gc+group.mod[num.group.sup[gc]])],wt=row.w/sum(row.w))
-          else coord.group.sup[gc,k] <- funcLg(res.globale$ind$coord[-ind.sup,k,drop=FALSE],data.group.sup[-ind.sup,(ind.gc+1):(ind.gc+group.mod[num.group.sup[gc]]),drop=FALSE],ponderation.x=1/res.globale$eig[k,1],ponderation.y=ponderation.group.sup[(ind.gc+1):(ind.gc+group.mod[num.group.sup[gc]])],wt=row.w/sum(row.w))
-        }
-        ind.gc <- ind.gc + group.mod[num.group.sup[gc]]
-      }
-    }
-    Lg <- matrix(0, nbre.group+1, nbre.group+1)
-    ind.gl <- 0
-    for (gl in c(group.actif,num.group.sup)) {
-        ind.gc <- 0
-        for (gc in c(group.actif,num.group.sup)) {
-            if (gc>=gl){
-			  if (is.null(num.group.sup)) {
-			    if (is.null(ind.sup)) Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=data[,ind.gl + (1:group.mod[gl]),drop=FALSE],y=data[,ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=ponderation[ind.gl + (1:group.mod[gl])],ponderation.y=ponderation[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
-				else Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=data[-ind.sup,ind.gl + (1:group.mod[gl]),drop=FALSE],y=data[-ind.sup,ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=ponderation[ind.gl + (1:group.mod[gl])],ponderation.y=ponderation[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
-			  } else {
-			    if (is.null(ind.sup)) Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=cbind.data.frame(data,data.group.sup)[,ind.gl + (1:group.mod[gl]),drop=FALSE],y=cbind.data.frame(data,data.group.sup)[,ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=c(ponderation,ponderation.group.sup)[ind.gl + (1:group.mod[gl])],ponderation.y=c(ponderation,ponderation.group.sup)[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
-			    else Lg[gl, gc] <- Lg[gc, gl] <- funcLg(x=cbind.data.frame(data,data.group.sup)[-ind.sup,ind.gl +(1:group.mod[gl]),drop=FALSE],y=cbind.data.frame(data,data.group.sup)[-ind.sup,ind.gc + (1:group.mod[gc]),drop=FALSE],ponderation.x=c(ponderation,ponderation.group.sup)[ind.gl +(1:group.mod[gl])],ponderation.y=c(ponderation,ponderation.group.sup)[ind.gc + (1:group.mod[gc])],wt=row.w/sum(row.w))
-			  }
-			}
-            ind.gc <- ind.gc + group.mod[gc]
-        }
-        ind.gl <- ind.gl + group.mod[gl]
-    }	
-   Lg[nbre.group+1,] <- Lg[,nbre.group+1] <- apply(Lg[group.actif,],2,sum)/res.globale$eig[1,1]
-   Lg[nbre.group+1,nbre.group+1] <- sum(Lg[group.actif,nbre.group+1])/res.globale$eig[1,1]
-    dist2.group <- diag(Lg)
-    if (!is.null(num.group.sup)){
+   dist2.group <- (diag(Lg))[1:nbre.group] # Lg AFM suppressed
+   if (!is.null(num.group.sup)){
       dist2.group.sup <- dist2.group[num.group.sup]
       dist2.group <- dist2.group[-num.group.sup]
     }
-    RV <- sweep(Lg, 2, sqrt(diag(Lg)), "/")
-    RV <- sweep(RV, 1, sqrt(diag(Lg)), "/")
-    rownames(Lg) <- colnames(Lg) <- rownames(RV) <- colnames(RV) <- c(name.group,"MFA")
+    coord.group <- t(t(contrib.group)*res.globale$eig[1:ncol(contrib.group),1])
+    cos2.group <- coord.group^2/dist2.group
     data.partiel <- vector(mode = "list", length = nbre.group)
     names(data.partiel) <- name.group
     ind.col <- 0
@@ -470,7 +539,7 @@ if ((!is.null(tab.comp))&(any("n"%in%type) | any("m"%in%type))){
     for (g in group.actif){
       Xis <- t(t(as.matrix(data.partiel[[g]]))-res.globale$call$centre) 
       Xis <- t(t(Xis)/res.globale$call$ecart.type)
-      coord.ind.sup <- length(group.actif) * as.matrix(Xis)
+      coord.ind.sup <- length(group.actif) * Xis
       coord.ind.sup <- t(t(coord.ind.sup)*res.globale$call$col.w)
       coord.ind.sup <- crossprod(t(coord.ind.sup),res.globale$svd$V)
       res.ind.partiel[[g]]$coord.sup <- coord.ind.sup
@@ -485,7 +554,7 @@ if ((!is.null(tab.comp))&(any("n"%in%type) | any("m"%in%type))){
     for (g in group.actif)  It <- It + apply(res.ind.partiel[[g]]$coord.sup[1:nb.actif,]^2*row.w,2,sum)
     rap.inertie <- apply(res.globale$ind$coord^2*row.w,2,sum) * length(group.actif) / It 
 
-    res.groupes <- list(Lg = Lg, RV = RV, coord = coord.group[, 1:ncp], contrib = contrib.group[, 1:ncp] * 100,  cos2 = cos2.group[, 1:ncp], dist2 = dist2.group[-length(dist2.group)], correlation = cor.grpe.fact[, 1:ncp])
+    res.groupes <- list(Lg = Lg, RV = RV, coord = coord.group[, 1:ncp], contrib = contrib.group[, 1:ncp] * 100,  cos2 = cos2.group[, 1:ncp], dist2 = dist2.group, correlation = cor.grpe.fact[, 1:ncp])
     if (!is.null(num.group.sup)){
       res.groupes$coord.sup <- coord.group.sup[,1:ncp,drop=FALSE]
       res.groupes$cos2.sup <- coord.group.sup[,1:ncp,drop=FALSE]^2/dist2.group.sup

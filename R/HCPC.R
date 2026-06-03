@@ -26,15 +26,20 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 		inert.gain <- rev(hc$height)
 		if (!is.null(cla)) inert.gain <- c(inert.gain,cla$tot.withinss/sum(cla$size))
 		intra <- rev(cumsum(rev(inert.gain)))
-## Ancien calcul pour niveau de coupure
-#        quot <- intra[min:(max)]/intra[(min - 1):(max - 1)] 
-#		nb.clust <- which.min(quot) + min -1
-### modif pour avoir ce qui est ecrit dans le livre, mais avec max au lieu de min
-quot <- inert.gain[min:max]/inert.gain[(min+1):(max+1)]
-nb.clust <- which.max(quot) + min - 1
 # changement dans calcul annule. Mis dans la version 1.34  2016/04/12 (2 lignes changees)
 #        quot = inert.gain[(min-1):(max-1)]/inert.gain[min:max] 
-#		nb.clust = which.max(quot) + min - 1
+## Ancien calcul pour niveau de coupure
+#        quot <- intra[min:(max)]/intra[(min - 1):(max - 1)] 
+### modif pour avoir ce qui est ecrit dans le livre, mais avec max au lieu de min
+#quot <- inert.gain[min:max]/inert.gain[(min+1):(max+1)]
+# Indice de Krzanowski-Lai (1988) : intresting for Euclidean distance + Ward criterion
+		  k_seq <- 1:length(intra)
+          intra_norm <- (k_seq^(2/ncol(X)))*intra
+          quot <- sapply(min:max, function(k) {
+            abs((intra_norm[k-1] - intra_norm[k])/(intra_norm[k] - intra_norm[k+1]))  #KL index
+          })
+		  nb.clust <- which.max(quot) + min - 1
+# Indice de Calinski and Harabasz (1974) ne fonctionne pas : fleau de la dimension
         return(list(res = res, tree = hc, nb.clust = nb.clust, 
             within = intra, inert.gain = inert.gain, quot = quot))
     }
@@ -143,7 +148,9 @@ nb.clust <- which.max(quot) + min - 1
 	  res$eig <- aux
     }
     if (is.null(max)) max <- min(10, round(nrow(res$ind$coord)/2))
-	max <- max(max+1,min)
+	min <- max(2,min)
+	max <- max(max,min)
+#	max <- max(max+1,min)
     max <- min(max, nrow(res$ind$coord) - 1)
     if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "FAMD")) {
     	if (!is.null(res$call$ind.sup)) res$call$X <- res$call$X[-res$call$ind.sup, ]
@@ -206,7 +213,6 @@ nb.clust <- which.max(quot) + min - 1
         }
     }
     else stop("The tree should be from 'hclust' or 'agnes' class.")
-	print(y)
     clust <- cutree(as.hclust(t$tree), h = y)
     nb.clust <- max(clust)
 	X <- as.data.frame(t$res$ind$coord)

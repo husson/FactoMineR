@@ -1,5 +1,4 @@
-dimdesc <- function (res, axes = 1:3, proba = 0.05) 
-{
+dimdesc <- function (res, axes = 1:3, proba = 0.05){
     if (!inherits(res, "PCA") & !inherits(res, "CA") & !inherits(res, "MCA") & !inherits(res, 
         "MFA") & !inherits(res, "HMFA") & !inherits(res, "DMFA") &  !inherits(res, "FAMD")) 
         stop("non convenient data")
