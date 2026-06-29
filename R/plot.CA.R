@@ -4,7 +4,8 @@ plot.CA <- function (x, axes = c(1, 2),
                      col.col = "red", col.row.sup = "darkblue", col.col.sup = "darkred",col.quali.sup ="magenta",
                      col.quanti.sup="blue",label = c("all","none","row", "row.sup", "col","col.sup", "quali.sup","quanti.sup"), title = NULL, palette=NULL, 
                      autoLab = c("auto","yes","no"),new.plot=FALSE, selectRow = NULL, selectCol = NULL,
-                     unselect = 0.7,shadowtext = FALSE, habillage = "none", legend = list(bty = "y", x = "topleft"), graph.type = c("ggplot","classic"), ggoptions= NULL, ...) {
+                     unselect = 0.7,shadowtext = FALSE, habillage = "none", legend = list(bty = "y", x = "topleft"), 
+					 Mytheme = "theme_factominer", graph.type = c("ggplot","classic"), ggoptions= NULL, ...) {
   
   res.ca <- x
   argument <- list(...)
@@ -472,5 +473,8 @@ plot.CA <- function (x, axes = c(1, 2),
     }
   }
   palette(old.palette)
-  if (graph.type == "ggplot")  return(gg_graph)
+  if (graph.type == "ggplot"){
+    if (tolower(Mytheme)!="none") gg_graph <- gg_graph + eval(parse(text=paste0(Mytheme,"()")))
+    return(gg_graph)
+  }
 }

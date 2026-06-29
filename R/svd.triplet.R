@@ -99,6 +99,6 @@ tryCatch.W.E <- function(expr){  ## function proposed by Maechler
 	  U[,num] <- t(t(U[,num])*vs[num])
       V[,num] <- t(t(V[,num])*vs[num])
 	}
-    res <- list(vs = vs, U = U, V = V)
+    res <- list(vs = vs, U = U, V = V, sumvp = sumvp)
     return(res)
 }

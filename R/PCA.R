@@ -372,5 +372,9 @@ fct.eta2 <- function(group, Y, weights = NULL) {  # no NA on Y hat are dimension
     }
     res$call <- res.call
     class(res) <- c("PCA", "list")
+    if (graph & (ncp>1)) {
+        print(plot.PCA(res, choix = "ind", axes = axes))
+        print(plot.PCA(res, choix = "var", axes = axes,shadowtext=TRUE,new.plot=TRUE))
+    }
     return(res)
 }

@@ -4,7 +4,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
                       col.ind.sup = "blue", col.quanti.sup = "blue",
                       label=c("all","none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"), title = NULL, habillage = "none", palette=NULL, 
                       autoLab = c("auto","yes","no"),new.plot=FALSE,select=NULL,selectMod=NULL, unselect=0.7, shadowtext=FALSE,
-                      legend = list(bty = "y", x = "topleft"), graph.type = c("ggplot","classic"), ggoptions = NULL, ...){
+                      legend = list(bty = "y", x = "topleft"), Mytheme = "theme_factominer", 
+					  graph.type = c("ggplot","classic"), ggoptions = NULL, ...){
   
   label <- match.arg(label,c("all","none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"),several.ok=TRUE)
   choix <- match.arg(choix,c("ind","var","quanti.sup"))
@@ -637,5 +638,8 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
   }
   }
    palette(old.palette)
-  if(graph.type == "ggplot") return(gg_graph)
+  if(graph.type == "ggplot"){
+    if (tolower(Mytheme)!="none") gg_graph <- gg_graph + eval(parse(text=paste0(Mytheme,"()")))
+    return(gg_graph)
+  }
 }

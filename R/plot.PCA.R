@@ -6,8 +6,9 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
                       col.var = "black", label=c("all","none","ind", "ind.sup", "quali", "var", "quanti.sup"), 
                       invisible = c("none","ind", "ind.sup", "quali","var", "quanti.sup"), lim.cos2.var = 0.,
                       title = NULL, palette=NULL, autoLab=c("auto","yes","no"),new.plot=FALSE, 
-                      select=NULL, unselect = 0.7,shadowtext = FALSE, legend = list(bty = "y", x = "topleft"),
-                      graph.type = c("ggplot","classic"), ggoptions = NULL,  ...){
+                      select=NULL, unselect = 0.7,shadowtext = FALSE, legend = list(bty = "y", x = "topleft"), 
+					  Mytheme = "theme_factominer",
+                      graph.type = c("ggplot","classic"), ggoptions = NULL, ...){
   
   res.pca <- x
   argument <- list(...)
@@ -748,5 +749,8 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
     }
   }
   palette(old.palette)
-  if(graph.type == "ggplot") return(gg_graph)
+  if(graph.type == "ggplot"){
+    if (tolower(Mytheme)!="none") gg_graph <- gg_graph + eval(parse(text=paste0(Mytheme,"()")))
+    return(gg_graph)
+  }
 }

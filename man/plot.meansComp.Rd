@@ -9,11 +9,12 @@ Plot the graphs for the means comparisons.
 }
 
 \usage{
-\method{plot}{meansComp}(x, \dots)
+\method{plot}{meansComp}(x, Mytheme = "theme_factominer", \dots)
 }
 
 \arguments{
   \item{x}{an object of class meansComp.}
+  \item{Mytheme}{a character string corresponding to a theme you want to use for the graph, by default "theme_factominer". "None" is also possible.}
   \item{\dots}{further arguments passed to or from other methods, such as ggplot, ...}
 }
 

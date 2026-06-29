@@ -3,7 +3,9 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
                    habillage = "group", col.hab = NULL, invisible = c("none","ind", "ind.sup", "quanti","quanti.sup","quali","quali.sup","row", "row.sup","col", "col.sup"), partial = NULL, 
                    lim.cos2.var = 0., chrono = FALSE, xlim = NULL, ylim = NULL, 
                    title = NULL, palette = NULL, autoLab = c("auto","yes","no"),new.plot = FALSE, select = NULL,
-                   unselect = 0.7,shadowtext=FALSE, legend = list(bty = "y", x = "topleft"), graph.type = c("ggplot","classic"), ggoptions = NULL, ...) 
+                   unselect = 0.7,shadowtext=FALSE, legend = list(bty = "y", x = "topleft"),
+				   Mytheme = "theme_factominer", graph.type = c("ggplot","classic"), 
+				    ggoptions = NULL, ...) 
 {
   res.mfa <- x
   argument <- list(...)
@@ -1482,5 +1484,8 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
     }
    }  }
    palette(old.palette)
-  if (graph.type == "ggplot") return(gg_graph)
+  if(graph.type == "ggplot"){
+    if (tolower(Mytheme)!="none") gg_graph <- gg_graph + eval(parse(text=paste0(Mytheme,"()")))
+    return(gg_graph)
+  }
 }

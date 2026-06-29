@@ -268,8 +268,7 @@ for (j in seq_len(nb.modalite)) {
   oo    <- order(mat[, 5], decreasing = TRUE)
   mat   <- matrix(mat[oo, ], ncol = 5)
   n_mat <- nom[[j]]
-  n_mat <- if (is.matrix(n_mat)) n_mat[oo, ] else matrix(n_mat[oo], nrow = 1)
-
+  n_mat <- if (is.matrix(n_mat)) n_mat[oo, ,drop=FALSE] else matrix(n_mat[oo], nrow = 1)
   rownames(mat) <- paste(n_mat[, 2], n_mat[, 1], sep = "=")
   colnames(mat) <- c("Cla/Mod", "Mod/Cla", "Global", "p.value", "v.test")
 
