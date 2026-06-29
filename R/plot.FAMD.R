@@ -2,7 +2,7 @@ plot.FAMD <- function (x, choix = c("ind","var","quanti","quali"), axes = c(1, 2
     lab.var = TRUE, lab.ind = TRUE, habillage = "none", col.lab = FALSE, col.hab = NULL, 
     invisible = NULL, lim.cos2.var = 0., xlim = NULL,
     ylim = NULL, title = NULL, palette=NULL, autoLab = c("auto","yes","no"), new.plot = FALSE, 
-    select = NULL, unselect = 0.7, shadowtext=FALSE, legend = list(bty = "y", x = "topleft"), Mytheme = "theme_factominer", 
+    select = NULL, unselect = 0.7, shadowtext=FALSE, legend = list(bty = "y", x = "topleft"), theme = "theme_factominer", 
 	graph.type = c("ggplot","classic"), ggoptions = NULL, ...) {
 
 autoLab <- match.arg(autoLab,c("auto","yes","no"))
@@ -80,7 +80,15 @@ if (choix=="quanti") {
 } 
   palette(old.palette)
   if(graph.type == "ggplot"){
-    if (tolower(Mytheme)!="none") gg_graph <- gg_graph + eval(parse(text=paste0(Mytheme,"()")))
-    return(gg_graph)
+    if (is.function(theme)) {
+      fonc_theme <- match.fun(theme)
+	  gg_graph <- gg_graph + fonc_theme()
+    } else if (inherits(theme, "theme")) {
+      gg_graph <- gg_graph + theme
+    } else {
+      warning("Argument 'theme' invalide. The 'theme_factominer' is used by default.")
+      gg_graph <- gg_graph + theme_factominer()    
+    }
+  return(gg_graph)
   }
 }

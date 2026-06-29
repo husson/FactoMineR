@@ -1,5 +1,5 @@
 utils::globalVariables(c("emmean","Effect","lower.CL","upper.CL","Letters"))
-plot.meansComp <- function(x, Mytheme = "theme_factominer",...){
+plot.meansComp <- function(x, theme = "theme_factominer",...){
   if (!inherits(x,"meansComp")) stop("x must be a compMean object")
   aux <- summary(x$adjMean)
   if (ncol(aux)==6){
@@ -43,6 +43,14 @@ plot.meansComp <- function(x, Mytheme = "theme_factominer",...){
     # p <- p + ggplot2::annotate("point", x=min(xlim), y = min(ylim), colour = palette()[i+1], size = 2)
   # }
 # }
-    if (tolower(Mytheme)!="none") p <- p + eval(parse(text=paste0(Mytheme,"()")))
+    if (is.function(theme)) {
+      fonc_theme <- match.fun(theme)
+	  p <- p + fonc_theme()
+    } else if (inherits(theme, "theme")) {
+      p <- p + theme
+    } else {
+      warning("Argument 'theme' invalide. The 'theme_factominer' is used by default.")
+      p <- p + theme_factominer()    
+    }
   return(p)
 }

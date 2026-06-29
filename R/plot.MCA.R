@@ -4,7 +4,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
                       col.ind.sup = "blue", col.quanti.sup = "blue",
                       label=c("all","none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"), title = NULL, habillage = "none", palette=NULL, 
                       autoLab = c("auto","yes","no"),new.plot=FALSE,select=NULL,selectMod=NULL, unselect=0.7, shadowtext=FALSE,
-                      legend = list(bty = "y", x = "topleft"), Mytheme = "theme_factominer", 
+                      legend = list(bty = "y", x = "topleft"), theme = "theme_factominer", 
 					  graph.type = c("ggplot","classic"), ggoptions = NULL, ...){
   
   label <- match.arg(label,c("all","none","ind", "var", "ind.sup", "quali.sup", "quanti.sup"),several.ok=TRUE)
@@ -30,7 +30,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
   lab.x <- paste("Dim ",axes[1]," (",format(res.mca$eig[axes[1],2],nsmall=2,digits=2),"%)",sep="")
   lab.y <- paste("Dim ",axes[2]," (",format(res.mca$eig[axes[2],2],nsmall=2,digits=2),"%)",sep="")
   if (graph.type == "ggplot"){
-      theme <- theme(
+      def_theme <- theme(
       axis.title = element_text(hjust = 1, size = if (is.null(argument[["cex.axis"]])) {10} else {10*argument$cex.axis},face = 2),
       plot.title = element_text(hjust = 0.5, size = if (is.null(argument[["cex.main"]])) {11} else {11*argument$cex.main},face = 2),
         legend.position = ifelse(legend$x %in% c("bottom","up","right","left"), legend$x, "right"),
@@ -316,7 +316,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
         xlim(xlim) + ylim(ylim) +
         geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
         geom_vline(xintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
-        theme_light() + theme + labs(title = titre, x = lab.x, y= lab.y)
+        theme_light() + def_theme + labs(title = titre, x = lab.x, y= lab.y)
       if (autoLab=="auto") autoLab <- (length(which(labe!=""))<50)
       if(class(habillage) %in% c("numeric","integer")) habillage <- colnames(res.mca$call$X)[habillage]
       transparency_ind <- 1
@@ -344,7 +344,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
          if(is.na(test.invisible[1]) || is.na(test.invisible[4]) & !is.null(df_ind2)){ 
            gg_graph <- gg_graph +
            geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color= (res.mca$call$X)[rownames(df_ind2),habillage]), shape = df_ind2[,5], alpha = transparency_ind, size = ggoptions_default$size/2.8) + 
-           scale_color_manual(values = palette[1:length(levels(res.mca$call$X[rownames(df_ind2),habillage]))], labels = levels(res.mca$call$X[,habillage])) +
+           scale_colour_manual(values = palette[1:length(levels(res.mca$call$X[rownames(df_ind2),habillage]))], labels = levels(res.mca$call$X[,habillage])) +
            labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage)) 
            if(autoLab)text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1]), size = ggoptions_default$size, color = df_ind2[,4], fontface = df_ind2[,6])
            else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1]), size = ggoptions_default$size, color = df_ind2[,4], hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25, fontface = df_ind2[,6])}
@@ -421,7 +421,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
           else{text_quali.sup <- geom_text(aes(x = df_quali.sup[,2], y = df_quali.sup[,3], label=df_quali.sup[,1], color = df_quali.sup[,4]), size = ggoptions_default$size, fontface = df_quali.sup[,6])}
           gg_graph <- gg_graph + text_quali.sup
         }
-        gg_graph <- gg_graph + scale_color_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) + labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage))
+        gg_graph <- gg_graph + scale_colour_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) + labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage))
       }
     }
   }
@@ -489,7 +489,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
           if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_quanti.sup[,2], y=df_quanti.sup[,3],label=df_quanti.sup[,1]), size = ggoptions_default$size, color = col.quanti.sup)
           else{text <- geom_text(aes(x=df_quanti.sup[,2], y=df_quanti.sup[,3],label=df_quanti.sup[,1]), size = ggoptions_default$size, color = col.quanti.sup, hjust = (-sign(df_quanti.sup[,2])+1)/2, vjust = -sign(df_quanti.sup[,3])*0.75+0.25)}
         }
-        gg_graph <- gg_graph + text + theme + circle
+        gg_graph <- gg_graph + text + def_theme + circle
 		gg_graph <- gg_graph + xlab(lab.x) + ylab(lab.y) + ggtitle(title) 
 
       }
@@ -622,7 +622,7 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
     #     xlim(xlim) + ylim(ylim) +
     #     geom_hline(yintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
     #     geom_vline(xintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
-    #     scale_color_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
+    #     scale_colour_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
     #     labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "cos2")) +
     #     theme_light() + 
     #     ggoptions_default$theme +
@@ -634,12 +634,20 @@ plot.MCA <- function (x, axes = c(1, 2), choix=c("ind","var","quanti.sup"),
     # if(habillage == "contrib"){
     #   
     # }
-    gg_graph <- gg_graph + theme
+    gg_graph <- gg_graph + def_theme
   }
   }
    palette(old.palette)
   if(graph.type == "ggplot"){
-    if (tolower(Mytheme)!="none") gg_graph <- gg_graph + eval(parse(text=paste0(Mytheme,"()")))
-    return(gg_graph)
+    if (is.function(theme)) {
+      fonc_theme <- match.fun(theme)
+	  gg_graph <- gg_graph + fonc_theme()
+    } else if (inherits(theme, "theme")) {
+      gg_graph <- gg_graph + theme
+    } else {
+      warning("Argument 'theme' invalide. The 'theme_factominer' is used by default.")
+      gg_graph <- gg_graph + theme_factominer()    
+    }
+  return(gg_graph)
   }
 }

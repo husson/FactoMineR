@@ -19,7 +19,7 @@ variables and supplementary categorical variables.
     lim.cos2.var = 0., title = NULL, palette=NULL,
     autoLab = c("auto","yes","no"), new.plot = FALSE, select = NULL, 
 	unselect = 0.7, shadowtext = FALSE, legend = list(bty = "y", x = "topleft"),
-	Mytheme = "theme_factominer",graph.type = c("ggplot","classic"), 
+	theme = "theme_factominer",graph.type = c("ggplot","classic"), 
 	ggoptions = NULL, \dots)
     }
 
@@ -49,7 +49,7 @@ variables and supplementary categorical variables.
   \item{unselect}{may be either a value between 0 and 1 that gives the transparency of the unselected objects (if \code{unselect=1} the transparceny is total and the elements are not drawn, if \code{unselect=0} the elements are drawn as usual but without any label) or may be a color (for example \code{unselect="grey60"})}
   \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program); only used when \code{graph.type="classic"}}
   \item{legend}{a list of arguments that defines the legend if needed (when individuals are drawn according to a variable); see the arguments of the function \code{legend}}
-  \item{Mytheme}{a character string corresponding to a theme you want to use for the graph, by default "theme_factominer". "None" is also possible.}
+  \item{theme}{a character string corresponding to a theme you want to use for the graph, by default "theme_factominer". "None", "ggplot2::theme_bw" for instance are also possible.}
   \item{graph.type}{a character that gives the type of graph used: "ggplot" or "classic"}
   \item{ggoptions}{a list that gives the graph options when grah.type="ggplot" is used. See the optines and the default values in the details section}
   \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}
@@ -112,12 +112,8 @@ plot(res.pca,choix="var",select="cos2 0.6")  # plot the variables with cos2 grea
 plot(res.pca,habillage="100m",
    ggoptions=list(low.col.quanti="grey90",high.col.quanti="grey10"),legend=list(x="bottom"))
 
-## You can modify the ggplot graphs as ususal with ggplot2
-require(ggplot2)
-gr <- plot(res.pca)
-gr + theme(panel.grid.major = element_blank(),
-   plot.title=element_text(size=14, color="blue"),
-   axis.title = element_text(size=12, color="red"))
+plot(res.pca,theme=theme_factominer(base_size=16))   #biger size
+plot(res.pca,theme=ggplot2::theme_grey())
 
 ## To draw classical R graphs
 plot(res.pca, graph.type = "classic")

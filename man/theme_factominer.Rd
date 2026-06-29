@@ -76,6 +76,10 @@ factominer_labels_pct(digits = 1)
 }
 \examples{
 data(decathlon)
-res <- PCA(decathlon,quali.sup=13,quanti.sup=11:12)
+res.pca <- PCA(decathlon,quali.sup=13,quanti.sup=11:12, graph=FALSE)
+plot(res.pca)                                        #theme by defaut
+plot(res.pca,theme=theme_factominer(base_size=16))   #biger size
+plot(res.pca,theme=ggplot2::theme_grey())
+plot(res.pca,theme=ggplot2::theme_bw())
 }
 \keyword{aplot}

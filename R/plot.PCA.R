@@ -7,7 +7,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
                       invisible = c("none","ind", "ind.sup", "quali","var", "quanti.sup"), lim.cos2.var = 0.,
                       title = NULL, palette=NULL, autoLab=c("auto","yes","no"),new.plot=FALSE, 
                       select=NULL, unselect = 0.7,shadowtext = FALSE, legend = list(bty = "y", x = "topleft"), 
-					  Mytheme = "theme_factominer",
+					  theme = "theme_factominer",
                       graph.type = c("ggplot","classic"), ggoptions = NULL, ...){
   
   res.pca <- x
@@ -39,7 +39,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
   lab.y <- paste("Dim ",axes[2]," (",format(res.pca$eig[axes[2],2],nsmall=2,digits=2),"%)",sep="")
   if (graph.type == "ggplot"){
     if(!is.null(col.hab)) palette <- col.hab
-    theme <- theme(
+    def_theme <- theme(
       axis.title = element_text(hjust = 1, size = if (is.null(argument[["cex.axis"]])) {10} else {10*argument$cex.axis},face = 2),
       plot.title = element_text(hjust = 0.5, size = if (is.null(argument[["cex.main"]])) {11} else {11*argument$cex.main},face = 2),
       legend.position = ifelse(legend$x %in% c("bottom","up","right","left"), legend$x, "right"),
@@ -319,7 +319,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
             df_ind2 <- data.frame(df_ind2, (res.pca$call$X)[rownames(df_ind2),habillage])
             gg_graph <- gg_graph +
               geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color = df_ind2[,6]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
-              scale_color_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
+              scale_colour_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
               labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage))
             if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = df_ind2[,6]), size = ggoptions_default$size, show.legend = FALSE)
             else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = df_ind2[,6]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25)}
@@ -328,7 +328,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
             df_ind2 <- data.frame(df_ind2, (res.pca$call$X)[rownames(df_ind2),habillage])
             gg_graph <- gg_graph +
               geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color = (res.pca$call$X)[rownames(df_ind2),habillage]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
-              scale_color_manual(values = palette[1:length(levels((res.pca$call$X)[,habillage]))]) +
+              scale_colour_manual(values = palette[1:length(levels((res.pca$call$X)[,habillage]))]) +
               labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage))
             if (autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$call$X)[rownames(res.pca$ind$coord),habillage[1]]), size = ggoptions_default$size, show.legend = FALSE)
             else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$call$X)[rownames(res.pca$ind$coord),habillage[1]]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25)}
@@ -336,7 +336,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           if (habillage == "cos2"){
           gg_graph <- gg_graph +
               geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color = res.pca$ind$cos2[,axes[1]] + res.pca$ind$cos2[,axes[2]]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) +
-              scale_color_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
+              scale_colour_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
               labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "cos2")) 
             if (autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = res.pca$ind$cos2[,axes[1]] + res.pca$ind$cos2[,axes[2]]), size = ggoptions_default$size)
             else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = res.pca$ind$cos2[,axes[1]] + res.pca$ind$cos2[,axes[2]]), size = ggoptions_default$size, hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25)}
@@ -344,7 +344,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           if (habillage == "contrib"){
           gg_graph <- gg_graph +
               geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color = (res.pca$ind$contrib[,axes[1]]*res.pca$eig[axes[1],1]+res.pca$ind$contrib[,axes[2]]*res.pca$eig[axes[2],1])/(res.pca$eig[axes[1],1]+res.pca$eig[axes[2],1])), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
-              scale_color_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
+              scale_colour_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
               labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "Ctr")) 
             if (autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$ind$contrib[,axes[1]]*res.pca$eig[axes[1],1]+res.pca$ind$contrib[,axes[2]]*res.pca$eig[axes[2],1])/(res.pca$eig[axes[1],1]+res.pca$eig[axes[2],1])), size = ggoptions_default$size)
             else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$ind$contrib[,axes[1]]*res.pca$eig[axes[1],1]+res.pca$ind$contrib[,axes[2]]*res.pca$eig[axes[2],1])/(res.pca$eig[axes[1],1]+res.pca$eig[axes[2],1])), size = ggoptions_default$size, hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25)
@@ -354,7 +354,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           if (!(habillage[1] %in% liste.quali)){
           gg_graph <- gg_graph +
               geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], shape = res.pca$call$X[rownames(res.pca$ind$coord),habillage[2]], color = (res.pca$call$X)[rownames(res.pca$ind$coord),habillage[1]]), size = ggoptions_default$size/3, alpha = transparency_ind) + 
-              scale_color_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
+              scale_colour_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
               labs(color = habillage[1], shape = habillage[2]) 
             if (autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$call$X)[rownames(res.pca$ind$coord),habillage[1]]), size = ggoptions_default$size, show.legend = FALSE)
             else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$call$X)[rownames(res.pca$ind$coord),habillage[1]]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25)}
@@ -362,7 +362,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           if (habillage[1] %in% liste.quali){
           gg_graph <- gg_graph +
               geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], shape = res.pca$call$X[rownames(res.pca$ind$coord),habillage[2]], color = (res.pca$call$X)[rownames(res.pca$ind$coord),habillage[1]]), size = ggoptions_default$size/3, alpha = transparency_ind) + 
-              scale_color_manual(values = palette[1:length(levels((res.pca$call$X)[,habillage[1]]))]) +
+              scale_colour_manual(values = palette[1:length(levels((res.pca$call$X)[,habillage[1]]))]) +
               labs(color = habillage[1], shape = habillage[2])
             if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$call$X)[rownames(res.pca$ind$coord),habillage[1]]), size = ggoptions_default$size, show.legend = FALSE)
             else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$call$X)[rownames(res.pca$ind$coord),habillage[1]]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25)}
@@ -370,7 +370,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           if (habillage[1] == "cos2"){
           gg_graph <- gg_graph +
               geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color = res.pca$ind$cos2[,axes[1]] + res.pca$ind$cos2[,axes[2]], shape = res.pca$call$X[rownames(res.pca$ind$coord),habillage[2]]), size = ggoptions_default$size/3, alpha = transparency_ind) +
-              scale_color_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
+              scale_colour_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
               labs(color = habillage[1], shape = habillage[2]) 
             if (autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = res.pca$ind$cos2[,axes[1]] + res.pca$ind$cos2[,axes[2]]), size = ggoptions_default$size)
             else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = res.pca$ind$cos2[,axes[1]] + res.pca$ind$cos2[,axes[2]]), size = ggoptions_default$size, hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25)}
@@ -378,7 +378,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           if (habillage[1] == "contrib"){
           gg_graph <- gg_graph +
               geom_point(aes(x=df_ind2[,2], y=df_ind2[,3], color = (res.pca$ind$contrib[,axes[1]]*res.pca$eig[axes[1],1]+res.pca$ind$contrib[,axes[2]]*res.pca$eig[axes[2],1])/(res.pca$eig[axes[1],1]+res.pca$eig[axes[2],1]), shape = res.pca$call$X[rownames(res.pca$ind$coord),habillage[2]]), size = ggoptions_default$size/3, alpha = transparency_ind) +
-              scale_color_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
+              scale_colour_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti) +
               labs(color = habillage[1], shape = habillage[2])
             if (autoLab) text <- ggrepel::geom_text_repel(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$ind$contrib[,axes[1]]*res.pca$eig[axes[1],1]+res.pca$ind$contrib[,axes[2]]*res.pca$eig[axes[2],1])/(res.pca$eig[axes[1],1]+res.pca$eig[axes[2],1])), size = ggoptions_default$size)
             else{text <- geom_text(aes(x=df_ind2[,2], y=df_ind2[,3], label=df_ind2[,1], color = (res.pca$ind$contrib[,axes[1]]*res.pca$eig[axes[1],1]+res.pca$ind$contrib[,axes[2]]*res.pca$eig[axes[2],1])/(res.pca$eig[axes[1],1]+res.pca$eig[axes[2],1])), size = ggoptions_default$size, hjust = (-sign(df_ind2[,2])+1)/2, vjust = -sign(df_ind2[,3])*0.75+0.25)
@@ -390,7 +390,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           gg_graph <- gg_graph +
           labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage[1]))
       }
-      gg_graph <- gg_graph + theme
+      gg_graph <- gg_graph + def_theme
       if (is.na(test.invisible[1]) & isTRUE(lab.ind)) gg_graph <- gg_graph + text
      
       if ((!is.null(res.pca$ind.sup)) && (is.na(test.invisible[2]))){
@@ -713,7 +713,7 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
           gg_graph <- gg_graph + 
             aes(x=df_var[,2], y=df_var[,3],color = df_var[,4]) +
             geom_segment(aes(x=0,y=0,xend=df_var[,2], yend=df_var[,3],col = df_var[,4]),arrow=arrow(length=unit(0.2,"cm")), alpha = transparency_var, lty = ggoptions_default$segment.lty, lwd = ggoptions_default$segment.lwd) + 
-            scale_color_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti)
+            scale_colour_gradient(low=ggoptions_default$low.col.quanti, high=ggoptions_default$high.col.quanti)
           if (habillage[1] == "cos2") gg_graph <- gg_graph + labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "cos2"))
           if (habillage[1] == "contrib") gg_graph <- gg_graph + labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "Ctr"))
           if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_var[,2], y=df_var[,3],label=df_var[,1], color = df_var[,4]), size = ggoptions_default$size)
@@ -744,13 +744,21 @@ plot.PCA <- function (x, axes = c(1, 2), choix = c("ind","var","varcor"),
             geom_segment(aes(x=0,y=0,xend=df_quanti.sup[,2], yend=df_quanti.sup[,3]),arrow=arrow(length=unit(0.2,"cm")),lty = 2, color = col.quanti.sup)
         }
       }
-      gg_graph <- gg_graph + theme + circle + labs(title = titre, x = lab.x, y= lab.y) 
+      gg_graph <- gg_graph + def_theme + circle + labs(title = titre, x = lab.x, y= lab.y) 
       if (is.na(test.invisible[1]) & (isTRUE(lab.var))) gg_graph <- gg_graph + text 
     }
   }
   palette(old.palette)
   if(graph.type == "ggplot"){
-    if (tolower(Mytheme)!="none") gg_graph <- gg_graph + eval(parse(text=paste0(Mytheme,"()")))
-    return(gg_graph)
+    if (is.function(theme)) {
+      fonc_theme <- match.fun(theme)
+	  gg_graph <- gg_graph + fonc_theme()
+    } else if (inherits(theme, "theme")) {
+      gg_graph <- gg_graph + theme
+    } else {
+      warning("Argument 'theme' invalide. The 'theme_factominer' is used by default.")
+      gg_graph <- gg_graph + theme_factominer()    
+	}
+  return(gg_graph)
   }
 }

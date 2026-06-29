@@ -4,7 +4,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
                    lim.cos2.var = 0., chrono = FALSE, xlim = NULL, ylim = NULL, 
                    title = NULL, palette = NULL, autoLab = c("auto","yes","no"),new.plot = FALSE, select = NULL,
                    unselect = 0.7,shadowtext=FALSE, legend = list(bty = "y", x = "topleft"),
-				   Mytheme = "theme_factominer", graph.type = c("ggplot","classic"), 
+				   theme = "theme_factominer", graph.type = c("ggplot","classic"), 
 				    ggoptions = NULL, ...) 
 {
   res.mfa <- x
@@ -39,7 +39,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
     nbre.grpe <- nbre.grpe - length(num.group.sup)
   }
   if (graph.type == "ggplot"){
-    theme <- theme(
+    def_theme <- theme(
       axis.title = element_text(hjust = 1, size = if (is.null(argument[["cex.axis"]])) {10} else {10*argument$cex.axis},face = 2),
       plot.title = element_text(hjust = 0.5, size = if (is.null(argument[["cex.main"]])) {11} else {11*argument$cex.main},face = 2),
       legend.position = ifelse(legend$x %in% c("bottom","up","right","left"), legend$x, "right"),
@@ -160,8 +160,8 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
       if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_axes[,2], y=df_axes[,3],label=df_axes[,1], color = as.factor(as.character(df_axes[,4]))), size = ggoptions_default$size, show.legend = FALSE)
       else{text <- geom_text(aes(x=df_axes[,2], y=df_axes[,3],label=df_axes[,1]),color = palette[as.numeric(as.character(df_axes[,4]))], size = ggoptions_default$size, hjust = (-sign(df_axes[,2])+1)/2, vjust = -sign(df_axes[,3])*0.75+0.25)}
       
-      if(is.null(select)) gg_graph <- gg_graph + scale_color_manual(values = palette[L$text.col[order(L$text.col)]], labels = unique(df_axes[,5])[order(unique(df_axes[,4]))])
-      if(!is.null(select)) gg_graph <- gg_graph + scale_color_manual(values = palette[unique(df_axes[,4])], labels = unique(df_axes[,5]))
+      if(is.null(select)) gg_graph <- gg_graph + scale_colour_manual(values = palette[L$text.col[order(L$text.col)]], labels = unique(df_axes[,5])[order(unique(df_axes[,4]))])
+      if(!is.null(select)) gg_graph <- gg_graph + scale_colour_manual(values = palette[unique(df_axes[,4])], labels = unique(df_axes[,5]))
       
       }
       if(habillage == "none"){
@@ -179,7 +179,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         else{text <- geom_text(aes(x=df_axes[,2], y=df_axes[,3],label=df_axes[,1]), size = ggoptions_default$size, hjust = (-sign(df_axes[,2])+1)/2, vjust = -sign(df_axes[,3])*0.75+0.25)}
         
       }
-      gg_graph <- gg_graph + text + theme + circle
+      gg_graph <- gg_graph + text + def_theme + circle
     }
   }
   if (choix == "group") {
@@ -298,7 +298,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         ggtitle(title)
       if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_group[,2], y=df_group[,3], label=df_group[,1]), size = ggoptions_default$size, color = rgb(t(col2rgb(df_group[,"coll"])),maxColorValue=255) , fontface = df_group[,"fonte"])
       else{text <- geom_text(aes(x=df_group[,2], y=df_group[,3], label=df_group[,1]), size = ggoptions_default$size, color = rgb(t(col2rgb(df_group[,4])),maxColorValue=255) , hjust = (-sign(df_group[,2])+1)/2, vjust = -sign(df_group[,3])*0.75+0.25, fontface = df_group[,"fonte"])}
-      gg_graph <- gg_graph + text + theme
+      gg_graph <- gg_graph + text + def_theme
     }
   }
   if (choix == "var") {
@@ -521,7 +521,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         ggtitle(title) +
         labs(color = if(legend["title"] %in% legend) legend["title"][[1]]) +
 #        labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "")) +
-        scale_color_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)]) +
+        scale_colour_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)]) +
         theme_light()  + 
         ggoptions_default$theme
       if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_var[,2], y=df_var[,3],label=df_var[,1], color = df_var[,4]), size = ggoptions_default$size,show.legend = FALSE)
@@ -544,7 +544,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         else{text <- geom_text(aes(x=df_var[,2], y=df_var[,3],label=df_var[,1]), size = ggoptions_default$size, hjust = (-sign(df_var[,2])+1)/2, vjust = -sign(df_var[,3])*0.75+0.25,show.legend = FALSE)}
         
       }
-      gg_graph <- gg_graph + text + theme + circle      
+      gg_graph <- gg_graph + text + def_theme + circle      
     }
   }
   if (choix=="freq"){
@@ -790,7 +790,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         geom_vline(xintercept = 0,lty=ggoptions_default$line.lty, lwd = ggoptions_default$line.lwd, color=ggoptions_default$line.color) +
 #        labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], "")) +
         labs(color = if(legend["title"] %in% legend) legend["title"][[1]]) +
-        scale_color_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)]) +
+        scale_colour_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)]) +
         theme_light() +
         ggoptions_default$theme +
         ggtitle(titre)
@@ -811,7 +811,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         if(autoLab) text <- ggrepel::geom_text_repel(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = palette[df_freq[,4]])
         else{text <- geom_text(aes(x=df_freq[,2], y=df_freq[,3], label=df_freq[,1]), size = ggoptions_default$size, color = palette[df_freq[,4]], hjust = (-sign(df_freq[,2])+1)/2, vjust = -sign(df_freq[,3])*0.75+0.25)}
       }
-      gg_graph <- gg_graph + theme + text
+      gg_graph <- gg_graph + def_theme + text
     }
   }
   if (choix == "ind") {
@@ -1175,7 +1175,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
               gg_graph <- gg_graph +
                 geom_point(aes(x=df_ind[,2], y=df_ind[,3], color = res.mfa$call$X[rownames(df_ind),habillage]), shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
                 # geom_point(aes(x=df_ind[,2], y=df_ind[,3]), color = coll_bis, shape = ggoptions_default$point.shape, size = ggoptions_default$size/3, alpha = transparency_ind) + 
-                scale_color_manual(values = palette[sort(unique(coll_num))]) +
+                scale_colour_manual(values = palette[sort(unique(coll_num))]) +
 			  labs(color = ifelse(legend["title"] %in% legend, legend["title"][[1]], habillage))
               if (autoLab) text_ind <- ggrepel::geom_text_repel(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1], color = (res.mfa$call$X)[rownames(df_ind),habillage]), size = ggoptions_default$size, show.legend = FALSE)
               else{text_ind <- geom_text(aes(x=df_ind[,2], y=df_ind[,3], label=df_ind[,1], color = res.mfa$call$X[rownames(df_ind),habillage]), size = ggoptions_default$size, show.legend = FALSE, hjust = (-sign(df_ind[,2])+1)/2, vjust = -sign(df_ind[,3])*0.75+0.25)}
@@ -1386,7 +1386,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
 	  }
     }
     if(graph.type == "ggplot") {
-	  gg_graph <- gg_graph + theme + text_ind + text_ind.sup + text_quali + text_quali.sup
+	  gg_graph <- gg_graph + def_theme + text_ind + text_ind.sup + text_quali + text_quali.sup
 	  if (!is.null(partial)) gg_graph <- gg_graph + labs(color = "")
 	} else {
       if (shadowtext) points(coo[, 1], y = coo[, 2], pch = ipch, col = coll, ...)
@@ -1416,7 +1416,7 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
         if(graph.type == "classic") do.call(graphics::legend, L)
       }
     if(graph.type=="ggplot" & habillage == "group" & !is.null(partial)){
-      gg_graph <- gg_graph + scale_color_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)])
+      gg_graph <- gg_graph + scale_colour_manual(values = palette[L$text.col[order(L$text.col)]], labels = L$legend[order(L$text.col)])
     }
       
 #    if (!is.null(coord.ellipse) & is.na(test.invisible[2])) {
@@ -1485,7 +1485,15 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
    }  }
    palette(old.palette)
   if(graph.type == "ggplot"){
-    if (tolower(Mytheme)!="none") gg_graph <- gg_graph + eval(parse(text=paste0(Mytheme,"()")))
-    return(gg_graph)
+    if (is.function(theme)) {
+      fonc_theme <- match.fun(theme)
+	  gg_graph <- gg_graph + fonc_theme()
+    } else if (inherits(theme, "theme")) {
+      gg_graph <- gg_graph + theme
+    } else {
+      warning("Argument 'theme' invalide. The 'theme_factominer' is used by default.")
+      gg_graph <- gg_graph + theme_factominer()    
+    }
+  return(gg_graph)
   }
 }
