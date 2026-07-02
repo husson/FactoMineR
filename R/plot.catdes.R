@@ -1,14 +1,17 @@
-plot.catdes <- function(x,show= "all",output=c("figure","dt"),level=0.01,sort=NULL,col.upper="indianred2",col.lower="royalblue1",numchar=10,barplot=FALSE,cex.names=1,...){
+plot.catdes <- function(x,show= c("all","quanti.var","test.chi2"),output=c("figure","dt"),level=0.01,sort=NULL,col.upper="indianred2",col.lower="royalblue1",numchar=10,barplot=FALSE,cex.names=1,...){
   #Check the arguments
   if( !attr(x,"class")[1]=="catdes") {stop("'x' must be of type catdes")}
-  if (show!="all" && show!="quanti" && show!="quali"&& show!="quanti.var"&& show!="test.chi2"){stop("Invalid value of show")}
-  output <- match.arg(output[1],c("figure","dt"))
-output <- tolower(output[1])
-if (output=="dt") {
+  if (!("all"%in%show) && !("quanti"%in%show) && !("quali"%in%show) && !("quanti.var"%in%show) && !("test.chi2"%in%show)){stop("Invalid value of show")}
+  output <- match.arg(tolower(output),c("figure","dt"),several.ok=TRUE)
+if ("dt" %in% output) {
+  res <- list()
   mini <- 1
-  if (show=="quanti" || show=="all"){
-    if (is.null(x$quanti) & (show=="quanti")) stop("No quantitative variables")
-    else {
+  tableau_vtest <- NULL
+  tableau_quali <- NULL
+  if (!is.null(x$quanti)){
+#    if (length(show)==1 && show=="quanti") stop("No quantitative variables")
+#  }	else {
+    if ("quanti"%in%show || "all"%in%show){
       mini <- min(x$quanti.var[,2])
       lvl <- length(x$quanti)
       rows <- rownames(x$quanti[[1]])
@@ -22,14 +25,14 @@ if (output=="dt") {
 	    tabvtest[rownames(x$quanti[[i]]),i] <- x$quanti[[i]][,"v.test", drop = FALSE]
 	    tabpvalue[rownames(x$quanti[[i]]),i] <- x$quanti[[i]][,"p.value", drop = FALSE]
 	  }
-	  tableau_vtest <- NULL
       if (level >= min(tabpvalue)) tableau_vtest <- signif(t(as.matrix(tabvtest[apply(tabpvalue,1,min) <= level,])),3)
     }
   }
   
-  if (show=="quali" || show=="all"){
-    if (is.null(x$category) & (show=="quali")) stop("No qualitative variables")
-    else {
+  if (!is.null(x$category)){
+ #   if (length(show)==1 && show=="quali") stop("No qualitative variables")
+ # } else {
+    if ("quali" %in% show || "all" %in% show){
       lvl <- length(x$category)
       rows <- rownames(x$category[[1]])
       for (i in 2:lvl) rows <- c(rows,rownames(x$category[[i]]))
@@ -44,17 +47,16 @@ if (output=="dt") {
 	  }
       mini <- min(mini,min(tabpvalue))
       colnames(tabpvalue) <- colnames(tabvtest) <- names(x$category)
-      tableau_quali <- NULL
 	  if (level >= min(tabpvalue)) tableau_quali <- signif(tabvtest[apply(tabpvalue,1,min) <= level,,drop = FALSE],3)
     }
   }
     
-  if (show=="quanti"){
-    if (is.null(tableau_vtest)) stop(paste("The p-value should be greater than",signif(mini,3),"."))
+  if ("quanti" %in% show && !is.null(tableau_vtest)){
+#    if (is.null(tableau_vtest)) stop(paste("The p-value should be greater than",signif(mini,3),"."))
         lvl <- length(x$category)
         quant <- seq(-max(abs(tableau_vtest), na.rm = T), max(abs(tableau_vtest), na.rm = T),length.out = 100)
         color <- grDevices::colorRampPalette(c(col.lower,"white",col.upper))(length(quant)+1)     
-        a <- DT::formatStyle(
+        res$res_quanti <- DT::formatStyle(
           DT::datatable(t(as.matrix(tableau_vtest)),
                         extensions = c('Buttons','FixedColumns','FixedHeader'),
                         options = list( pageLength = ncol(tableau_vtest),
@@ -63,46 +65,45 @@ if (output=="dt") {
           rownames(tableau_vtest),
           backgroundColor = DT::styleInterval(quant, color)
         )
-        return(a)
   }
   
-  if (show=="quali"){
-        if (is.null(tableau_quali)) stop(paste("The p-value should be greater than",signif(mini,3),"."))
+  if ("quali" %in% show && !is.null(tableau_quali)){
+#        if (is.null(tableau_vtest)) stop(paste("The p-value should be greater than",signif(mini,3),"."))
         quant <- seq(-max(abs(tableau_quali),na.rm = TRUE), max(abs(tableau_quali), na.rm = TRUE), length.out = 100)
         # quant <- seq(min(tableau_quali,na.rm = TRUE), max(tableau_quali, na.rm = TRUE), length.out = 100)
         color <- grDevices::colorRampPalette(c(col.lower,"white",col.upper))(length(quant)+1)
-        a <- DT::formatStyle(
+        res$res_quali <- DT::formatStyle(
           DT::datatable(tableau_quali, extensions = c('Buttons','FixedColumns','FixedHeader'),
             options = list(pageLength = nrow(tableau_quali), dom = 'Bfrtip',
               buttons = c('csv'), fixedColumns = TRUE, fixedHeader = TRUE)
           ),
           colnames(tableau_quali), backgroundColor = DT::styleInterval(quant, color)
         )  
-        return(a)
       }
   
-  if (show=="all"){
+  if ("all" %in% show){
     tab <- NULL
     if(!is.null(tableau_quali)) tab <- rbind(tab,tableau_quali)
     if(!is.null(tableau_vtest)) tab <- rbind(tab,t(tableau_vtest))
-    if (is.null(tab)) stop(paste("The p-value should be greater than",signif(mini,3),"."))
-    quant <- seq(-max(abs(tab), na.rm = T), max(abs(tab), na.rm = T), length.out = 100)
-    color <- grDevices::colorRampPalette(c(col.lower,"white",col.upper))(length(quant)+1)
-    a <- DT::formatStyle(
-      DT::datatable(tab,extensions = c('Buttons','FixedColumns','FixedHeader'),
-        options = list(pageLength = nrow(tab),dom = 'Bfrtip',
+    # if (is.null(tab)) stop(paste("The p-value should be greater than",signif(mini,3),"."))
+    if (!is.null(tab)){
+	  quant <- seq(-max(abs(tab), na.rm = T), max(abs(tab), na.rm = T), length.out = 100)
+      color <- grDevices::colorRampPalette(c(col.lower,"white",col.upper))(length(quant)+1)
+      res$res_all <- DT::formatStyle(
+        DT::datatable(tab,extensions = c('Buttons','FixedColumns','FixedHeader'),
+          options = list(pageLength = nrow(tab),dom = 'Bfrtip',
           buttons = c('csv'),fixedColumns = TRUE,fixedHeader = TRUE)
-      ), colnames(tab),backgroundColor = DT::styleInterval(quant, color)
-    )
-    return(a)
+        ), colnames(tab),backgroundColor = DT::styleInterval(quant, color)
+      )
+	}
   }
   
-  if (show=="quanti.var"){
-      if(level <= min(x$quanti.var[,"P-value"])) stop(paste("The p-value should be greater than",signif(min(x$quanti.var[,"P-value"]),3)))
+  if ("quanti.var" %in% show && !is.null(x$quanti.var)){
+    if(level > min(x$quanti.var[,"P-value"])){
       tableau_link_quanti <- as.data.frame(x$quanti.var[ x$quanti.var[,"P-value"] <= level,c("Eta2","P-value"), drop = FALSE])
-      quant <- seq(min(tableau_link_quanti[,1]), max(tableau_link_quanti[,1]), length.out = 100)
+	  quant <- seq(min(tableau_link_quanti[,1]), max(tableau_link_quanti[,1]), length.out = 100)
       color <- grDevices::colorRampPalette(c(col.lower,"white",col.upper))(length(quant)+1)
-      a <- DT::formatStyle(
+      res$res_quanti.var <- DT::formatStyle(
         DT::datatable(signif(tableau_link_quanti,3),
                       extensions = c('Buttons','FixedColumns','FixedHeader'),
                       options = list(pageLength = nrow(tableau_link_quanti),
@@ -112,32 +113,33 @@ if (output=="dt") {
         valueColumns = 'P-value',
         backgroundColor = DT::styleInterval(quant, color)
       )
-    return(a)
+	}
   }
   
-  if (show=="test.chi2"){
-    if(is.null(x$test.chi2)) stop("No qualitative variables")
-    if(level <= min(x$test.chi2[,"p.value"])) stop(paste("The p-value should be greater than",signif(min(x$test.chi2[,"p.value"]),3)))
-    tableau_link_chisquare <- (x$test.chi2[x$test.chi2[,"p.value"] <= level,"p.value", drop = FALSE])
-    quant <- seq(min(tableau_link_chisquare[,"p.value"]), max(tableau_link_chisquare[,"p.value"]), length.out = 100)
-    color <- grDevices::colorRampPalette(c(col.upper,"white",col.lower))(length(quant)+1)
-    a <- DT::formatStyle(
-      DT::datatable(
-        signif(tableau_link_chisquare,3),
-        extensions = c('Buttons','FixedColumns','FixedHeader'),
-        options = list(pageLength = nrow(tableau_link_chisquare),
+  if ("test.chi2" %in% show && !is.null(x$test.chi2)){
+    if(level > min(x$test.chi2[,"p.value"])){
+	  tableau_link_chisquare <- (x$test.chi2[x$test.chi2[,"p.value"] <= level,"p.value", drop = FALSE])
+      quant <- seq(min(tableau_link_chisquare[,"p.value"]), max(tableau_link_chisquare[,"p.value"]), length.out = 100)
+      color <- grDevices::colorRampPalette(c(col.upper,"white",col.lower))(length(quant)+1)
+      res$res_test_chi2 <- DT::formatStyle(
+        DT::datatable(
+          signif(tableau_link_chisquare,3),
+          extensions = c('Buttons','FixedColumns','FixedHeader'),
+          options = list(pageLength = nrow(tableau_link_chisquare),
                        dom = 'Bfrtip', buttons = c('csv'), fixedColumns = TRUE, fixedHeader = TRUE)
-      ),
-      columns = colnames(tableau_link_chisquare),
-      valueColumns = "p.value",
-      backgroundColor = DT::styleInterval(quant, color)
-    )
-    return(a)
+        ),
+        columns = colnames(tableau_link_chisquare),
+        valueColumns = "p.value",
+        backgroundColor = DT::styleInterval(quant, color)
+      )
+	}
   }
-} else {
-if (!barplot){
+} 
+if ("figure" %in% output){
+ if (!barplot){
+  rows <- NULL
   if(!is.null(x$quanti)) rows <- names(x$quanti)  
-  else  rows <- names(x$category)   
+  else if(!is.null(x$category)) rows <- names(x$category)   
   if(is.null(rows)){stop("Invalid value of x")}
   nb_cluster <- length(rows)
   #If sort is a string, then we convert it to an integer
@@ -161,7 +163,7 @@ if (!barplot){
   ##Columns of the table obtained with the union of the results in the catdes
   #Quantitative
   if(is.null(sort)){
-    if (show=="quanti" || show=="all"){
+    if ("quanti" %in% show || "all" %in% show){
       quanti <- c()
       for (q in x$quanti){
         quanti <- union(quanti,rownames(q))
@@ -169,7 +171,7 @@ if (!barplot){
       }
     }
     #Categorical
-    if (show=="quali" || show=="all"){
+    if ("quali" %in% show || "all" %in% show){
       quali <- c()
       for (q in x$category){
         quali <- union(quali,rownames(q))
@@ -177,13 +179,13 @@ if (!barplot){
       }
     }
     #All columns
-    if (show=="all"){
+    if ("all" %in% show){
       columns <- c(quanti,quali)
     }
-    else if (show=="quali"){
+    else if ("quali" %in% show){
       columns <- quali
     }
-    else if (show=="quanti"){
+    else if ("quanti" %in% show){
       columns <- quanti
     }
   } else{
@@ -200,7 +202,7 @@ if (!barplot){
       pval <- c(pval,q[,'p.value'])
     }
     k <- sort
-    if ((show=="quanti" || show=="all") && !(is.null(x$quanti))){
+    if (("quanti" %in% show || "all" %in% show) && !(is.null(x$quanti))){
     pvals_k_quanti <- as.data.frame(x$quanti[[k]][,"p.value"])
     colnames(pvals_k_quanti)<-"pvals"
     names <- rownames(pvals_k_quanti)
@@ -211,7 +213,7 @@ if (!barplot){
      quanti_all <- merge(x=quanti_all,y=pvals_k_quanti,by="names",all.x=TRUE)[,c("names","pvals.y")]
     colnames(quanti_all) <- c("names","pvals")
     }
-    if ((show=="quali" || show=="all") && !(is.null(x$category))){
+    if (("quali" %in% show || "all" %in% show) && !(is.null(x$category))){
     pvals_k_quali <- as.data.frame(x$category[[k]][,"p.value"])
     colnames(pvals_k_quali)<-"pvals"
     names <- rownames(pvals_k_quali)
@@ -222,9 +224,9 @@ if (!barplot){
      quali_all <- merge(x=quali_all,y=pvals_k_quali,by="names",all.x=TRUE)[,c("names","pvals.y")]
     colnames(quali_all) <- c("names","pvals")
     }
-    if (show=="all") columns <- rbind(quali_all,quanti_all)
-    if (show=="quali") columns <- rbind(quali_all)
-    if (show=="quanti") columns <- rbind(quanti_all)
+    if ("all" %in% show) columns <- rbind(quali_all,quanti_all)
+    if ("quali" %in% show) columns <- rbind(quali_all)
+    if ("quanti" %in% show) columns <- rbind(quanti_all)
     columns <- columns[order(columns$pvals),]
     columns <- columns$names
   }
@@ -267,7 +269,7 @@ if (!barplot){
     quanti <- x$quanti
     quali <- x$category
     #Quantitative
-    if (show=="quanti" || show=="all"){
+    if ("quanti" %in% show || "all" %in% show){
       for (name_row in rownames(quanti[[i]])){
         j <- which(columns==name_row)
         p <- quanti[[i]][name_row,"p.value"]
@@ -287,7 +289,7 @@ if (!barplot){
     }
     
     #Qualitative
-    if (show=="quali" || show=="all"){
+    if ("quali" %in% show || "all" %in% show){
       for (name_row in rownames(quali[[i]])){
         j <- which(columns==name_row)
         p <- quali[[i]][name_row,"p.value"]
@@ -326,9 +328,9 @@ if (!barplot){
       names(category.catdes) <- rownames(category)
     } else category.catdes <- NULL
                                         #print(category.catdes)
-    if (show=="all") catdes.aux <- c(quanti.catdes,category.catdes)
-    if (show=="quanti") catdes.aux <- quanti.catdes					# different options
-    if (show=="quali") catdes.aux <- category.catdes
+    if ("all" %in% show) catdes.aux <- c(quanti.catdes,category.catdes)
+    if ("quanti" %in% show) catdes.aux <- quanti.catdes					# different options
+    if ("quali" %in% show) catdes.aux <- category.catdes
     if (!is.null(catdes.aux)) {
       count <- count+1								#count is a counter of the catdes clusters which are non null.   
       long[i] <- length(catdes.aux)
@@ -365,6 +367,12 @@ if (!barplot){
     }
   }    
   par(las = 0)
-}
-}
+ }
+ cat("See the Plots window")
+ if (length(res)>0) cat(" and the Viewer window\n")
+ }
+  if (length(res)>0){
+    if (!("figure" %in%output)) cat("See the Viewer window\n")
+	return(res)
+  }
 }

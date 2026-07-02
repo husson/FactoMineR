@@ -5,10 +5,11 @@
 \title{Plots for description of clusters (catdes)}
 
 \description{
-  Plots a graph from a catdes output.}
+  This function creates a graph and gives HTML tables from a catdes output.}
 
 \usage{
-\method{plot}{catdes}(x, show="all",output=c("figure","dt") , level=0.01, sort=NULL,
+\method{plot}{catdes}(x, show= c("all","quanti.var","test.chi2"),
+   output=c("figure","dt"), level=0.01, sort=NULL,
    col.upper="indianred2", col.lower="royalblue1", numchar = 10,
    barplot = FALSE,cex.names=1, \dots)
 }
@@ -17,7 +18,7 @@
   \item{x}{A catdes object, see \code{\link{catdes}} for details.}
   \item{show}{a string. If "quali", only the categorical variables are
   used. If "quanti", only the the quantitative variables are used. If
-  "all", both quali and quanti are used. If "quanti.var" is used the characterization of the quantitative variables is given; if "test.chi2" is used the characterization of the qualitative variables is given.}
+  "all", both quali and quanti are used and ordered in a same table. If "quanti.var" is used the characterization of the quantitative variables is given; if "test.chi2" is used the characterization of the qualitative variables is given.}
 \item{output}{string: "dt" for a datatable or "figure" for a figure}
 \item{level}{a positive float. Indicates a critical value the p-value.}
 \item{sort}{NULL (default) or an integer between 1 and the number of clusters or a character (the name of a group). If it is an integer or the name of a group, the features are sorted according to their significances in the construction of the given cluster.}

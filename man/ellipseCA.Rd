@@ -12,6 +12,7 @@ Draw confidence ellipses in CA around rows and/or columns.
 ellipseCA (x, ellipse=c("col","row"), method="multinomial", nbsample=100,
     axes=c(1,2), xlim=NULL, ylim=NULL, col.row="blue", col.col="red",
 	col.row.ell=col.row, col.col.ell=col.col, 
+	theme = "theme_factominer",
 	graph.type = c("ggplot","classic"), ggoptions = NULL, \dots)
 }
 
@@ -28,6 +29,7 @@ ellipseCA (x, ellipse=c("col","row"), method="multinomial", nbsample=100,
   \item{col.row.ell}{a color for the ellipses of rows points (the color "transparent" can be used if an ellipse should not be drawn)}
   \item{col.col.ell}{a color for the ellipses of columns points (the color "transparent" can be used if an ellipse should not be drawn)}
   \item{graph.type}{a character that gives the type of graph used: "ggplot" or "classic"}
+  \item{theme}{a character string corresponding to a theme you want to use for the graph, by default 'theme_factominer'. The theme 'ggplot2::theme_bw()' for instance are also possible.}
   \item{ggoptions}{a list that gives the graph options when grah.type="ggplot" is used. See the optines and the default values in the details section}
   \item{\dots}{further arguments passed to or from the plot.CA function, such as title, invisible, ...}
 }

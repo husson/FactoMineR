@@ -86,7 +86,6 @@ if (choix=="quanti") {
     } else if (inherits(theme, "theme")) {
       gg_graph <- gg_graph + theme
     } else {
-      warning("Argument 'theme' invalide. The 'theme_factominer' is used by default.")
       gg_graph <- gg_graph + theme_factominer()    
     }
   return(gg_graph)

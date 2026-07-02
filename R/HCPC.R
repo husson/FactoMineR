@@ -314,14 +314,14 @@ if (kk<Inf){
   if (vec) data.clust <- as.data.frame(data.clust[, -2])
 if (description){
      if (!inherits(res.sauv, "CA")&!(vec)){
-	   if (!is.null(res.sauv$call$row.w.init)) desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w.init)
-	   else desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w)
+	   if (!is.null(res.sauv$call$row.w.init)) desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w.init, html.table=FALSE)
+	   else desc.var <- catdes(data.clust, ncol(data.clust), proba = proba, row.w = res.sauv$call$row.w, html.table=FALSE)
 	 } else {
       if ((vec) | (is.null(res.sauv$call$quanti.sup)& is.null(res.sauv$call$quali.sup))){
       	  desc.var <- descfreq(data.clust[,-which(sapply(data.clust,is.factor))], data.clust[,ncol(data.clust)], proba = proba)
 	  } else { 
 	   if (cluster.CA=="rows"){
-	     desc.var <- catdes(data.clust[,c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))], length(c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))), proba = proba,row.w=apply(data.clust[,-c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))],1,sum))
+	     desc.var <- catdes(data.clust[,c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))], length(c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))), proba = proba,row.w=apply(data.clust[,-c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))],1,sum), html.table=FALSE)
          desc.var$frequency <- descfreq(data.clust[,-c(res.sauv$call$quanti.sup,res.sauv$call$quali.sup,ncol(data.clust))], data.clust[,ncol(data.clust)], proba = proba)
 	     desc.var <- desc.var[c(length(desc.var),1:(length(desc.var)-1))]   # frequency will appear first
 	   } else {
@@ -329,7 +329,7 @@ if (description){
 	   }
 	  }
     }
-    if (kk==Inf) desc.axe <- catdes(X, ncol(X), proba = proba, row.w = res$call$row.w.init)
+    if (kk==Inf) desc.axe <- catdes(X, ncol(X), proba = proba, row.w = res$call$row.w.init, html.table=FALSE)
 }
   if (inherits(res.sauv, "data.frame")) tabInd <- cbind.data.frame(res.sauv,data.clust[,ncol(data.clust)])
   if (inherits(res.sauv, "PCA") | inherits(res.sauv, "MCA") | inherits(res.sauv,"MFA") | inherits(res.sauv, "HMFA") | inherits(res.sauv, "FAMD")) tabInd <- cbind.data.frame(res.sauv$ind$coord,data.clust[rownames(res.sauv$ind$coord),ncol(data.clust)])

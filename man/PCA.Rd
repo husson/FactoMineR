@@ -13,7 +13,7 @@ Missing values are replaced by the column mean.
 \usage{
 PCA(X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, 
     quanti.sup = NULL, quali.sup = NULL, row.w = NULL, 
-    col.w = NULL, graph = TRUE, axes = c(1,2))}
+    col.w = NULL, graph = TRUE, axes = c(1,2),...)}
 
 \arguments{
   \item{X}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (numeric variables)}
@@ -26,6 +26,7 @@ PCA(X, scale.unit = TRUE, ncp = 5, ind.sup = NULL,
   \item{col.w}{an optional column weights (by default, uniform column weights); the weights are given only for the active variables}
   \item{graph}{boolean, if TRUE a graph is displayed}
   \item{axes}{a length 2 vector specifying the components to plot}
+  \item{\dots}{further arguments passed to or from other methods, such as the ones of plot.PCA, ...}
 }
 
 \value{

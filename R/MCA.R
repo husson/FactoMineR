@@ -1,6 +1,6 @@
 MCA <- function (X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, quali.sup = NULL, excl=NULL,
     graph = TRUE, level.ventil = 0, axes = c(1, 2), row.w = NULL, 
-    method="Indicator",na.method="NA",tab.disj=NULL){
+    method="Indicator",na.method="NA",tab.disj=NULL, ...){
     
 ############
 #ventil.tab <- function (tab, level.ventil=0.05,row.w=NULL,ind.sup=NULL,quali.sup=NULL,quanti.sup=NULL) {
@@ -417,10 +417,10 @@ if (!is.null(quanti.sup)){
 	
     class(res.mca) <- c("MCA", "list")
     if (graph & (ncp>1)) {
-        print(plot.MCA(res.mca, choix = "ind", invisible="ind", axes = axes,new.plot=TRUE))
-        if (method=="Indicator") print(plot.MCA(res.mca, choix = "ind", invisible=c("var","quali.sup","quanti.sup"), axes = axes,new.plot=TRUE,cex=0.8))
-		print(plot.MCA(res.mca, choix = "var", axes = axes,new.plot=TRUE))
-        if (!is.null(quanti.sup)) print(plot.MCA(res.mca, choix = "quanti.sup", axes = axes,new.plot=TRUE))
+        print(plot.MCA(res.mca, choix = "ind", invisible="ind", axes = axes,new.plot=TRUE, ...))
+        if (method=="Indicator") print(plot.MCA(res.mca, choix = "ind", invisible=c("var","quali.sup","quanti.sup"), axes = axes,new.plot=TRUE,cex=0.8, ...))
+		print(plot.MCA(res.mca, choix = "var", axes = axes,new.plot=TRUE, ...))
+        if (!is.null(quanti.sup)) print(plot.MCA(res.mca, choix = "quanti.sup", axes = axes,new.plot=TRUE, ...))
     }
     return(res.mca)
 }

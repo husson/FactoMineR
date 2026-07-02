@@ -20,12 +20,26 @@
 }
 \usage{
 theme_factominer(
-  base_size = 11,
-  base_family = "InclusiveSans",
-  title_family = "AtkinsonNext",
-  dark_text = "#1C2B3A",
-  mid_text = "#4A5A6A",
-  light_text = "#7A8A9A"
+    base_size         = 11,
+    base_family       = "Inclusive Sans",
+    title_family      = "Atkinson Hyperlegible Next",
+    
+    rel_title         = 1.5,
+    rel_subtitle      = 1.05,
+    rel_caption       = 0.78,
+    rel_axis_title    = 0.9,
+    rel_axis_text     = 0.85,
+    rel_legend_title  = 0.88,
+    rel_legend_text   = 0.85,
+    rel_strip_text    = 0.9,
+    
+    # point_size        = 2.5,
+    # label_size        = 3.5, 
+    
+    dark_text         = "#1C2B3A",
+    mid_text          = "#4A5A6A",
+    light_text        = "#7A8A9A",
+    factominer_grid_col = "#E2E8F0"
 )
 
 scale_colour_factominer(...)
@@ -51,11 +65,20 @@ factominer_breaks_cos2()
 factominer_labels_pct(digits = 1)
 }
 \arguments{
-\item{base_size}{Base font size (default: 12).}
-\item{base_family}{Font family used for the main text (default: "InclusiveSans").}
-\item{title_family}{Font family used for titles (default: "AtkinsonNext").}
+\item{base_size}{Base font size (default: 11).}
+\item{base_family}{Font family used for the main text (default: "Inclusive Sans"); choose in the google fonts}
+\item{title_family}{Font family used for titles (default: "Atkinson Hyperlegible Next"); choose in the google fonts.}
+\item{rel_title}{Relative size of title. Default 1.5}
+\item{rel_subtitle}{Relative size of subtitle. Default 1.05}
+\item{rel_caption}{Relative size of caption. Default 0.78}
+\item{rel_axis_title}{Relative size of axis_title. Default 0.9}
+\item{rel_axis_text}{Relative size of axis_text. Default 0.85}
+\item{rel_legend_title}{Relative size of legend_title. Default 0.88}
+\item{rel_legend_text}{Relative size of legend_text. Default 0.85}
+\item{rel_strip_text}{Relative size of strip_text. Default 0.9}
 \item{dark_text}{Color used for titles and dark text.}
 \item{mid_text}{Color used for regular text and legends.}
+\item{factominer_grid_col}{Color used for the grid.}
 \item{light_text}{Color used for axes and secondary legends.}
 \item{name}{Legend title.}
 \item{limits}{Limits of the scale.}
@@ -77,9 +100,9 @@ factominer_labels_pct(digits = 1)
 \examples{
 data(decathlon)
 res.pca <- PCA(decathlon,quali.sup=13,quanti.sup=11:12, graph=FALSE)
-plot(res.pca)                                        #theme by defaut
-plot(res.pca,theme=theme_factominer(base_size=16))   #biger size
-plot(res.pca,theme=ggplot2::theme_grey())
-plot(res.pca,theme=ggplot2::theme_bw())
+plot(res.pca)                                                          #theme by defaut
+plot.PCA(res.pca, theme=theme_factominer(base_size=8, rel_title=1.2),  # smaller theme
+   ggoptions = list(size=2.5))                                         # and smaller size
+plot(res.pca,theme=ggplot2::theme_grey())                              # ggplot2 theme
 }
 \keyword{aplot}

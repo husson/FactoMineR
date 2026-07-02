@@ -48,7 +48,7 @@ Draw the Correspondence Analysis (CA) graphs.
   \item{shadowtext}{boolean; if true put a shadow on the labels (rectangles are written under the labels which may lead to difficulties to modify the graph with another program)}
   \item{habillage}{color the individuals among a categorical variable (give the number of the categorical supplementary variable or its name)}
   \item{legend}{a list of arguments that defines the legend if needed (when individuals are drawn according to a variable); see the arguments of the function \code{legend}}
-  \item{theme}{a character string corresponding to a theme you want to use for the graph, by default "theme_factominer". "None", "ggplot2::theme_bw" for instance are also possible.}
+  \item{theme}{a character string corresponding to a theme you want to use for the graph, by default 'theme_factominer'. The theme 'ggplot2::theme_bw()' for instance are also possible.}
   \item{graph.type}{a character that gives the type of graph used: "ggplot" or "classic"}
   \item{ggoptions}{a list that gives the graph options when grah.type="ggplot" is used. See the optines and the default values in the details section}
   \item{\dots}{further arguments passed to or from other methods, such as cex, cex.main, ...}

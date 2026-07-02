@@ -1,5 +1,5 @@
 PCA <- function(X, scale.unit = TRUE, ncp = 5, ind.sup = NULL, quanti.sup = NULL, 
-    quali.sup = NULL, row.w = NULL, col.w = NULL, graph = TRUE, axes = c(1, 2)){
+    quali.sup = NULL, row.w = NULL, col.w = NULL, graph = TRUE, axes = c(1, 2), ...){
 	
     moy.ptab <- function(V, poids) {
 #      as.vector(crossprod(poids/sum(poids),as.matrix(V)))
@@ -373,8 +373,8 @@ fct.eta2 <- function(group, Y, weights = NULL) {  # no NA on Y hat are dimension
     res$call <- res.call
     class(res) <- c("PCA", "list")
     if (graph & (ncp>1)) {
-        print(plot.PCA(res, choix = "ind", axes = axes))
-        print(plot.PCA(res, choix = "var", axes = axes,shadowtext=TRUE,new.plot=TRUE))
+        print(plot.PCA(res, choix = "ind", axes = axes, ...))
+        print(plot.PCA(res, choix = "var", axes = axes,shadowtext=TRUE,new.plot=TRUE, ...))
     }
     return(res)
 }

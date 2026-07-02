@@ -21,6 +21,6 @@ meansComp <- function(object, spec, graph=TRUE, ...){
   mat <- mat[order(summary(tuk)[,ncol(summary(tuk))-4]),order(summary(tuk)[,ncol(summary(tuk))-4])]
   res <- list(adjMean=tuk, groupComp=multcompView::multcompLetters(mat))
   class(res) <- "meansComp"
-  if (graph) print(plot(res))
+  if (graph) print(plot(res, ...))
   return(res)
 }

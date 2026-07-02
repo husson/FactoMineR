@@ -1,4 +1,4 @@
-catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA"){
+catdes <- function(donnee,num.var,proba = 0.05,row.w=NULL, na.method="NA", html.table=TRUE){
 
     # moy.p <- function(V, fac=NULL, poids, na.rm=TRUE) {
 		# poids[is.na(V)] <- 0
@@ -394,6 +394,11 @@ for (j in seq_len(nb.modalite)) {
   }
   res$call <- list(num.var=num.var, proba=proba, row.w=row.w, X=donnee, na.method=na.method)
   options(old.warn)
-class(res) <- c("catdes", "list")
+  class(res) <- c("catdes", "list")
+  if (html.table){
+    if (!is.null(res$test.chi2)) print(plot.catdes(res, level=proba, output="dt", show="test.chi2"))
+    if (!is.null(res$quanti.var)) print(plot.catdes(res, level=proba, output="dt", show="quanti.var"))
+    if (!is.null(res$quanti) || !is.null(res$category)) print(plot.catdes(res, level=proba, output="dt", show="all"))
+  }
   return(res)
 }

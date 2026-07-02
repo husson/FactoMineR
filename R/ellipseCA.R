@@ -1,6 +1,7 @@
 ellipseCA <- function(x, ellipse=c("col","row"), method="multinomial", nbsample=100,
                       axes=c(1,2), xlim=NULL, ylim=NULL, col.row="blue", col.col="red",
-                      col.row.ell=col.row, col.col.ell=col.col, graph.type = c("ggplot","classic"), ggoptions = NULL, ...){
+                      col.row.ell=col.row, col.col.ell=col.col,theme = "theme_factominer",
+					  graph.type = c("ggplot","classic"), ggoptions = NULL, ...){
   
   X <- x$call$X
   argument <- list(...)
@@ -73,7 +74,7 @@ ellipseCA <- function(x, ellipse=c("col","row"), method="multinomial", nbsample=
   }
   if (nullxlimylim & diff(xlim)/diff(ylim)>3) ylim <- (ylim-mean(ylim))*diff(xlim)/diff(ylim)/3 + mean(ylim)
   if (nullxlimylim & diff(xlim)/diff(ylim)<1/2) xlim <- (xlim-mean(xlim))*diff(ylim)/diff(xlim)/2 + mean(xlim)
-  graph <- plot(x,axes=axes,xlim=xlim,ylim=ylim,col.col=col.col,col.row=col.row, graph.type = graph.type, ggoptions = ggoptions, ...)
+  gg_graph <- plot(x,axes=axes,xlim=xlim,ylim=ylim,col.col=col.col,col.row=col.row, graph.type = graph.type, ggoptions = ggoptions, ...)
 
 #  if ("row"%in%ellipse){
 #    lev<-paste("row",1:nlevels(ellRow[, 1]),sep="")
@@ -109,7 +110,7 @@ ellipseCA <- function(x, ellipse=c("col","row"), method="multinomial", nbsample=
 	} else {
       if(graph.type == "ggplot"){
 	    ellRow$colour <- rep(col.row.ell,times=table(ellRow[,1]))
-        graph <- graph + geom_path(aes_string(x=ellRow[,2],y=ellRow[,3]), color = ellRow$colour,group=ellRow[,1])
+        gg_graph <- gg_graph + geom_path(aes(x=ellRow[,2],y=ellRow[,3]), color = ellRow$colour,group=ellRow[,1])
       }
     }   
   }
@@ -123,9 +124,19 @@ ellipseCA <- function(x, ellipse=c("col","row"), method="multinomial", nbsample=
 	} else {
       if(graph.type == "ggplot"){
 	    ellCol$colour <- rep(col.col.ell,times=table(ellCol[,1]))
-        graph <- graph + geom_path(aes_string(x=ellCol[,2],y=ellCol[,3]), color = ellCol$colour,group=ellCol[,1])
+        gg_graph <- gg_graph + geom_path(aes(x=ellCol[,2],y=ellCol[,3]), color = ellCol$colour,group=ellCol[,1])
       }
     }   
   }
-  if(graph.type == "ggplot") print(graph)
+  if(graph.type == "ggplot"){
+    if (is.function(theme)) {
+      fonc_theme <- match.fun(theme)
+	  gg_graph <- gg_graph + fonc_theme()
+    } else if (inherits(theme, "theme")) {
+      gg_graph <- gg_graph + theme
+    } else {
+      gg_graph <- gg_graph + theme_factominer()    
+	}
+  return(gg_graph)
+  }
 }

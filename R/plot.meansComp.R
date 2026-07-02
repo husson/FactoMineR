@@ -21,7 +21,7 @@ plot.meansComp <- function(x, theme = "theme_factominer",...){
   aux$Letters <- x$groupComp$Letters
 
 #if (graph.type==1){
-  p <- ggplot2::ggplot(aux, ggplot2::aes(x=emmean, y=Effect,col=Letters),...) + 
+  gg_graph <- ggplot2::ggplot(aux, ggplot2::aes(x=emmean, y=Effect,col=Letters),...) + 
     ggplot2::geom_errorbar(ggplot2::aes(xmin=lower.CL, xmax=upper.CL), width=.1) +
     ggplot2::geom_point() + ggplot2::theme(legend.position="none") +
     ggplot2::geom_text(ggplot2::aes(x=upper.CL+stats::offset(.1), y = Effect,label=Letters,col=Letters),hjust=0) +
@@ -29,28 +29,27 @@ plot.meansComp <- function(x, theme = "theme_factominer",...){
 #}
 
 # if (graph.type==2){
-  # p <- ggplot2::ggplot(aux, ggplot2::aes(x = emmean, y = Effect),...) + 
+  # gg_graph <- ggplot2::ggplot(aux, ggplot2::aes(x = emmean, y = Effect),...) + 
       # ggplot2::geom_point(size=2) + ggplot2::xlab("Adjust mean")+ggplot2::ylab(nameEffect)
   # for (i in 1:ncol(x$groupComp$LetterMatrix)) {
     # xlim <- aux[rownames(x$groupComp$LetterMatrix)[which(x$groupComp$LetterMatrix[,i])],2]
     # ylim <- which(x$groupComp$LetterMatrix[,i])
-    # p <- p + ggplot2::annotate("segment", x=min(xlim),xend=max(xlim), y = min(ylim),yend=min(ylim),colour = palette()[i+1], size = 1.5)
+    # gg_graph <- gg_graph + ggplot2::annotate("segment", x=min(xlim),xend=max(xlim), y = min(ylim),yend=min(ylim),colour = palette()[i+1], size = 1.5)
     # for (k in ylim) {
-      # p <- p + ggplot2::annotate("segment", x=aux[k,2],xend=aux[k,2], y = min(ylim),yend=k,colour = palette()[i+1], size = 1,linetype = "dashed")
-      # p <- p + ggplot2::annotate("point", x=aux[k,2], y = min(ylim), colour = "black", size = 2, shape=21)
+      # gg_graph <- gg_graph + ggplot2::annotate("segment", x=aux[k,2],xend=aux[k,2], y = min(ylim),yend=k,colour = palette()[i+1], size = 1,linetype = "dashed")
+      # gg_graph <- gg_graph + ggplot2::annotate("point", x=aux[k,2], y = min(ylim), colour = "black", size = 2, shape=21)
     # }
-    # p <- p + ggplot2::annotate("point", x=xlim, y = ylim, colour = "black", size = 2)
-    # p <- p + ggplot2::annotate("point", x=min(xlim), y = min(ylim), colour = palette()[i+1], size = 2)
+    # gg_graph <- gg_graph + ggplot2::annotate("point", x=xlim, y = ylim, colour = "black", size = 2)
+    # gg_graph <- gg_graph + ggplot2::annotate("point", x=min(xlim), y = min(ylim), colour = palette()[i+1], size = 2)
   # }
 # }
     if (is.function(theme)) {
       fonc_theme <- match.fun(theme)
-	  p <- p + fonc_theme()
+	  gg_graph <- gg_graph + fonc_theme()
     } else if (inherits(theme, "theme")) {
-      p <- p + theme
+      gg_graph <- gg_graph + theme
     } else {
-      warning("Argument 'theme' invalide. The 'theme_factominer' is used by default.")
-      p <- p + theme_factominer()    
+      gg_graph <- gg_graph + theme_factominer()    
     }
-  return(p)
+  return(gg_graph)
 }

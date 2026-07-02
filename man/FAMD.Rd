@@ -10,7 +10,7 @@ FAMD is a principal component method dedicated to explore data with both continu
 
 \usage{
 FAMD (base, ncp = 5, graph = TRUE, sup.var = NULL, 
-    ind.sup = NULL, axes = c(1,2), row.w = NULL, tab.disj = NULL)
+    ind.sup = NULL, axes = c(1,2), row.w = NULL, tab.disj = NULL, ...)
 }
 
 \arguments{
@@ -22,6 +22,7 @@ FAMD (base, ncp = 5, graph = TRUE, sup.var = NULL,
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{row.w}{an optional row weights (by default, uniform row weights); the weights are given only for the active individuals}
   \item{tab.disj}{object obtained from the imputeFAMD function of the missMDA package that allows to handle missing values}
+  \item{\dots}{further arguments passed to or from other methods, such as the ones of plot.PCA, ...}
 }
 
 \value{

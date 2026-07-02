@@ -1,4 +1,5 @@
-CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL, quali.sup=NULL, graph = TRUE, axes=c(1,2), row.w=NULL, excl=NULL){
+CA <- function (X, ncp = 5, row.sup = NULL, col.sup = NULL, quanti.sup=NULL, quali.sup=NULL, graph = TRUE, 
+     axes=c(1,2), row.w=NULL, excl=NULL, ...){
 
 fct.eta2 <- function(group, Y, weights = NULL) {
   prep_anova_weights <- function(group, weights = NULL) {
@@ -222,8 +223,8 @@ dist2.col <- colSums((X.col.sup-marge.row)^2/marge.row)
 
     class(res) <- c("CA", "list")
     if (graph & (ncp>1)) {
-	  print(plot(res,axes=axes))
-	  if (!is.null(quanti.sup)) print(plot(res, choix="quanti.sup",axes=axes,new.plot=TRUE))
+	  print(plot.CA(res,axes=axes, ...))
+	  if (!is.null(quanti.sup)) print(plot.CA(res, choix="quanti.sup",axes=axes,new.plot=TRUE, ...))
 	}
     return(res)
 }

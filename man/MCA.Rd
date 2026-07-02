@@ -15,7 +15,7 @@ Missing values are treated as an additional level, categories which are rare can
 MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL, 
     quali.sup = NULL, excl=NULL, graph = TRUE, 
 	level.ventil = 0, axes = c(1,2), row.w = NULL, 
-	method="Indicator", na.method="NA", tab.disj=NULL)}
+	method="Indicator", na.method="NA", tab.disj=NULL, ...)}
 
 \arguments{
   \item{X}{a data frame with \emph{n} rows (individuals) and \emph{p} columns (categorical variables)}
@@ -31,6 +31,7 @@ MCA(X, ncp = 5, ind.sup = NULL, quanti.sup = NULL,
   \item{method}{a string corresponding to the name of the method used: "Indicator" (by default) is the CA on the Indicator matrix, "Burt" is the CA on the Burt table. For Burt and the Indicator, the graph of the individuals and the graph of the categories are given}
   \item{na.method}{a string corresponding to the name of the method used if there are missing values; available methods are "NA" or "Average" (by default, "NA")}
   \item{tab.disj}{optional data.frame corresponding to the disjunctive table used for the analysis; it corresponds to a disjunctive table obtained from imputation method (see package missMDA).}
+  \item{\dots}{further arguments passed to or from other methods, such as the ones of plot.MCA, ...}
 }
 
 \value{

@@ -1491,7 +1491,6 @@ plot.MFA <- function (x, axes = c(1, 2), choix = c("ind","var","group","axes","f
     } else if (inherits(theme, "theme")) {
       gg_graph <- gg_graph + theme
     } else {
-      warning("Argument 'theme' invalide. The 'theme_factominer' is used by default.")
       gg_graph <- gg_graph + theme_factominer()    
     }
   return(gg_graph)

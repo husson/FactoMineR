@@ -11,7 +11,7 @@ Performs Correspondence Analysis (CA) including supplementary row and/or column 
 \usage{
 CA(X, ncp = 5, row.sup = NULL, col.sup = NULL, 
     quanti.sup=NULL, quali.sup = NULL, graph = TRUE, 
-	axes = c(1,2), row.w = NULL, excl=NULL)}
+	axes = c(1,2), row.w = NULL, excl=NULL, ...)}
 
 \arguments{
   \item{X}{a data frame or a table with \emph{n} rows and \emph{p} columns, i.e. a contingency table}
@@ -24,6 +24,7 @@ CA(X, ncp = 5, row.sup = NULL, col.sup = NULL,
   \item{axes}{a length 2 vector specifying the components to plot}
   \item{row.w}{an optional row weights (by default, a vector of 1 and each row has a weight equals to its margin); the weights are given only for the active rows}
   \item{excl}{numeric vector indicating the indexes of the "junk" columns (default is NULL). Useful for MCA with excl argument.}
+  \item{\dots}{further arguments passed to or from other methods, such as the ones of plot.CA, ...}
 }
 
 \value{
@@ -60,11 +61,11 @@ res.ca <- CA (children, row.sup = 15:18, col.sup = 6:8)
 summary(res.ca)
 ## Ellipses for all the active elements
 ellipseCA(res.ca)
+\dontrun{
 ## Ellipses around some columns only
 ellipseCA(res.ca,ellipse="col",col.col.ell=c(rep("blue",2),rep("transparent",3)),
      invisible=c("row.sup","col.sup"))
 
-\dontrun{
 ## Graphical interface
 require(Factoshiny)
 res <- Factoshiny(children)

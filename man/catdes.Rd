@@ -9,7 +9,7 @@ Description of the categories of one factor by categorical variables and/or by q
 }
 
 \usage{
-catdes(donnee,num.var,proba = 0.05, row.w = NULL, na.method="NA")}
+catdes(donnee,num.var,proba = 0.05, row.w = NULL, na.method="NA", html.table=TRUE)}
 
 \arguments{
   \item{donnee}{a data frame made up of at least one categorical variables and a set of quantitative variables and/or categorical variables}
@@ -17,6 +17,7 @@ catdes(donnee,num.var,proba = 0.05, row.w = NULL, na.method="NA")}
   \item{proba}{the significance threshold considered to characterized the category (by default 0.05)}
   \item{row.w}{a vector of integers corresponding to an optional row weights (by default, a vector of 1 for uniform row weights)}
   \item{na.method}{a boolean that says how to manage missing values. If ; if na.method="NA" a new category is considered for the categorical variable; if na.method="na.omit" the missing values are deleted}
+  \item{html.table}{a boolean that gives HTML tables as outputs in the viewer window}
 }
 
 \value{
@@ -26,6 +27,8 @@ Returns a list including:
   \item{category}{description of each category of the \code{num.var} by each category of all the categorical variables}
   \item{quanti.var}{the global description of the \code{num.var} variable by the quantitative variables with the square correlation coefficient and the p-value of the F-test in a one-way analysis of variance (assuming the hypothesis of homoscedsticity)}
   \item{quanti}{the description of each category of the \code{num.var} variable by the quantitative variables.}
+  
+  These ouputs are also given in HTML tables that can be ordered.
 }
 
 \author{Francois Husson \email{francois.husson@institut-agro.fr}}

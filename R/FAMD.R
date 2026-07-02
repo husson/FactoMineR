@@ -1,4 +1,4 @@
-FAMD <- function(base, ncp = 5, graph = TRUE, sup.var=NULL, ind.sup = NULL, axes=c(1,2),row.w=NULL, tab.disj=NULL){
+FAMD <- function(base, ncp = 5, graph = TRUE, sup.var=NULL, ind.sup = NULL, axes=c(1,2),row.w=NULL, tab.disj=NULL, ...){
 	
     moy.ptab <- function(V, poids) {
         as.vector(crossprod(poids/sum(poids),as.matrix(V)))
@@ -288,11 +288,11 @@ fct.eta2 <- function(group, Y, weights = NULL) {
 #	res$call$call <- sys.calls()[[1]]
     class(res) <- c("FAMD", "list")
 	 if (graph & (ncp>1)){
-       print(plot.FAMD(res,choix="ind", axes=axes,habillage="none"))
-       print(plot.FAMD(res,choix="ind", invisible=c("quali","quali.sup"),axes=axes,habillage="none",new.plot=TRUE))
-       print(plot.FAMD(res,choix="var",axes=axes,new.plot=TRUE))
-       print(plot.FAMD(res,choix="quali", axes=axes,habillage="none",new.plot=TRUE))
-       print(plot.FAMD(res,choix="quanti",axes=axes,new.plot=TRUE))
+       print(plot.FAMD(res,choix="ind", axes=axes,habillage="none", ...))
+       print(plot.FAMD(res,choix="ind", invisible=c("quali","quali.sup"),axes=axes,habillage="none",new.plot=TRUE, ...))
+       print(plot.FAMD(res,choix="var",axes=axes,new.plot=TRUE, ...))
+       print(plot.FAMD(res,choix="quali", axes=axes,habillage="none",new.plot=TRUE, ...))
+       print(plot.FAMD(res,choix="quanti",axes=axes,new.plot=TRUE, ...))
      }
 	return(res)
 }

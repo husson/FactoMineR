@@ -1,4 +1,5 @@
-MFA <- function (base, group, type = rep("s",length(group)), excl = NULL, ind.sup = NULL, ncp = 5, name.group = NULL, num.group.sup = NULL, graph = TRUE, weight.col.mfa = NULL, row.w = NULL, axes=c(1,2),tab.comp=NULL){
+MFA <- function (base, group, type = rep("s",length(group)), excl = NULL, ind.sup = NULL, ncp = 5, name.group = NULL, 
+    num.group.sup = NULL, graph = TRUE, weight.col.mfa = NULL, row.w = NULL, axes=c(1,2),tab.comp=NULL, ...){
 
     moy.p <- function(V, poids) {
         res <- sum(V * poids,na.rm=TRUE)/sum(poids[!is.na(V)])
@@ -905,15 +906,15 @@ cor.partial.axes <- cov.wt(aux,wt=row.w/sum(row.w),method="ML",cor=TRUE)$cor
           max.inertia <- order(apply(resultats$quali.var.sup$within.inertia[,1:2],1,sum))
           cg.plot.partial <- c(cg.plot.partial,rownames(resultats$quali.var.sup$coord)[max.inertia[1:length(max.inertia)]])
         }
- print(plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial,habillage="group",axes=axes,new.plot=TRUE))
+ print(plot.MFA(resultats,choix="ind",invisible="ind",partial=cg.plot.partial,habillage="group",axes=axes,new.plot=TRUE, ...))
       }
       max.inertia <- order(apply(resultats$ind$within.inertia[,1:2],1,sum))
-      print(plot.MFA(resultats,choix="axes",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE))
-      print(plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],habillage="group",axes=axes,new.plot=TRUE))
-      if ("c"%in%type) print(plot.MFA(resultats,choix="var",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE))
-      if ("f"%in%type) print(plot.MFA(resultats,choix="freq",habillage="group",axes=axes,new.plot=TRUE))
-      print(plot.MFA(resultats,choix="ind",invisible="quali",habillage = "ind",axes=axes,new.plot=TRUE,col.hab=1+3*(1:nbre.ind)%in%ind.sup))
-      print(plot.MFA(resultats,choix="group",axes=axes,new.plot=TRUE))
+      print(plot.MFA(resultats,choix="axes",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE, ...))
+      print(plot.MFA(resultats,choix="ind",invisible="quali",partial=rownames(resultats$ind$coord)[max.inertia[c(1:2,nrow(resultats$ind$coord)-1,nrow(resultats$ind$coord))]],habillage="group",axes=axes,new.plot=TRUE, ...))
+      if ("c"%in%type) print(plot.MFA(resultats,choix="var",habillage="group",axes=axes,new.plot=TRUE,shadowtext=TRUE, ...))
+      if ("f"%in%type) print(plot.MFA(resultats,choix="freq",habillage="group",axes=axes,new.plot=TRUE, ...))
+      print(plot.MFA(resultats,choix="ind",invisible="quali",habillage = "ind",axes=axes,new.plot=TRUE,col.hab=1+3*(1:nbre.ind)%in%ind.sup, ...))
+      print(plot.MFA(resultats,choix="group",axes=axes,new.plot=TRUE, ...))
     }
     return(resultats)
 }
