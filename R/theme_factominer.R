@@ -81,26 +81,47 @@ theme_factominer <- function(
         lineheight = 1.2
       ),
 
-      plot.title = ggtext::element_markdown(
+      # plot.title = ggtext::element_markdown(
+        # colour  = dark_text,
+        # family  = title_family,
+        # size    = ggplot2::rel(rel_title),
+        # face    = "bold",
+        # margin  = ggplot2::margin(t = 10, b = 6)
+      # ),
+      # plot.subtitle = ggtext::element_markdown(
+        # colour  = mid_text,
+        # family  = base_family,
+        # size    = ggplot2::rel(rel_subtitle),
+        # margin  = ggplot2::margin(b = 10)
+      # ),
+      # plot.caption = ggtext::element_markdown(
+        # colour  = light_text,
+        # family  = base_family,
+        # size    = ggplot2::rel(rel_caption),
+        # hjust   = 0,      
+        # margin  = ggplot2::margin(t = 8)
+      # ),
+      plot.title = ggplot2::element_text(
         colour  = dark_text,
         family  = title_family,
         size    = ggplot2::rel(rel_title),
         face    = "bold",
         margin  = ggplot2::margin(t = 10, b = 6)
       ),
-      plot.subtitle = ggtext::element_markdown(
+      plot.subtitle = ggplot2::element_text(
         colour  = mid_text,
         family  = base_family,
         size    = ggplot2::rel(rel_subtitle),
         margin  = ggplot2::margin(b = 10)
       ),
-      plot.caption = ggtext::element_markdown(
+      plot.caption = ggplot2::element_text(
         colour  = light_text,
         family  = base_family,
         size    = ggplot2::rel(rel_caption),
         hjust   = 0,      
         margin  = ggplot2::margin(t = 8)
       ),
+
       plot.title.position   = "plot",
       plot.caption.position = "plot",
 

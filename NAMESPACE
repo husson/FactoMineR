@@ -8,7 +8,6 @@ importFrom(flashClust,hclust)
 importFrom(ggplot2,aes,aes_string,annotate,arrow,coord_fixed,element_blank,element_line,element_rect,element_text,geom_hline,geom_line,geom_path,geom_point,geom_segment,geom_text,geom_vline,ggplot,ggtitle,guides,guide_colourbar,guide_legend,labs,margin,unit,rel,scale_colour_manual,scale_colour_gradient,scale_colour_gradientn,scale_colour_gradient2,scale_fill_gradientn,scale_fill_gradient2,scale_fill_manual,theme,theme_light,theme_minimal,xlab,xlim,ylab,ylim)
 
 importFrom(ggrepel,geom_text_repel)
-importFrom(ggtext,element_markdown)
 importFrom(graphics,abline,arrows,barplot,contour,image,layout,legend,lines,locator,par,points,plot,plot.new,rect,strheight,strwidth,text)
 importFrom(grDevices,colours,colorRampPalette,dev.new,dev.off,rgb,col2rgb,xy.coords,palette,terrain.colors)
 importFrom(irlba,irlba)
