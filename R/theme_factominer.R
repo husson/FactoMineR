@@ -24,8 +24,10 @@ factominer_grid_col <- "#E4E7EA"
 
 theme_factominer <- function(
     base_size         = 11,
-    base_family       = "Inclusive Sans",
-    title_family      = "Atkinson Hyperlegible Next",
+ #    base_family       = "Inclusive Sans",
+ #   title_family      = "Atkinson Hyperlegible Next",
+    base_family       = "sans",
+    title_family      = "sans",
     
     rel_title         = 1.5,
     rel_subtitle      = 1.05,
@@ -44,13 +46,6 @@ theme_factominer <- function(
     light_text        = "#7A8A9A",
     factominer_grid_col = "#E2E8F0"
 ) {
-
-  # if (!"InclusiveSans" %in% sysfonts::font_families()) {
-    # sysfonts::font_add_google("Inclusive Sans", family = "InclusiveSans")
-  # }
-  # if (!"AtkinsonNext" %in% sysfonts::font_families()) {
-    # sysfonts::font_add_google("Atkinson Hyperlegible Next", family = "AtkinsonNext")
-  # }
 
   format_google_name <- function(family_name) {
     res <- gsub("([a-z])([A-Z])", "\\1 \\2", family_name)
@@ -71,17 +66,9 @@ theme_factominer <- function(
     })
   }
   
-  showtext::showtext_auto(enable = TRUE)
-  
-# if size of points and labels are defined in the theme
-  # ggplot2::update_geom_defaults("point", list(size = point_size))
-  # ggplot2::update_geom_defaults("text", list(size = label_size / 2.8346, family = base_family))
-  # ggplot2::update_geom_defaults("label", list(size = label_size / 2.8346, family = base_family))
-  
-  # if (requireNamespace("ggrepel", quietly = TRUE)) {
-    # ggplot2::update_geom_defaults(ggrepel::GeomTextRepel, list(size = label_size / 2.8346, family = base_family))
-    # ggplot2::update_geom_defaults(ggrepel::GeomLabelRepel, list(size = label_size / 2.8346, family = base_family))
-  # }
+    showtext_was_enabled <- showtext::showtext_auto()
+    on.exit(showtext::showtext_auto(enable = showtext_was_enabled), add = TRUE)
+    showtext::showtext_auto(enable = TRUE)
   
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(

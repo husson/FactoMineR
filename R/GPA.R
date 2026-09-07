@@ -726,8 +726,7 @@ GPA<-function (df, tolerance = 10^-10, nbiteration = 200, scale = TRUE,
     }
     if (is.null(name.group))
         name.group <- paste("group", c(1:length(group)), sep = ".")
-    if (!is.data.frame(df))
-        stop("df is not a data.frame")
+    df <- as.data.frame(df)
     blo <- group
     nbjuge <- length(blo)
     X <- array(0, c(nrow(df), max(blo), nbjuge))

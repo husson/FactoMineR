@@ -175,9 +175,9 @@ fct.eta2 <- function(group, Y, weights = NULL) {  # no NA on Y hat are dimension
 ## Main program    
 #############
 
+  X <- as.data.frame(X)
   if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
   if (is.null(colnames(X))) colnames(X) <- colnames(X, do.NULL = FALSE,prefix="V")
-  X <- as.data.frame(X)
   is.quali <- which(!unlist(lapply(X,is.numeric)))
   X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
   X <- droplevels(X)

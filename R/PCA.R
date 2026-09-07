@@ -106,7 +106,7 @@ fct.eta2 <- function(group, Y, weights = NULL) {  # no NA on Y hat are dimension
 # }
 
 ### main program
-    if (!is.data.frame(X)) X <- as.data.frame(X)
+    X <- as.data.frame(X)
     rowX <- rownames(X)
 	colX <- colnames(X)
 

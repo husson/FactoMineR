@@ -52,9 +52,9 @@ if (!is.null(tab.comp)){
   if (!is.null(weight.col.mfa)) stop("Weightings on the variables are not allowed with the tab.comp argument")
 }
 
+    base <- as.data.frame(base)
     if (is.null(rownames(base))) rownames(base) <- 1:nrow(base)
     if (is.null(colnames(base))) colnames(base) <- paste("V",1:ncol(base),sep="")
-    base <- as.data.frame(base)
     is.quali <- which(!unlist(lapply(base,is.numeric)))
     base[,is.quali] <- lapply(base[,is.quali,drop=FALSE],as.factor)
 	base <- droplevels(base)

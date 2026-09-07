@@ -1,4 +1,4 @@
-HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, axes=c(1,2), name.group = NULL) {
+HMFA <- function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, axes=c(1,2), name.group = NULL) {
     hdil <- function(H) {
         nbnivh <- length(H)
         dil <- H
@@ -55,9 +55,9 @@ HMFA<-function (X, H, type = rep("s", length(H[[1]])), ncp = 5, graph = TRUE, ax
         return(cw.partiel)
     }
 
+	X <- as.data.frame(X)
     if (is.null(rownames(X))) rownames(X) <- 1:nrow(X)
     if (is.null(colnames(X))) colnames(X) <- paste("V",1:ncol(X),sep="")
-	X <- as.data.frame(X)
 	is.quali <- which(!unlist(lapply(X,is.numeric)))
     X[,is.quali] <- lapply(X[,is.quali,drop=FALSE],as.factor)
     for (j in 1:ncol(X)) if (colnames(X)[j]=="") colnames(X)[j] <- paste("V",j,sep="")
