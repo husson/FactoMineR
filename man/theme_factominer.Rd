@@ -21,8 +21,8 @@
 \usage{
 theme_factominer(
     base_size         = 11,
-    base_family       = "Inclusive Sans",
-    title_family      = "Atkinson Hyperlegible Next",
+    base_family       = "sans",
+    title_family      = "sans",
     
     rel_title         = 1.5,
     rel_subtitle      = 1.05,
