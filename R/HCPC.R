@@ -145,11 +145,10 @@ HCPC <- function (res, nb.clust = 0, consol = TRUE, iter.max = 10, min = 3,
 	  if(cluster.CA=="columns") res <- PCA(res$col$coord, scale.unit = FALSE, ncp = Inf, graph = FALSE,row.w=res$call$marge.col*sum(res$call$X))
 	  res$eig <- aux
     }
-    if (is.null(max)) max <- min(10, round(nrow(res$ind$coord)/2))
+    if (is.null(max)) max <- min(10, round(nrow(res$ind$coord)/2),nrow(res$ind$coord)-2)
 	min <- max(2,min)
-	max <- max(max,min)
 #	max <- max(max+1,min)
-    max <- min(max, nrow(res$ind$coord) - 1)
+	min <- min(max,min)
     if (inherits(res, "PCA") | inherits(res, "MCA") | inherits(res,"MFA") | inherits(res, "HMFA") | inherits(res, "FAMD")) {
     	if (!is.null(res$call$ind.sup)) res$call$X <- res$call$X[-res$call$ind.sup, ]
         if (is.null(res$call$row.w.init)) res$call$row.w.init <- res$call$row.w
